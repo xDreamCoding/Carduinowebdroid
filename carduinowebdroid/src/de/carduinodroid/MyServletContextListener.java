@@ -17,46 +17,48 @@ public class MyServletContextListener implements ServletContextListener {
 	private ServletContext context;
 	private Log log;
 
-	  /*This method is invoked when the Web Application has been removed 
-	  and is no longer able to accept requests
-	  */
-	
-	  public void contextDestroyed(ServletContextEvent event)
-	  {
-	    log.writelogfile("contextDestroyed.");
-	    this.context = null;
+	/*This method is invoked when the Web Application has been removed 
+	and is no longer able to accept requests
+	*/
 
-	  }
+	public void contextDestroyed(ServletContextEvent event)
+	{
+		log.writelogfile("contextDestroyed.");
+		this.context = null;
+		
+		DBConnector db = (DBConnector)event.getServletContext().getAttribute("database");
+		db.shutDown();
+	}
 
 
-	  //This method is invoked when the Web Application
-	  //is ready to service requests
+	//This method is invoked when the Web Application
+	//is ready to service requests
 
-	  public void contextInitialized(ServletContextEvent event)
-	  {
+	public void contextInitialized(ServletContextEvent event)
+	{
 		context = event.getServletContext();
-	    log = new Log();
-	    context.setAttribute("log", log);
-	    log.writelogfile("contextInitialized. Log instanciated.");
-	    
-	    GPSTrack gps = new GPSTrack();
-	    log.writelogfile("GPSTracker instanciated.");
-	    
-	    Controller_Computer controller = new Controller_Computer(log, gps);
-	    context.setAttribute("controller", controller);
-	    log.writelogfile("Controller_Computer instanciated.");
-	    
-	    Config config = new Config(log);
-	    config.readOptions();
-	    //context.setAttribute("config", config);
-	    
-	    Options options = config.getOptions();
-	    if(options.dbAddress == null)
-	    	options = config.createAndSaveDefault();
-    
-	    context.setAttribute("options", options);
-	    log.writelogfile("Options loaded");
-	    
+		log = new Log();
+		context.setAttribute("log", log);
+		log.writelogfile("contextInitialized. Log instanciated.");
+		
+		GPSTrack gps = new GPSTrack();
+		log.writelogfile("GPSTracker instanciated.");
+		
+		Controller_Computer controller = new Controller_Computer(log, gps);
+		context.setAttribute("controller", controller);
+		log.writelogfile("Controller_Computer instanciated.");
+		
+		Config config = new Config(log);
+		config.readOptions();
+		//context.setAttribute("config", config);
+		
+		Options options = config.getOptions();
+		if(options.dbAddress == null)
+			options = config.createAndSaveDefault();
+		
+		context.setAttribute("options", options);
+		log.writelogfile("Options loaded");
+		
 //	    try {
 //			Class.forName("org.mariadb.jdbc.Driver");
 //			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/carduinodroid", "root", "test");
@@ -65,10 +67,11 @@ public class MyServletContextListener implements ServletContextListener {
 //		} catch (Exception e) {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
-//		}
-	    
-	    DBConnector db = new DBConnector(log, options);
-	    context.setAttribute("database", db);
-	  }
-
+		//		}
+		
+		DBConnector db = new DBConnector(log, options);
+		context.setAttribute("database", db);
+		
+		//db.dbTest();
+	}
 }

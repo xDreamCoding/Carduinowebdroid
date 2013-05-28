@@ -29,8 +29,8 @@ public class User {
 		}
 	}	
 	
-	public String userID; 		// login name 
-	public String nickname;	// anzeige name
+	private String userID; 		// login name 
+	private String nickname;	// anzeige name
 	private Right right = Right.GUEST;
 	
 	public User() {	}
