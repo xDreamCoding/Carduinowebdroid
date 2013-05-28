@@ -1,9 +1,5 @@
 package de.carduinodroid;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -38,7 +34,7 @@ public class MyServletContextListener implements ServletContextListener {
 
 	  public void contextInitialized(ServletContextEvent event)
 	  {
-		ServletContext context = event.getServletContext();
+		context = event.getServletContext();
 	    log = new Log();
 	    context.setAttribute("log", log);
 	    log.writelogfile("contextInitialized. Log instanciated.");
@@ -55,26 +51,9 @@ public class MyServletContextListener implements ServletContextListener {
 	    //context.setAttribute("config", config);
 	    
 	    Options options = config.getOptions();
-	    // check if any options were found, if not load default
-	    if(options.dbAddress == null) { 	    	
-	    	/*
-	    	 * DB läuft auf/im 
-	    	 * 	localhost 	-> true
-	    	 * 	FEM-Netz	-> false
-	    	 */
-	    	boolean localhost = true;	
-	    	options.fahrZeit = 10;
-	    	if(localhost) {
-	    		options.dbAddress = "localhost:3306/carduinodroid";
-	    		options.dbUser = "root";
-	    		options.dbPW = "test";
-	    	} else {
-	    		options.dbAddress = "sehraf-pi:3306/carduinodroid";
-	    		options.dbUser = "test";
-	    		options.dbPW = "test";
-	    	}
-	    	config.writeOptions(options);
-	    }	    
+	    if(options.dbAddress == null)
+	    	options = config.createAndSaveDefault();
+    
 	    context.setAttribute("options", options);
 	    log.writelogfile("Options loaded");
 	    
@@ -89,10 +68,7 @@ public class MyServletContextListener implements ServletContextListener {
 //		}
 	    
 	    DBConnector db = new DBConnector(log, options);
-	    if(db.connect()) {
-	    	Connection dbConnection = db.getDbConnection();
-	    	context.setAttribute("connection", dbConnection);
-	    }
+	    context.setAttribute("database", db);
 	  }
 
 }
