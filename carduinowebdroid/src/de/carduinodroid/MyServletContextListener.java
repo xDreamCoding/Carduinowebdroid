@@ -1,5 +1,9 @@
 package de.carduinodroid;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -72,6 +76,6 @@ public class MyServletContextListener implements ServletContextListener {
 		DBConnector db = new DBConnector(log, options);
 		context.setAttribute("database", db);
 		
-		//db.dbTest();
+		//db.dbTest();		
 	}
 }
