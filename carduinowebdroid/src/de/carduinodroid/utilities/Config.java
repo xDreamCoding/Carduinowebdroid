@@ -25,6 +25,7 @@ public class Config {
 		File f = new File(configPath);
 		if(!f.exists())
 			try {
+				log.writelogfile("creating empty settings file");
 				f.createNewFile();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -34,13 +35,14 @@ public class Config {
 	
 	public void readOptions() {
 		try{
-			Properties p = new Properties();
+			Properties p = new Properties();			
 			p.load(new FileInputStream(configPath));
 			
-			System.out.println("fahrZeit = " + p.getProperty("fahrZeit"));
-			System.out.println("dbAddress = " + p.getProperty("dbAddress"));
-			System.out.println("dbUser = " + p.getProperty("dbUser"));
-			System.out.println("dbPW = " + p.getProperty("dbPW"));
+			log.writelogfile("loading settings");
+			log.writelogfile("fahrZeit = " + p.getProperty("fahrZeit"));
+			log.writelogfile("dbAddress = " + p.getProperty("dbAddress"));
+			log.writelogfile("dbUser = " + p.getProperty("dbUser"));
+			log.writelogfile("dbPW = " + p.getProperty("dbPW"));
 			
 			options.fahrZeit = Integer.parseInt(p.getProperty("fahrZeit"));
 			options.dbAddress = p.getProperty("dbAddress");
@@ -54,6 +56,7 @@ public class Config {
 	
 	public void saveOptions() {
 		try{
+			log.writelogfile("saving settings");
 			Properties p = new Properties();
 			p.setProperty("fahrZeit", String.valueOf(options.fahrZeit));
 			p.setProperty("dbAddress", options.dbAddress);
@@ -69,6 +72,28 @@ public class Config {
 	public void writeOptions(Options opt) {
 		options = opt;
 		saveOptions();
+	}
+	
+	public Options createAndSaveDefault() {    	
+    	/*
+    	 * DB läuft auf/im 
+    	 * 	localhost 	-> true
+    	 * 	FEM-Netz	-> false
+    	 */
+    	boolean localhost = true;	
+    	options = new Options();
+    	options.fahrZeit = 10;
+    	if(localhost) {
+    		options.dbAddress = "localhost:3306/carduinodroid";
+    		options.dbUser = "root";
+    		options.dbPW = "test";
+    	} else {
+    		options.dbAddress = "sehraf-pi:3306/carduinodroid";
+    		options.dbUser = "test";
+    		options.dbPW = "test";
+    	}
+    	writeOptions(options);	   
+    	return options;
 	}
 
 	/**
