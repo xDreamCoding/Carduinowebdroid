@@ -5,12 +5,12 @@
 <html>
     <head>
         <title>Carduinodroid Login</title>
-       	<link rel="stylesheet" media="screen" href="stylesheets/login.css">
-        <link rel="shortcut icon" type="image/png" href="images/favicon.ico">
+       	<link rel="stylesheet" media="screen" href="static/stylesheets/login.css">
+        <link rel="shortcut icon" type="image/png" href="static/images/favicon.ico">
     </head>
     <body>
 	    <div align="center">
-			<img src="images/Logofin.png">
+			<img src="static/images/Logofin.png">
 			<form action="main" method="post" class="login box">
 				<h2>Login</h2>
 				<table>
@@ -33,7 +33,7 @@
 						<td><input name ="ip" type="text" class="text" /></td>
 					</tr>
 				</table>
-				<input type="submit" text="Login" class="submit" />
+				<input type="submit" text="connect" class="submit" />
 			</form>
 			<p class="label box">Welcome to Carduinodroid. If you want to watch
 				another driver, please click on "Look for a driver." We hope you

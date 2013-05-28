@@ -14,14 +14,10 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet Filter implementation class Filter
  */
-@WebFilter("/filter")
+@WebFilter("/*")
 public class Filter implements javax.servlet.Filter {
-
-	/**
-	 * @see Filter#destroy()
-	 */
-	public void destroy() {
-	}
+	
+	FilterConfig config;
 
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
@@ -30,21 +26,40 @@ public class Filter implements javax.servlet.Filter {
 		// place your code here
 		System.out.println("filter");
 		
-		HttpServletRequest req = (HttpServletRequest) request;
-		HttpSession session = req.getSession();
-		if(session.getAttribute("name") == null) {
-			req.getRequestDispatcher("/login.jsp").forward(req, res);
-			return;
+		boolean authorized = false;
+		boolean staticRequest = false;
+		
+		if(request instanceof HttpServletRequest) {
+			HttpServletRequest req = (HttpServletRequest) request;
+			HttpSession session = req.getSession();
+			
+			staticRequest = req.getRequestURI().startsWith("static");
+			
+			if(session.getAttribute("name") != null) {
+				authorized = true;
+			}
 		}
-		// pass the request along the filter chain
-		chain.doFilter(request, res);
+		
+		if(authorized || staticRequest) {
+			chain.doFilter(request, res);
+		} else {
+			config.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, res);
+		}
 	}
 
 	/**
 	 * @see Filter#init(FilterConfig)
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
+		config = fConfig;
 		System.out.println("initfilter");
 	}
+	
+	/**
+	 * @see Filter#destroy()
+	 */
+	public void destroy() {
+	}
+
 
 }

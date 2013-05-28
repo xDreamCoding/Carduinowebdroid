@@ -1,9 +1,5 @@
 package de.carduinodroid;
 
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -12,8 +8,9 @@ import javax.servlet.annotation.WebListener;
 import de.carduinodroid.desktop.Controller.Controller_Computer;
 import de.carduinodroid.desktop.Model.GPSTrack;
 import de.carduinodroid.desktop.Model.Log;
-import de.carduinodroid.utilities.*;
+import de.carduinodroid.utilities.Config;
 import de.carduinodroid.utilities.Config.Options;
+import de.carduinodroid.utilities.DBConnector;
 
 @WebListener
 public class MyServletContextListener implements ServletContextListener {
