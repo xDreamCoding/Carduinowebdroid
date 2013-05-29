@@ -170,7 +170,7 @@ public class DBConnector {
 			stmt.setString(1, userID);
 			stmt.setString(2, nick);
 			stmt.setString(3, pw);
-			stmt.setByte(4, (byte)r.getVal());
+			stmt.setByte(4, (byte)r.ordinal());
 			
 			stmt.executeUpdate();
 		} catch (SQLException e) {

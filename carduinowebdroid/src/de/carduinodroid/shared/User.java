@@ -2,12 +2,9 @@ package de.carduinodroid.shared;
 
 public class User {
 	public enum Right {
-		GUEST(0),
-		USER(1),
-		ADMIN(2);
-		private final int val;
-		private Right(int v) { val = v; }
-		public int getVal() { return val; }
+		GUEST,
+		USER,
+		ADMIN;
 	}	
 	
 	private String userID; 		// login name 
