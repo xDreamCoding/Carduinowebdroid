@@ -49,13 +49,15 @@ public class MyServletContextListener implements ServletContextListener {
 		context.setAttribute("controller", controller);
 		log.writelogfile("Controller_Computer instanciated.");
 		
-		Config config = new Config(log);
+		Config config = new Config(log, context.getRealPath("/WEB-INF/config"));
 		config.readOptions();
 		//context.setAttribute("config", config);
 		
 		Options options = config.getOptions();
-		if(options.dbAddress == null)
-			options = config.createAndSaveDefault();
+		if(options.dbAddress == null) {
+			config.setDefault();
+			options = config.getOptions();
+		}
 		
 		context.setAttribute("options", options);
 		log.writelogfile("Options loaded");
