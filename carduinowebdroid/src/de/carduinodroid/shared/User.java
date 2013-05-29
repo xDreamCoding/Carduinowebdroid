@@ -4,7 +4,7 @@ public class User {
 	public enum Right {
 		GUEST,
 		USER,
-		ADMIN
+		ADMIN;
 	}	
 	
 	private String userID; 		// login name 
