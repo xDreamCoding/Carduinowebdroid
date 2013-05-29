@@ -27,7 +27,7 @@ Basics:
 Wie spiele ich updates aus dem Hauptrepo in meinen Fork ein?  
 -> so: https://help.github.com/articles/syncing-a-fork  
 (FYI: der Schritt "$ git remote add upstream https://github.com/otheruser/repo.git" war bei mir nicht notwendig)  
-Konflickte beim Mergern: //TODO  
+Konflikte beim Mergen: //TODO  
 PANIK! schreiend im Kreis laufen  
 Eclipse + Tomcat:  
 Java SDK (nicht JRE)(SE nicht EE)  
