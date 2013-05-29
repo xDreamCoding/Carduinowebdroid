@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.carduinodroid.desktop.View.GUI_Computer;
-
 /**
 * methods for sending camera changes
 * @author Lars Vogel
