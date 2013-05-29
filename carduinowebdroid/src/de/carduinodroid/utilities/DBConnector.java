@@ -99,7 +99,7 @@ public class DBConnector {
 				String nickname = rset.getString("nickname");
 				if(nickname == null) nickname = userID;
 				byte right = rset.getByte("rightFlag");
-				user = new User(userID, nickname, Right.toRight(right));
+				user = new User(userID, nickname, Right.values()[right]);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -170,7 +170,7 @@ public class DBConnector {
 			stmt.setString(1, userID);
 			stmt.setString(2, nick);
 			stmt.setString(3, pw);
-			stmt.setByte(4, Right.toByte(r));
+			stmt.setByte(4, (byte)r.getVal());
 			
 			stmt.executeUpdate();
 		} catch (SQLException e) {
