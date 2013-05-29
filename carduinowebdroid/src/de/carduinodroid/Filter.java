@@ -33,7 +33,7 @@ public class Filter implements javax.servlet.Filter {
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();
 			
-			staticRequest = req.getRequestURI().startsWith("static");
+			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
 			
 			if(session.getAttribute("name") != null) {
 				authorized = true;
