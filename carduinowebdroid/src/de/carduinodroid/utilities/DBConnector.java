@@ -59,9 +59,56 @@ public class DBConnector {
 	}	
 		
 	// --------------------- API ---------------------
-	// --- User ---
+	// --- Chat ---
 	/**
-	 * TODO: pw hashen
+	 * save chat to DB
+	 * @param userID
+	 * @param sessionID
+	 * @param text
+	 * @return 
+	 */
+	public boolean logChat(String userID, int sessionID, String text) {
+		PreparedStatement stmt = null;
+	
+		if(text.length() > 256) {	// TODO: den Wert vllt zentral speichern? 
+			log.writelogfile("logChat: text too long!");
+			text = text.substring(0, 255);
+		}
+		
+		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		
+		try {
+			stmt = dbConnection.prepareStatement("INSERT INTO chat (`time`, `userID`, `sessionID`, `text`) VALUES (?, ?, ?, ?)");
+			stmt.setObject(1, datetime);
+			stmt.setString(2, userID);
+			stmt.setInt(3, sessionID); 
+			stmt.setString(4, text);
+			
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+			
+			try {
+				if (stmt != null) { stmt.close(); }
+			}
+			catch (Exception e2) {
+				log.writelogfile(e2.getMessage());
+			}
+			
+			return false;
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				log.writelogfile(e.getMessage());
+			}
+		}
+		return true;
+	}
+	
+	// --- User ---
+	/** 
+	 * try to login with a given userID and password
 	 * @param userID (login)
 	 * @param password
 	 * @return returns the user as a User object or null if the login was invalid 
@@ -73,7 +120,7 @@ public class DBConnector {
 		try {
 			stmt = dbConnection.prepareStatement("SELECT nickname, rightFlag FROM user WHERE userID = ? AND password = ?");
 			stmt.setString(1, userID);
-			stmt.setString(2, pw);
+			stmt.setString(2, pw); // TODO: pw hashen
 			
 			rset = stmt.executeQuery();
 		} catch (SQLException e) {
@@ -118,7 +165,7 @@ public class DBConnector {
 	}
 
 	/**
-	 * 
+	 * change the nicknam 
 	 * @param userID (login)
 	 * @param new nickname
 	 * @return true if successful
@@ -153,9 +200,8 @@ public class DBConnector {
 		return true;
 	}
 	
-	/**
-	 * TODO: pw hashen
-	 * 
+	/** 
+	 * create a new user
 	 * @param userID (login)
 	 * @param nickname
 	 * @param password
@@ -169,8 +215,8 @@ public class DBConnector {
 			stmt = dbConnection.prepareStatement("INSERT INTO user (`userID`, `nickname`, `password`, `rightFlag`) VALUES (?, ?, ?, ?)");
 			stmt.setString(1, userID);
 			stmt.setString(2, nick);
-			stmt.setString(3, pw);
-			stmt.setByte(4, (byte)r.getVal());
+			stmt.setString(3, pw); 	//TODO: pw hashen
+			stmt.setByte(4, (byte)r.ordinal());
 			
 			stmt.executeUpdate();
 		} catch (SQLException e) {
@@ -195,7 +241,7 @@ public class DBConnector {
 	}
 	
 	/**
-	 * 
+	 * delete a user
 	 * @param userID to delete
 	 * @return true if successful
 	 */
@@ -231,7 +277,7 @@ public class DBConnector {
 	// --- Session ---
 	
 	/**
-	 * 
+	 * create a new session
 	 * @param userID
 	 * @param ip address
 	 * @return sessionID
@@ -324,7 +370,7 @@ public class DBConnector {
 	}
 	
 	/**
-	 * 
+	 * add logout time to a given session
 	 * @param sessionID
 	 * @return true if successful
 	 */
@@ -365,9 +411,10 @@ public class DBConnector {
 	// --------------------- self tests ---------------------
 	
 	public void dbTest() {
-		System.out.print("starting DB test! \n");
+		String userID = "test";
 		
-		System.out.print("starting user test! \n");
+		System.out.println("starting DB test!");
+		
 		/**
 		 * testet der Verbindung
 		 * Erwartung: Verbindung ist ok
@@ -381,17 +428,45 @@ public class DBConnector {
 				return;
 			}
 		} catch (SQLException e) {
-			System.out.print("error: " + e.getMessage()+"\n");
+			System.out.println("error: " + e.getMessage());
+			return;
+		}
+		System.out.println("");
+		
+		dbUserTest();
+		int sessionID = dbSessionTest(userID);
+		if(sessionID < 0)
+		{
+			System.out.println("session test has failed! exiting...");
+			return;
+		}
+		dbChatTest(userID, sessionID);
+		
+		System.out.println("test done!");
+	}
+	
+	private void dbChatTest(String userID, int sessionID) {
+		String txt = String.valueOf((int)(Math.random() * Integer.MAX_VALUE));
+		
+		System.out.println("starting chat test!");
+		
+		/**
+		 * Chat speichern
+		 * Erwartung: geht
+		 */
+		System.out.print("saving random chat text ... ");
+		if(logChat(userID, sessionID, txt)) 
+			System.out.print("OK\n");
+		else {
+			System.out.print("BAD\n");
 			return;
 		}
 		
-		dbUserTest();
-		dbSessionTest();
-		
-		System.out.print("test done!\n");
+		System.out.println("chat test done!");
+		System.out.println("");
 	}
 	
-	private void dbSessionTest() {
+	private int dbSessionTest(String userID) {
 		int sessionID = -1;
 		Inet4Address addr;
 		
@@ -399,24 +474,24 @@ public class DBConnector {
 		try {
 			addr = (Inet4Address) Inet4Address.getByName("localhost");
 		} catch (UnknownHostException e) {
-			System.out.print("localhost ist nicht bekannt :S");
-			return;
+			System.out.println("localhost ist nicht bekannt :S");
+			return sessionID;
 		}
 		
-		System.out.print("starting user test! \n");		
+		System.out.println("starting session test!");		
 		
 		/**
 		 * Session erstellen
 		 * Erwartung: sessionID > -1
 		 */
 		System.out.print("creating new session ... ");
-		sessionID = createSession("test", addr);
+		sessionID = createSession(userID, addr);
 		System.out.print("sessionID: " + sessionID + " ");
 		if(sessionID > -1) 
 			System.out.print("OK\n");
 		else {
 			System.out.print("BAD\n");
-			return;
+			return sessionID;
 		}
 		
 		/**
@@ -429,9 +504,11 @@ public class DBConnector {
 		else
 			System.out.print("BAD\n");
 		
-		System.out.print("(dummy session aus db löschen)\n");
+		System.out.println("(dummy sessions are still in the DB)");
 		
-		System.out.print("session test done!\n");
+		System.out.println("session test done!");
+		System.out.println("");
+		return sessionID;
 	}
 	
 	private void dbUserTest() {
@@ -439,6 +516,8 @@ public class DBConnector {
 		String user = "u" + pw;
 		String nick = "n" + pw;
 		User u;
+		
+		System.out.println("starting user test!");
 		
 		/**
 		 * Versucht sich mit einem ungültigen User einzuloggen 
@@ -533,6 +612,7 @@ public class DBConnector {
 			System.out.print("BAD - user seems to exist ... continuing\n");
 		}
 		
-		System.out.print("user test done!\n");
+		System.out.println("user test done!");
+		System.out.println("");
 	}
 }

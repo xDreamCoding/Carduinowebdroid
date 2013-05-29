@@ -15,7 +15,7 @@ public class Config {
 	}
 	
 	private Log log;
-	private String configPath = "config.ini";
+	private String configPath = "config.ini"; // TODO: der PFad ist eher m‰ﬂig, ‰ndern
 	private Options options;
 	
 	public Config(Log log) {
@@ -28,7 +28,6 @@ public class Config {
 				log.writelogfile("creating empty settings file");
 				f.createNewFile();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}
