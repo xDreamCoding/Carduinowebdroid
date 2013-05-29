@@ -2,31 +2,12 @@ package de.carduinodroid.shared;
 
 public class User {
 	public enum Right {
-		GUEST, USER, ADMIN;
-		
-		public static byte toByte(Right r) {
-			switch(r){
-			case GUEST:
-				return 0;
-			case USER:
-				return 1;
-			case ADMIN:
-				return 2;
-			}
-			return 0;
-		}
-		
-		public static Right toRight(byte b) {
-			switch(b) {
-			case 0:
-				return GUEST;
-			case 1:
-				return USER;
-			case 2:
-				return ADMIN;
-			}
-			return GUEST;
-		}
+		GUEST(0),
+		USER(1),
+		ADMIN(2);
+		private final int val;
+		private Right(int v) { val = v; }
+		public int getVal() { return val; }
 	}	
 	
 	private String userID; 		// login name 
