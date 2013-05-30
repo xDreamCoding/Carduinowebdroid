@@ -27,7 +27,7 @@ public class User {
 	
 	public boolean isAdmin() { return right == Right.ADMIN; }
 	public boolean isUser() { return right == Right.USER; }
-	public boolean isGUEST() { return right == Right.GUEST; }
+	public boolean isGuest() { return right == Right.GUEST; }
 //	public void setRight(Right r) { right = r; }
 	
 	/**

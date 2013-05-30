@@ -7,6 +7,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import de.carduinodroid.desktop.Model.Log;
 import de.carduinodroid.shared.User;
@@ -58,6 +61,58 @@ public class DBConnector {
 		return true;
 	}	
 		
+	// --------------------- Hilfsfunktionen ---------------------
+	private boolean executeUpdate(PreparedStatement stmt) {
+		try {
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+			
+			try {
+				if (stmt != null) { stmt.close(); }
+			}
+			catch (Exception e2) {
+				log.writelogfile(e2.getMessage());
+			}
+			
+			return false;
+		} finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				log.writelogfile(e.getMessage());
+			}
+		}
+		return true;
+	}
+	
+	private ResultSet executeQuery(PreparedStatement stmt) {
+		ResultSet rset = null;
+		try {	
+			rset = stmt.executeQuery();
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+			
+			try {
+				if (stmt != null) { stmt.close(); }
+			}
+			catch (Exception e2) {
+				log.writelogfile(e2.getMessage());				
+			}
+			return null;
+		}
+		// don't close statement, you need it for the resilt set!
+		return rset;
+	}
+	
+	private void closeStatement(PreparedStatement stmt) {
+		try {
+			stmt.close();
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}		
+	}
+	
 	// --------------------- API ---------------------
 	// --- Chat ---
 	/**
@@ -84,25 +139,11 @@ public class DBConnector {
 			stmt.setInt(3, sessionID); 
 			stmt.setString(4, text);
 			
-			stmt.executeUpdate();
+			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
-			
-			try {
-				if (stmt != null) { stmt.close(); }
-			}
-			catch (Exception e2) {
-				log.writelogfile(e2.getMessage());
-			}
-			
-			return false;
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				log.writelogfile(e.getMessage());
-			}
 		}
+
 		return true;
 	}
 	
@@ -122,21 +163,8 @@ public class DBConnector {
 			stmt.setString(1, userID);
 			stmt.setString(2, pw); // TODO: pw hashen
 			
-			rset = stmt.executeQuery();
-		} catch (SQLException e) {
-			log.writelogfile(e.getMessage());
+			rset = executeQuery(stmt);
 			
-			try {
-				if (stmt != null) { stmt.close(); }
-			}
-			catch (Exception e2) {
-				log.writelogfile(e2.getMessage());
-			}
-			
-			return null;
-		}
-		
-		try {
 			if(!rset.isBeforeFirst()) {
 				//throw new IllegalArgumentException("Login invalid.");
 				// TODO: log invalid login attempts?
@@ -147,19 +175,12 @@ public class DBConnector {
 				if(nickname == null) nickname = userID;
 				byte right = rset.getByte("rightFlag");
 				user = new User(userID, nickname, Right.values()[right]);
-			}
+			}			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			log.writelogfile(e.getMessage());
 		}
-		
+
+		closeStatement(stmt);
 		
 		return user;
 	}
@@ -176,27 +197,13 @@ public class DBConnector {
 		try {
 			stmt = dbConnection.prepareStatement("UPDATE user SET `nickname`=? WHERE `userID`=?");
 			stmt.setString(1, newNick);
-			stmt.setString(2, userID);
+			stmt.setString(2, userID);			
 			
-			stmt.executeUpdate();
+			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
-			
-			try {
-				if (stmt != null) { stmt.close(); }
-			}
-			catch (Exception e2) {
-				log.writelogfile(e2.getMessage());
-			}
-			
-			return false;
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
+
 		return true;
 	}
 	
@@ -218,25 +225,11 @@ public class DBConnector {
 			stmt.setString(3, pw); 	//TODO: pw hashen
 			stmt.setByte(4, (byte)r.ordinal());
 			
-			stmt.executeUpdate();
+			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
-			
-			try {
-				if (stmt != null) { stmt.close(); }
-			}
-			catch (Exception e2) {
-				log.writelogfile(e2.getMessage());
-			}
-			
-			return false;
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
+
 		return true;
 	}
 	
@@ -252,28 +245,61 @@ public class DBConnector {
 			stmt = dbConnection.prepareStatement("DELETE FROM user WHERE `userID`=?");
 			stmt.setString(1, userID);
 			
-			stmt.executeUpdate();
+			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
-			
-			try {
-				if (stmt != null) { stmt.close(); }
-			}
-			catch (Exception e2) {
-				log.writelogfile(e2.getMessage());
-			}
-			
-			return false;
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
+		
 		return true;
 	}
 
+	/**
+	 * 
+	 * @return returns all users in the database
+	 */
+	public List<User> getAllUser() {
+		// TODO: besondere filter?
+		
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		User user = null;
+		List<User> list = new ArrayList<User>();
+		
+		String userID, nickname;
+		byte right;
+		
+		try {
+			stmt = dbConnection.prepareStatement("SELECT userID, nickname, rightFlag FROM user");
+			
+			rset = executeQuery(stmt);
+			
+			if(!rset.isBeforeFirst()) {
+				// kein user?
+				return null;
+			} else {
+				while(!rset.isAfterLast()){
+					rset.next();					
+					
+					userID = rset.getString("userID");
+					nickname = rset.getString("nickname");
+					if(nickname == null) nickname = userID;
+					right = rset.getByte("rightFlag");
+					user = new User(userID, nickname, Right.values()[right]);
+					
+					list.add(user);
+					user = null;
+				}
+			}			
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+
+		closeStatement(stmt);
+		
+		return list;
+	
+	}
+	
 	// --- Session ---
 	
 	/**
@@ -299,72 +325,32 @@ public class DBConnector {
 			stmt.setString(2, ip.getHostAddress());
 			stmt.setObject(3, datetime);
 			
-			stmt.executeUpdate();
+			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
-			
-			try {
-				if (stmt != null) { stmt.close(); }
-			}
-			catch (Exception e2) {
-				log.writelogfile(e2.getMessage());
-			}
-			
-			return -1;
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		
-		// lockup sessionID
+		// lookup sessionID
 		try {
 			stmt = dbConnection.prepareStatement("SELECT sessionID FROM session WHERE `userID`=? AND `ipAddress`=? AND `loginTime`=?");
 			stmt.setString(1, userID);
 			stmt.setString(2, ip.getHostAddress());
 			stmt.setObject(3, datetime);
 			
-			rset = stmt.executeQuery();
-		} catch (SQLException e) {
-			log.writelogfile(e.getMessage());
+			rset = executeQuery(stmt);
 			
-			try {
-				if (stmt != null) { stmt.close(); }
-			}
-			catch (Exception e2) {
-				log.writelogfile(e2.getMessage());
-			}
-			
-			return -1;
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		try {
 			if(!rset.isBeforeFirst()) {
 				log.writelogfile("unable to create new session");
-				return -1;
+				return sessionID; 	// -> return -1;
 			} else {
 				rset.next();
 				sessionID = rset.getInt("sessionID");
-			}
+			}			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}		
+			log.writelogfile(e.getMessage());
+		}
+		
+		closeStatement(stmt);
 		
 		return sessionID;
 	}
@@ -386,23 +372,9 @@ public class DBConnector {
 			stmt.setObject(1, datetime);
 			stmt.setInt(2, sessionID);
 			
-			stmt.executeUpdate();
+			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
-			
-			try {
-				if (stmt != null) { stmt.close(); }
-			}
-			catch (Exception e2) {
-				log.writelogfile(e2.getMessage());
-			}			
-			return false;
-		} finally {
-			try {
-				stmt.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
 		return true;
 	}
@@ -550,8 +522,10 @@ public class DBConnector {
 		u = loginUser(user, pw);
 		if(u != null) {
 			System.out.print("Success\n");
-			if(u.getNickname().equals(user))
+			if(u.getNickname().equals(user)) {
 				System.out.print("--> nickname (" + u.getNickname() + ") == user (" + user + ") - OK\n");
+				System.out.println("--> isGuest() = " + (u.isGuest() ? "true - OK" : "false - BAD"));
+			}
 			else
 				System.out.print("--> nickname (" + u.getNickname() + ") != user (" + user + ") - BAD! continuing ...\n");
 		} else {
@@ -587,6 +561,25 @@ public class DBConnector {
 		} else {
 			System.out.print("error! exiting ...");
 			return;
+		}
+		
+		/**
+		 * Holt alle User aus der DB
+		 * Erwartung: Liste, mit mind einem User
+		 */
+		System.out.print("fetching all users ... ");
+		List<User> list = new ArrayList<User>();
+		User tmpU;
+		list = getAllUser();
+		if(list.isEmpty()) {
+			System.out.print("BAD - list is empty\n");
+		} else {
+			System.out.print("OK\n");
+			System.out.println("userID\tnick\tUser");
+			for(Iterator<User> it = list.iterator(); it.hasNext(); ) {
+				tmpU = it.next();
+				System.out.println(tmpU.getUserID() + "\t" + tmpU.getNickname() + "\t" + (tmpU.isUser() ? "true" : "false"));
+			}
 		}
 		
 		/**

@@ -60,15 +60,6 @@ public class MyServletContextListener implements ServletContextListener {
 		context.setAttribute("options", options);
 		log.writelogfile("Options loaded");
 		
-//	    try {
-//			Class.forName("org.mariadb.jdbc.Driver");
-//			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/carduinodroid", "root", "test");
-//			log.writelogfile("DB Connection established.");
-//			context.setAttribute("connection", connection);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-		//		}
 		
 		DBConnector db = new DBConnector(log, options);
 		context.setAttribute("database", db);
