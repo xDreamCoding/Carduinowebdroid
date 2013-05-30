@@ -147,6 +147,189 @@ public class DBConnector {
 		return true;
 	}
 	
+	// --- Drive ---	
+	/**
+	 * create a new drive
+	 * @param userID of the driver
+	 * @return driveID 
+	 */
+	public int startDrive(String userID) {
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		int driveID = -1;
+		
+		// TODO: check if the userID exists
+
+		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		
+		// insert new session
+		try {
+			stmt = dbConnection.prepareStatement("INSERT INTO driver (`userID`, `startTime`) VALUES (?, ?);");
+			stmt.setString(1, userID);
+			stmt.setObject(2, datetime);
+			
+			executeUpdate(stmt);
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+		
+		// lookup sessionID
+		try {
+			stmt = dbConnection.prepareStatement("SELECT driveID FROM driver WHERE `userID`=? AND `startTime`=?");
+			stmt.setString(1, userID);
+			stmt.setObject(2, datetime);
+			
+			rset = executeQuery(stmt);
+			
+			if(!rset.isBeforeFirst()) {
+				log.writelogfile("unable to create new session");
+				return driveID; 	// -> return -1;
+			} else {
+				rset.next();
+				driveID = rset.getInt("driveID");
+			}			
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+		
+		closeStatement(stmt);
+		
+		return driveID;
+	}
+
+	
+	/**
+	 * add stop time to a given drive
+	 * @param driveID
+	 * @return true if successful
+	 */
+	public boolean stopDrive(int driveID) {
+		PreparedStatement stmt = null;
+		
+		// TODO: check if the driveID exists
+
+		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		
+		try {
+			stmt = dbConnection.prepareStatement("UPDATE driver SET `stopTime`=? WHERE `driveID`=?");
+			stmt.setObject(1, datetime);
+			stmt.setInt(2, driveID);
+			
+			executeUpdate(stmt);
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+		return true;
+	}
+	
+	// --- GPS ---
+	/**
+	 * logs gps coordinates
+	 * @param driveID
+	 * @param longitude
+	 * @param latitude
+	 * @return true is successful
+	 */
+	public boolean logGPS(int driveID, String longitude, String latitude) {
+		PreparedStatement stmt = null;
+		
+		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		
+		try {
+			stmt = dbConnection.prepareStatement("INSERT INTO gps (`time`, `driveID`, `lat`, `long`) VALUES (?, ?, ?, ?)");
+			stmt.setObject(1, datetime);
+			stmt.setInt(2, driveID); 
+			stmt.setString(3, latitude);
+			stmt.setString(4, longitude);
+			
+			executeUpdate(stmt);
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+
+		return true;
+	}
+	
+	// --- Session ---
+	
+	/**
+	 * create a new session
+	 * @param userID
+	 * @param ip address
+	 * @return sessionID
+	 */
+	public int createSession(String userID, Inet4Address ip) {
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		int sessionID = -1;
+		
+		// TODO: check if the userID exists
+
+		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		
+		// insert new session
+		try {
+			stmt = dbConnection.prepareStatement("INSERT INTO session (`userID`, `ipAddress`, `loginTime`) VALUES (?, ?, ?);");
+			stmt.setString(1, userID);
+			stmt.setString(2, ip.getHostAddress());
+			stmt.setObject(3, datetime);
+			
+			executeUpdate(stmt);
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+		
+		// lookup sessionID
+		try {
+			stmt = dbConnection.prepareStatement("SELECT sessionID FROM session WHERE `userID`=? AND `ipAddress`=? AND `loginTime`=?");
+			stmt.setString(1, userID);
+			stmt.setString(2, ip.getHostAddress());
+			stmt.setObject(3, datetime);
+			
+			rset = executeQuery(stmt);
+			
+			if(!rset.isBeforeFirst()) {
+				log.writelogfile("unable to create new session");
+				return sessionID; 	// -> return -1;
+			} else {
+				rset.next();
+				sessionID = rset.getInt("sessionID");
+			}			
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+		
+		closeStatement(stmt);
+		
+		return sessionID;
+	}
+
+	
+	/**
+	 * add logout time to a given session
+	 * @param sessionID
+	 * @return true if successful
+	 */
+	public boolean closeSession(int sessionID) {
+		PreparedStatement stmt = null;
+		
+		// TODO: check if the sessionID exists
+
+		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		
+		try {
+			stmt = dbConnection.prepareStatement("UPDATE session SET `logoutTime`=? WHERE `sessionID`=?");
+			stmt.setObject(1, datetime);
+			stmt.setInt(2, sessionID);
+			
+			executeUpdate(stmt);
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+		return true;
+	}
+	
+	
 	// --- User ---
 	/** 
 	 * try to login with a given userID and password
@@ -300,29 +483,25 @@ public class DBConnector {
 	
 	}
 	
-	// --- Session ---
-	
+	// --- Queue ---
 	/**
-	 * create a new session
+	 * log a user who queued himself
 	 * @param userID
-	 * @param ip address
-	 * @return sessionID
+	 * @param sessionID
+	 * @return queueID
 	 */
-	public int createSession(String userID, Inet4Address ip) {
+	public int logQueue(String userID, int sessionID) {
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
-		int sessionID = -1;
+		int queueID = -1;
 		
-		// TODO: check if the userID exists
-
 		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
 		
 		// insert new session
 		try {
-			stmt = dbConnection.prepareStatement("INSERT INTO session (`userID`, `ipAddress`, `loginTime`) VALUES (?, ?, ?);");// +
-					//"SELECT sessionID FROM session WHERE `userID`=? AND `ipAddress`=? AND `loginTime`=?");
+			stmt = dbConnection.prepareStatement("INSERT INTO waitingQueue (`userID`, `sessionID`, `time`) VALUES (?, ?, ?);");
 			stmt.setString(1, userID);
-			stmt.setString(2, ip.getHostAddress());
+			stmt.setInt(2, sessionID);
 			stmt.setObject(3, datetime);
 			
 			executeUpdate(stmt);
@@ -332,19 +511,19 @@ public class DBConnector {
 		
 		// lookup sessionID
 		try {
-			stmt = dbConnection.prepareStatement("SELECT sessionID FROM session WHERE `userID`=? AND `ipAddress`=? AND `loginTime`=?");
+			stmt = dbConnection.prepareStatement("SELECT queueID FROM waitingQueue WHERE `userID`=? AND `sessionID`=? AND `time`=?");
 			stmt.setString(1, userID);
-			stmt.setString(2, ip.getHostAddress());
+			stmt.setInt(2, sessionID);
 			stmt.setObject(3, datetime);
 			
 			rset = executeQuery(stmt);
 			
 			if(!rset.isBeforeFirst()) {
-				log.writelogfile("unable to create new session");
-				return sessionID; 	// -> return -1;
+				log.writelogfile("unable to create new queue entry");
+				return queueID; 	// -> return -1;
 			} else {
 				rset.next();
-				sessionID = rset.getInt("sessionID");
+				queueID = rset.getInt("queueID");
 			}			
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
@@ -352,33 +531,9 @@ public class DBConnector {
 		
 		closeStatement(stmt);
 		
-		return sessionID;
+		return queueID;
 	}
-	
-	/**
-	 * add logout time to a given session
-	 * @param sessionID
-	 * @return true if successful
-	 */
-	public boolean closeSession(int sessionID) {
-		PreparedStatement stmt = null;
-		
-		// TODO: check if the sessionID exists
 
-		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
-		
-		try {
-			stmt = dbConnection.prepareStatement("UPDATE session SET `logoutTime`=? WHERE `sessionID`=?");
-			stmt.setObject(1, datetime);
-			stmt.setInt(2, sessionID);
-			
-			executeUpdate(stmt);
-		} catch (SQLException e) {
-			log.writelogfile(e.getMessage());
-		}
-		return true;
-	}
-	
 	
 	// --------------------- self tests ---------------------
 	
@@ -414,9 +569,19 @@ public class DBConnector {
 		}
 		dbChatTest(userID, sessionID);
 		
+		int driveID = dbDriveTest(userID);
+		if(driveID < 0)
+		{
+			System.out.println("drive test has failed! exiting...");
+			return;
+		}
+		dbGPSTest(driveID, "51°03'09.5\"", "001°07'54.9\"");
+		
+		int queueID = dbQueueTest(userID, sessionID);
+		
 		System.out.println("test done!");
 	}
-	
+
 	private void dbChatTest(String userID, int sessionID) {
 		String txt = String.valueOf((int)(Math.random() * Integer.MAX_VALUE));
 		
@@ -437,7 +602,82 @@ public class DBConnector {
 		System.out.println("chat test done!");
 		System.out.println("");
 	}
+		
+	private int dbDriveTest(String userID) {
+		int driveID = -1;
+		
+		System.out.println("starting drive test!");		
+		
+		/**
+		 * Fahrt beginnen
+		 * Erwartung: sessionID > -1
+		 */
+		System.out.print("creating new drive ... ");
+		driveID = startDrive(userID);
+		System.out.print("driveID: " + driveID + " ");
+		if(driveID > -1) 
+			System.out.print("OK\n");
+		else {
+			System.out.print("BAD\n");
+			return driveID;
+		}
+		
+		/**
+		 * Session schließen
+		 * Erwartung: geht
+		 */
+		System.out.print("finishing drive ... ");
+		if(stopDrive(driveID)) 
+			System.out.print("OK\n");
+		else
+			System.out.print("BAD\n");
+		
+		System.out.println("drive test done!");
+		System.out.println("");
+		return driveID;
+	}
+
+	private void dbGPSTest(int driveID, String longitude, String latitude) {
+		System.out.println("starting GPS test!");		
+		
+		/**
+		 * Koordinaten speichern
+		 * Erwartung: geht
+		 */
+		System.out.print("saving GPS ... ");
+		if(logGPS(driveID, longitude, latitude)) 
+			System.out.print("OK\n");
+		else {
+			System.out.print("BAD\n");
+			return;
+		}
+		
+		System.out.println("GPS test done!");
+		System.out.println("");
+	}
 	
+	private int dbQueueTest(String userID, int sessionID) {
+		int queueID = -1;
+		System.out.println("starting queue test!");		
+		
+		/**
+		 * Eintrag speichern 
+		 * Erwartung: geht
+		 */
+		System.out.print("saving enqueue event ... ");
+		queueID = logQueue(userID, sessionID);
+		if(queueID > -1) 
+			System.out.print("OK\n");
+		else {
+			System.out.print("BAD\n");
+			return queueID;
+		}
+		
+		System.out.println("queue test done!");
+		System.out.println("");
+		return queueID;
+	}
+
 	private int dbSessionTest(String userID) {
 		int sessionID = -1;
 		Inet4Address addr;
@@ -475,8 +715,6 @@ public class DBConnector {
 			System.out.print("OK\n");
 		else
 			System.out.print("BAD\n");
-		
-		System.out.println("(dummy sessions are still in the DB)");
 		
 		System.out.println("session test done!");
 		System.out.println("");

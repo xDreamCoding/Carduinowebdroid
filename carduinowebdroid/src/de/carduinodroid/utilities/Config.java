@@ -15,14 +15,24 @@ public class Config {
 	}
 	
 	private Log log;
-	private String configPath = "config.ini"; // TODO: der PFad ist eher mäßig, ändern
 	private Options options;
+	private InputStream in;
+	private String filePath;
 	
-	public Config(Log log) {
+	public Config(Log log, String configPath) {
 		this.log = log;
+		filePath = configPath + "/config.properties";
+		
+		log.writelogfile("filePath: " + filePath);
+		
 		options = new Options();
 		
-		File f = new File(configPath);
+		File c = new File(configPath);
+		File f = new File(filePath);
+		if(!c.exists()) {
+			log.writelogfile("creating folder");
+			c.mkdir();
+		}
 		if(!f.exists())
 			try {
 				log.writelogfile("creating empty settings file");
@@ -35,7 +45,7 @@ public class Config {
 	public void readOptions() {
 		try{
 			Properties p = new Properties();			
-			p.load(new FileInputStream(configPath));
+			p.load(new FileInputStream(filePath));
 			
 			log.writelogfile("loading settings");
 			log.writelogfile("fahrZeit = " + p.getProperty("fahrZeit"));
@@ -61,19 +71,14 @@ public class Config {
 			p.setProperty("dbAddress", options.dbAddress);
 			p.setProperty("dbUser", options.dbUser);
 			p.setProperty("dbPW", options.dbPW);
-			p.store(new FileOutputStream(configPath), null);
+			p.store(new FileOutputStream(filePath), null);
 		}
 		catch (Exception e) {
 			  System.out.println(e);
 		}
 	}
 	
-	public void writeOptions(Options opt) {
-		options = opt;
-		saveOptions();
-	}
-	
-	public Options createAndSaveDefault() {    	
+	public void setDefault() {    	
     	/*
     	 * DB läuft auf/im 
     	 * 	localhost 	-> true
@@ -91,8 +96,7 @@ public class Config {
     		options.dbUser = "test";
     		options.dbPW = "test";
     	}
-    	writeOptions(options);	   
-    	return options;
+    	saveOptions();
 	}
 
 	/**
@@ -100,6 +104,10 @@ public class Config {
 	 */
 	public Options getOptions() {
 		return options;
+	}
+	
+	public void setOptions(Options options) {
+		this.options = options;
 	}
 	
 	
