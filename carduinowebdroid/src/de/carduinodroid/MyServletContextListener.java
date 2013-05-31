@@ -11,12 +11,14 @@ import de.carduinodroid.desktop.Model.Log;
 import de.carduinodroid.utilities.Config;
 import de.carduinodroid.utilities.Config.Options;
 import de.carduinodroid.utilities.DBConnector;
+import de.carduinodroid.utilities.LogNG;
 
 @WebListener
 public class MyServletContextListener implements ServletContextListener {
 
 	private ServletContext context;
-	private Log log;
+	private Log oldLog;
+	private LogNG log;
 
 	/*This method is invoked when the Web Application has been removed 
 	and is no longer able to accept requests
@@ -38,42 +40,42 @@ public class MyServletContextListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event)
 	{
 		context = event.getServletContext();
-		log = new Log();
+		
+		// initialize everything		
+		// new log
+		log = new LogNG();
+		log.writelogfile("logNG instanciated.");
 		context.setAttribute("log", log);
-		log.writelogfile("contextInitialized. Log instanciated.");
 		
-		GPSTrack gps = new GPSTrack();
-		log.writelogfile("GPSTracker instanciated.");
-		
-		Controller_Computer controller = new Controller_Computer(log, gps);
-		context.setAttribute("controller", controller);
-		log.writelogfile("Controller_Computer instanciated.");
-		
+		// config & options
 		Config config = new Config(log, context.getRealPath("/WEB-INF/config"));
 		config.readOptions();
-		//context.setAttribute("config", config);
-		
 		Options options = config.getOptions();
 		if(options.dbAddress == null) {
 			config.setDefault();
 			options = config.getOptions();
 		}
-		
-		context.setAttribute("options", options);
 		log.writelogfile("Options loaded");
+		context.setAttribute("options", options);
+			
+		// GPS		
+		GPSTrack gps = new GPSTrack();
+		log.writelogfile("GPSTracker instanciated");
 		
-//	    try {
-//			Class.forName("org.mariadb.jdbc.Driver");
-//			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/carduinodroid", "root", "test");
-//			log.writelogfile("DB Connection established.");
-//			context.setAttribute("connection", connection);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-		//		}
+		// controller
+		Controller_Computer controller = new Controller_Computer(log.getOldLog(), gps);		
+		log.writelogfile("Controller_Computer instanciated.");
+		context.setAttribute("controller", controller);	
 		
+		// database
 		DBConnector db = new DBConnector(log, options);
+		log.writelogfile("DBConnector instanciated.");
 		context.setAttribute("database", db);
+		
+		// send options and db to logNG 
+		log.setOptions(options);
+		log.setDB(db);
+		
 		
 		//db.dbTest();		
 	}
