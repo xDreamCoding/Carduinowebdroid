@@ -2,7 +2,6 @@ package de.carduinodroid.desktop.Controller;
 
 import de.carduinodroid.desktop.Model.GPSTrack;
 import de.carduinodroid.desktop.Model.Log;
-import de.carduinodroid.desktop.View.GUI_Computer;
 /** Class to include the controller classes. 
 * 
 * @author Felix L

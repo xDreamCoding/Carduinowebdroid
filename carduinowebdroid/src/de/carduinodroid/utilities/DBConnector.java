@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import de.carduinodroid.desktop.Model.Log;
 import de.carduinodroid.shared.User;
 import de.carduinodroid.shared.User.Right;
 import de.carduinodroid.utilities.Config.Options;
@@ -19,11 +18,11 @@ import de.carduinodroid.utilities.Config.Options;
 public class DBConnector {
 
 	static Connection dbConnection = null;
-	Log log;
+	LogNG log;
 	Options options;
 	
-	public DBConnector(Log l, Options opt) {
-		log = l;
+	public DBConnector(LogNG logIN, Options opt) {
+		log = logIN;
 		options = opt;
 		
 		if(dbConnection == null)
@@ -577,7 +576,7 @@ public class DBConnector {
 		}
 		dbGPSTest(driveID, "51°03'09.5\"", "001°07'54.9\"");
 		
-		int queueID = dbQueueTest(userID, sessionID);
+		dbQueueTest(userID, sessionID);
 		
 		System.out.println("test done!");
 	}
