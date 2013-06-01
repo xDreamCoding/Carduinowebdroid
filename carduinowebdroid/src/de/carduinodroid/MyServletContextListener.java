@@ -17,7 +17,6 @@ import de.carduinodroid.utilities.LogNG;
 public class MyServletContextListener implements ServletContextListener {
 
 	private ServletContext context;
-	private Log oldLog;
 	private LogNG log;
 
 	/*This method is invoked when the Web Application has been removed 
@@ -75,8 +74,7 @@ public class MyServletContextListener implements ServletContextListener {
 		// send options and db to logNG 
 		log.setOptions(options);
 		log.setDB(db);
-		
-		
+
 		//db.dbTest();		
 	}
 }

@@ -34,6 +34,8 @@ public class DBConnector {
 		if(dbConnection == null)
 			return;
 		
+		log.writelogfile("closing db connection!");
+		
 		try {
 			dbConnection.commit();
 			dbConnection.close();
@@ -100,7 +102,7 @@ public class DBConnector {
 			}
 			return null;
 		}
-		// don't close statement, you need it for the resilt set!
+		// don't close the statement yet, you need it for the result set!
 		return rset;
 	}
 	
@@ -121,7 +123,7 @@ public class DBConnector {
 	 * @param text
 	 * @return 
 	 */
-	public boolean logChat(String userID, int sessionID, String text) {
+	protected boolean logChat(String userID, int sessionID, String text) {
 		PreparedStatement stmt = null;
 	
 		if(text.length() > 256) {	// TODO: den Wert vllt zentral speichern? 
@@ -229,7 +231,7 @@ public class DBConnector {
 	 * @param latitude
 	 * @return true is successful
 	 */
-	public boolean logGPS(int driveID, String longitude, String latitude) {
+	protected boolean logGPS(int driveID, String longitude, String latitude) {
 		PreparedStatement stmt = null;
 		
 		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
@@ -484,12 +486,12 @@ public class DBConnector {
 	
 	// --- Queue ---
 	/**
-	 * log a user who queued himself
+	 * log a user who enqueued himself
 	 * @param userID
 	 * @param sessionID
 	 * @return queueID
 	 */
-	public int logQueue(String userID, int sessionID) {
+	protected int logQueue(String userID, int sessionID) {
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
 		int queueID = -1;
