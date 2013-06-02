@@ -16,7 +16,7 @@
 
 <link rel="stylesheet" href="static/style.css" />
 
-<!--Site specific jS-->
+<!--Custom jS-->
 <script>
 $(function() {
 	$( "input[type=submit], button" )
@@ -58,7 +58,7 @@ $(function() {
 
 <div id="index_guestbox">
     <form action="guest.jsp" method="post" id="guest">
-        <td><input type="submit" value="Watch a Driver"</a></td>       
+        <td><input type="submit" value="Watch a Driver" /></td>       
     </form> 
 </div>
 

@@ -27,6 +27,10 @@ a{
 	text-decoration:none;
 }
 
+textarea{
+	resize:none;
+}
+
 #index_logo {
 	margin-top:50px;
 	text-align:center;	
@@ -121,6 +125,31 @@ a{
         0 0 0 12px rgba(255,255,255,0.4);
 }
 
+#main_chat_textinput{
+    border:1px solid #ECD6BF;
+    margin-left:10px;
+    margin-right:auto;
+    padding:3px;
+    height: 75px;
+	width:97%;
+    border-radius: 4px;
+    margin-left:4px;
+    padding:3px;
+    margin-top: 8px;
+	maxlength: 256;
+}
+
+#main_chat_chars{
+	text-align:right;
+	color:#666;
+	font-size:14px;
+	}
+	
+#main_chat_speak{
+	margin-top:5px;
+	width:100%;
+}
+
 #main_q{
 	margin-left: 5px;
 	margin-right:5px;
@@ -150,3 +179,20 @@ a{
         0 0 0 12px rgba(255,255,255,0.4);
 }
 
+#main_controls{
+	margin-left: 5px;
+	border-radius: 4px;
+    padding: 3px;
+    margin-top: 10px;
+   	box-shadow:
+        0 2px 2px rgba(0,0,0,0.2),
+        0 1px 5px rgba(0,0,0,0.2),
+        0 0 0 12px rgba(255,255,255,0.4);
+	height: auto !important;
+	height: 19%;
+	min-height: 19%;
+}
+
+#main_maxspeed{
+	height:100px;
+}
