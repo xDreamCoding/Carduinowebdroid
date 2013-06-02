@@ -43,7 +43,7 @@ public class Filter implements javax.servlet.Filter {
 		if(authorized || staticRequest) {
 			chain.doFilter(request, res);
 		} else {
-			config.getServletContext().getRequestDispatcher("/WEB-INF/login.jsp").forward(request, res);
+			config.getServletContext().getRequestDispatcher("/index.jsp").forward(request, res);
 		}
 	}
 
