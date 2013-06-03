@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <title>CarDuinoDroid</title>
-<link rel="icon" href="../static/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="static/favicon.ico" type="image/x-icon" />
 <!--JQuery Import-->
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/dot-luv/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -13,7 +13,7 @@
 
 <!--Custom Stylesheet-->
 
-<link rel="stylesheet" href="../static/style.css" />
+<link rel="stylesheet" href="static/style.css" />
 
 <!--Custom jS-->
 <script>
