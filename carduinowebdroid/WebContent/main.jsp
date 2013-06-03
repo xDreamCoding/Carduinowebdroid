@@ -64,14 +64,14 @@ $(function() {
 	});
 		$( "#main_close_right" ).button().click(function() {
 		$( "#main_table_sidebar_right" ).hide();
-		stream_width+=10;
+		stream_width+=20;
 		$( "#main_table_stream").css("width", stream_width + "%");
 		$( "#main_close_right" ).hide();
 		$( "#main_open_right" ).show();
 	});
 	$( "#main_open_right" ).button().click(function() {
 		$( "#main_table_sidebar_right" ).show();
-		stream_width-=10;
+		stream_width-=20;
 		$( "#main_table_stream").css("width", stream_width + "%");
 		$( "#main_close_right" ).show();
 		$( "#main_open_right" ).hide();
@@ -119,7 +119,7 @@ $(function() {
             </div>
             
         </td>
-        <td><button id="main_close_right" class="ui-icon ui-icon-triangle-1-e"></button> <button id="main_open_left" class="ui-icon ui-icon-triangle-1-w"></button></td>
+        <td><button id="main_close_right" class="ui-icon ui-icon-triangle-1-e"></button> <button id="main_open_right" class="ui-icon ui-icon-triangle-1-w"></button></td>
         <td id="main_table_sidebar_right">	
         
         	<div id="main_q">Q </div>
