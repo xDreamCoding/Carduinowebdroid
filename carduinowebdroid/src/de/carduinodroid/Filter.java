@@ -33,6 +33,8 @@ public class Filter implements javax.servlet.Filter {
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();
 			
+			System.out.println("-> " + req.getRequestURI());
+			
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
 			
 			if(session.getAttribute("name") != null) {
@@ -43,7 +45,7 @@ public class Filter implements javax.servlet.Filter {
 		if(authorized || staticRequest) {
 			chain.doFilter(request, res);
 		} else {
-			config.getServletContext().getRequestDispatcher("/index.jsp").forward(request, res);
+			config.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, res);
 		}
 	}
 
@@ -52,7 +54,7 @@ public class Filter implements javax.servlet.Filter {
 	 */
 	public void init(FilterConfig fConfig) throws ServletException {
 		config = fConfig;
-		System.out.println("initfilter");
+		System.out.println("init filter");
 	}
 	
 	/**
