@@ -10,19 +10,21 @@ Hi Leute hier eine kleine **Anleitung**:
 
 Basics:
 
-1. Github account anlegen  
-2. Repo forken  
+1. Github Account anlegen  
+ Sven den Accountnamen sagen
+2. Repo forken **[entfällt]**  
  oben rechts -> fork klicken  
-3. das eigenes repo klonen
- per Windows Programm
- oder Shell  
+3. das eigenes Repo klonen **[das Hauptrepo clonen]**  
+	per Windows Programm
+	oder Shell  
 4. Work, Work  
 5. commiten und pushen  
- per Eclipse (unter Team)  
- oder per Windows Programm  
- oder per Shell  
-6. pull request  
- auf der github Seite eures repo oben auf pull request klicken  
+	per Eclipse (unter Team)  
+	oder per Windows Programm  
+	oder per Shell  
+	guckt euch an, WAS ihr commitet!
+6. pull request **[entfällt]**  
+	auf der Github Seite eures Repos oben auf pull request klicken  
    
 Wie spiele ich updates aus dem Hauptrepo in meinen Fork ein?  
 -> so: https://help.github.com/articles/syncing-a-fork  
