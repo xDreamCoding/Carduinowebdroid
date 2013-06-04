@@ -13,6 +13,10 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import de.carduinodroid.shared.User;
+import de.carduinodroid.utilities.DBConnector;
+import de.carduinodroid.utilities.LogNG;
+
 /**
  * Servlet Filter implementation class Filter
  */
@@ -20,6 +24,7 @@ import javax.servlet.http.HttpSession;
 public class Filter implements javax.servlet.Filter {
 	
 	FilterConfig config;
+	LogNG log;
 
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
@@ -35,8 +40,9 @@ public class Filter implements javax.servlet.Filter {
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();
 			
-			Map<String, String[]> m = req.getParameterMap();
+			System.out.println("-> " + req.getRequestURI());
 			
+			Map<String, String[]> m = req.getParameterMap();
 			Iterator<Entry<String, String[]>> entries = m.entrySet().iterator();
 			while (entries.hasNext()) {
 			    Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) entries.next();
@@ -45,7 +51,26 @@ public class Filter implements javax.servlet.Filter {
 			    System.out.println("Key = " + key + ", Value = " + value[0]);
 			}
 			
-			System.out.println("-> " + req.getRequestURI());
+			if(m.size() > 0 && m.containsKey("action")) {
+				switch((String)m.get("action")[0])  {
+				case "login":
+					if(!m.containsKey("loginName") || !m.containsKey("password"))
+						break;
+					
+					DBConnector db = (DBConnector)config.getServletContext().getAttribute("db");
+					String userID, pw;
+					userID = (String)m.get("loginName")[0];
+					pw = (String)m.get("password")[0];
+					User u = db.loginUser(userID, pw);
+					
+					if(u == null)
+						break;
+					
+					session.setAttribute("name", u.getNickname());
+					System.out.println("user " + u.getNickname() + " has logged in");
+					break;
+				}
+			}
 			
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
 			
@@ -54,7 +79,9 @@ public class Filter implements javax.servlet.Filter {
 			}
 		}
 		
-		if(authorized || staticRequest) {
+		if(authorized) {
+			config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);
+		} else if(staticRequest) {
 			chain.doFilter(request, res);
 		} else {
 			config.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, res);
@@ -67,6 +94,8 @@ public class Filter implements javax.servlet.Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		config = fConfig;
 		System.out.println("init filter");
+		
+		log = (LogNG)config.getServletContext().getAttribute("log");
 	}
 	
 	/**

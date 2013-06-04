@@ -35,11 +35,12 @@ $(function() {
 
 <div id="index_loginbox">
 <form method="POST">
+	<input type="hidden" name="action" value="login"/>
 	<h1>Login</h1>
     	<table id="index_logintable">
         	<tr>
             	<td for="nickname">Nickname:</td>
-                <td><input type="text" name="nickname" placeholder="Nickname"/></td>
+                <td><input type="text" name="loginName" placeholder="Nickname"/></td>
             </tr>
             <tr>
             	<td for="password">Password:</td>
