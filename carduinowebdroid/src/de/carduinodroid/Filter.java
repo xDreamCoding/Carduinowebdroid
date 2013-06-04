@@ -1,7 +1,9 @@
 package de.carduinodroid;
 
 import java.io.IOException;
-
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -32,6 +34,16 @@ public class Filter implements javax.servlet.Filter {
 		if(request instanceof HttpServletRequest) {
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();
+			
+			Map<String, String[]> m = req.getParameterMap();
+			
+			Iterator<Entry<String, String[]>> entries = m.entrySet().iterator();
+			while (entries.hasNext()) {
+			    Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) entries.next();
+			    String key = (String)entry.getKey();
+			    String[] value = (String[])entry.getValue();
+			    System.out.println("Key = " + key + ", Value = " + value[0]);
+			}
 			
 			System.out.println("-> " + req.getRequestURI());
 			

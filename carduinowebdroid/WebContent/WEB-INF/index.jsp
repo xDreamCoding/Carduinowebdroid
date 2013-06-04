@@ -34,7 +34,7 @@ $(function() {
 <br>
 
 <div id="index_loginbox">
-<form action="index.jsp" method="POST" target="_blank">
+<form method="POST">
 	<h1>Login</h1>
     	<table id="index_logintable">
         	<tr>
