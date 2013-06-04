@@ -19,11 +19,7 @@
 <!--Custom jS-->
 <script>
 $(function() {
-	$( "input[type=submit], button" )
-	.button()
-	.click(function( event ) {
-	event.preventDefault();
-	});
+	$( "input[type=submit], button" ).button()
 });
 </script>
 </head>
@@ -38,16 +34,16 @@ $(function() {
 <br>
 
 <div id="index_loginbox">
-<form action="index.jsp" method="post">
+<form action="index.jsp" method="POST" target="_blank">
 	<h1>Login</h1>
     	<table id="index_logintable">
         	<tr>
             	<td for="nickname">Nickname:</td>
-                <td><input type="text" name="nickname" id="textinput" placeholder="Nickname"/></td>
+                <td><input type="text" name="nickname" placeholder="Nickname"/></td>
             </tr>
             <tr>
             	<td for="password">Password:</td>
-                <td><input type="password" name="password" id="textinput" placeholder="Password"/></td>
+                <td><input type="password" name="password" placeholder="Password"/></td>
             </tr>
        </table>
        <input id="index_buttonsubmit" type="submit" value="Login" />
@@ -71,6 +67,6 @@ $(function() {
 <div id="index_footer">
 <a href="impress.jsp">Impress</a> | <a href="about.jsp">About</a>
 </div>
-  
+
 </body>
 </html>
