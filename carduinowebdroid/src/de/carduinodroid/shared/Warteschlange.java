@@ -4,17 +4,17 @@ import java.util.LinkedList;
 
 public class Warteschlange {
 
-	private LinkedList<String> Warteschlange;
+	private LinkedList<Integer> Warteschlange;
 	
 	public Warteschlange(){
-		Warteschlange = new LinkedList<String>();
+		Warteschlange = new LinkedList<Integer>();
 	}
 	
-	public String getnextUser(){
+	public int getNextUser(){
 		return Warteschlange.removeFirst();
 	}
 	
-	public void insertUser(String SessionID){
+	public void insertUser(int SessionID){
 		Warteschlange.add(SessionID);
 	}
 	
@@ -26,12 +26,12 @@ public class Warteschlange {
 		return Warteschlange.isEmpty();
 	}
 	
-	public void deleteTicket(String SessionID){
+	public void deleteTicket(int SessionID){
 		int index = Warteschlange.indexOf(SessionID);
 		Warteschlange.remove(index);
 	}
 	
-	public void InsertFirst(String SessionID){
+	public void InsertFirst(int SessionID){
 		Warteschlange.addFirst(SessionID);
 	}
 }

@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebListener;
 
 import de.carduinodroid.desktop.Controller.Controller_Computer;
 import de.carduinodroid.desktop.Model.GPSTrack;
-import de.carduinodroid.desktop.Model.Log;
 import de.carduinodroid.utilities.Config;
 import de.carduinodroid.utilities.Config.Options;
 import de.carduinodroid.utilities.DBConnector;

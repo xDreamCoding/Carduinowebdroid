@@ -1,6 +1,7 @@
 package de.carduinodroid.utilities;
 
 import de.carduinodroid.desktop.Model.Log;
+import de.carduinodroid.shared.GPS;
 import de.carduinodroid.utilities.Config.Options;
 
 public class LogNG {
@@ -56,6 +57,15 @@ public class LogNG {
 		}
 		else
 			return db.logGPS(driveID, longitude, latitude);
+	}
+	
+	/**
+	 * log GPS to DB or file depending on settings
+	 * @param gps
+	 * @return true if successful
+	 */
+	public boolean logGPS(GPS gps) {
+		return (logGPS(gps.getDriveID(), gps.getLongitude(), gps.getLatitude()));
 	}
 	
 	/**

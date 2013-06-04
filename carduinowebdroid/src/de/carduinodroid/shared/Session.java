@@ -1,15 +1,15 @@
 package de.carduinodroid.shared;
 
 import java.net.Inet4Address;
-import java.util.*;
+import java.sql.Timestamp;
 
 public class Session {
 
 	private String SessionId;
 	private Inet4Address ip;
-	private Date LoginTime;
+	private Timestamp LoginTime;
 	
-	public Session(String id,Inet4Address ipadress,Date Login) {
+	public Session(String id,Inet4Address ipadress, Timestamp Login) {
 		SessionId = id;
 		ip = ipadress;
 		LoginTime = Login;
@@ -23,7 +23,7 @@ public class Session {
 		return ip;
 	}
 	
-	public Date getLoginTme(){
+	public Timestamp getLoginTme(){
 		return LoginTime;
 	}
 }

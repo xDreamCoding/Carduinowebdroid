@@ -1,13 +1,16 @@
 package de.carduinodroid.shared;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
 public class GPS {
 
-	private Object datetime;
+	private Timestamp datetime;
 	private int driverID;
 	private String longitude;
 	private String latitude;
 	
-	public GPS(int driveID, String longi, String lati,Object time){
+	public GPS(int driveID, String longi, String lati, Timestamp time){
 		datetime = time;
 		driverID = driveID;
 		longitude = longi;
@@ -22,11 +25,15 @@ public class GPS {
 		return latitude;
 	}
 	
-	public int getdriveID(){
+	public int getDriveID(){
 		return driverID;
 	}
 
-	public Object getdateTime(){
+	public Timestamp getDateTime(){
 		return datetime;
+	}
+	
+	public String getDateTimeFormated() {
+		return new SimpleDateFormat("MM/dd/yyyy").format(datetime);
 	}
 }

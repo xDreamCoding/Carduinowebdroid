@@ -7,11 +7,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import de.carduinodroid.shared.User;
+import de.carduinodroid.shared.*;
 import de.carduinodroid.shared.User.Right;
 import de.carduinodroid.utilities.Config.Options;
 
@@ -131,11 +132,11 @@ public class DBConnector {
 			text = text.substring(0, 255);
 		}
 		
-		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
 		try {
 			stmt = dbConnection.prepareStatement("INSERT INTO chat (`time`, `userID`, `sessionID`, `text`) VALUES (?, ?, ?, ?)");
-			stmt.setObject(1, datetime);
+			stmt.setTimestamp(1, datetime);
 			stmt.setString(2, userID);
 			stmt.setInt(3, sessionID); 
 			stmt.setString(4, text);
@@ -161,13 +162,13 @@ public class DBConnector {
 		
 		// TODO: check if the userID exists
 
-		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
 		// insert new session
 		try {
 			stmt = dbConnection.prepareStatement("INSERT INTO driver (`userID`, `startTime`) VALUES (?, ?);");
 			stmt.setString(1, userID);
-			stmt.setObject(2, datetime);
+			stmt.setTimestamp(2, datetime);
 			
 			executeUpdate(stmt);
 		} catch (SQLException e) {
@@ -178,7 +179,7 @@ public class DBConnector {
 		try {
 			stmt = dbConnection.prepareStatement("SELECT driveID FROM driver WHERE `userID`=? AND `startTime`=?");
 			stmt.setString(1, userID);
-			stmt.setObject(2, datetime);
+			stmt.setTimestamp(2, datetime);
 			
 			rset = executeQuery(stmt);
 			
@@ -209,11 +210,11 @@ public class DBConnector {
 		
 		// TODO: check if the driveID exists
 
-		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
 		try {
 			stmt = dbConnection.prepareStatement("UPDATE driver SET `stopTime`=? WHERE `driveID`=?");
-			stmt.setObject(1, datetime);
+			stmt.setTimestamp(1, datetime);
 			stmt.setInt(2, driveID);
 			
 			executeUpdate(stmt);
@@ -231,14 +232,14 @@ public class DBConnector {
 	 * @param latitude
 	 * @return true is successful
 	 */
-	protected boolean logGPS(int driveID, String longitude, String latitude) {
+	protected boolean logGPS(int driveID, String latitude, String longitude) {
 		PreparedStatement stmt = null;
 		
-		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
 		try {
 			stmt = dbConnection.prepareStatement("INSERT INTO gps (`time`, `driveID`, `lat`, `long`) VALUES (?, ?, ?, ?)");
-			stmt.setObject(1, datetime);
+			stmt.setTimestamp(1, datetime);
 			stmt.setInt(2, driveID); 
 			stmt.setString(3, latitude);
 			stmt.setString(4, longitude);
@@ -251,8 +252,101 @@ public class DBConnector {
 		return true;
 	}
 	
-	// --- Session ---
+	/**
+	 * get all GPS records for one drive
+	 * @param driveID
+	 * @return ArrayList with GPS records
+	 */
+	public List<GPS> getGPSByDriveID(int driveID) {
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		GPS gps= null;
+		List<GPS> list = new ArrayList<GPS>();
+		
+		Timestamp datetime;
+		String latitude, longitude;
+		
+		try {
+			stmt = dbConnection.prepareStatement("SELECT 'time', 'lat', 'long' FROM gps WHERE driveID=?");
+			stmt.setInt(1, driveID);
+			
+			rset = executeQuery(stmt);
+			
+			if(!rset.isBeforeFirst()) {
+				// kein gps infos gefunden
+				return null;
+			} else {
+				rset.next();
+				while(!rset.isAfterLast()){
+					datetime = rset.getTimestamp("time");
+					latitude = rset.getString("latitude");
+					longitude = rset.getString("longitude");
+					gps = new GPS(driveID, longitude, latitude, datetime);
+							
+					list.add(gps);
+					gps = null;
+					rset.next();
+				}
+			}			
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+
+		closeStatement(stmt);
+		
+		return list;	
+	}
 	
+	/**
+	 * get all GPS records between a given time frame
+	 * @param begin
+	 * @param end
+	 * @return ArrayList with GPS records
+	 */
+	public List<GPS> getGPSByTime(Timestamp begin, Timestamp end) {
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		GPS gps= null;
+		List<GPS> list = new ArrayList<GPS>();
+		
+		int driveID;
+		Timestamp datetime;
+		String latitude, longitude;
+		
+		try {
+			stmt = dbConnection.prepareStatement("SELECT 'driveID', 'lat', 'long' FROM gps WHERE 'time'>? AND 'time'<?");
+			stmt.setObject(1, begin);
+			stmt.setObject(2, end);
+			
+			rset = executeQuery(stmt);
+			
+			if(!rset.isBeforeFirst()) {
+				// kein gps infos gefunden
+				return null;
+			} else {
+				rset.next();
+				while(!rset.isAfterLast()){
+					driveID = rset.getInt("driveID");
+					datetime = rset.getTimestamp("time");
+					latitude = rset.getString("latitude");
+					longitude = rset.getString("longitude");
+					gps = new GPS(driveID, longitude, latitude, datetime);
+							
+					list.add(gps);
+					gps = null;
+					rset.next();
+				}
+			}			
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+
+		closeStatement(stmt);
+		
+		return list;	
+	}
+	
+	// --- Session ---	
 	/**
 	 * create a new session
 	 * @param userID
@@ -266,14 +360,14 @@ public class DBConnector {
 		
 		// TODO: check if the userID exists
 
-		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
 		// insert new session
 		try {
 			stmt = dbConnection.prepareStatement("INSERT INTO session (`userID`, `ipAddress`, `loginTime`) VALUES (?, ?, ?);");
 			stmt.setString(1, userID);
 			stmt.setString(2, ip.getHostAddress());
-			stmt.setObject(3, datetime);
+			stmt.setTimestamp(3, datetime);
 			
 			executeUpdate(stmt);
 		} catch (SQLException e) {
@@ -285,7 +379,7 @@ public class DBConnector {
 			stmt = dbConnection.prepareStatement("SELECT sessionID FROM session WHERE `userID`=? AND `ipAddress`=? AND `loginTime`=?");
 			stmt.setString(1, userID);
 			stmt.setString(2, ip.getHostAddress());
-			stmt.setObject(3, datetime);
+			stmt.setTimestamp(3, datetime);
 			
 			rset = executeQuery(stmt);
 			
@@ -316,11 +410,11 @@ public class DBConnector {
 		
 		// TODO: check if the sessionID exists
 
-		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
 		try {
 			stmt = dbConnection.prepareStatement("UPDATE session SET `logoutTime`=? WHERE `sessionID`=?");
-			stmt.setObject(1, datetime);
+			stmt.setTimestamp(1, datetime);
 			stmt.setInt(2, sessionID);
 			
 			executeUpdate(stmt);
@@ -438,8 +532,8 @@ public class DBConnector {
 	}
 
 	/**
-	 * 
-	 * @return returns all users in the database
+	 * get all user 
+	 * @return returns all users in the database in an ArrayList
 	 */
 	public List<User> getAllUser() {
 		// TODO: besondere filter?
@@ -480,8 +574,7 @@ public class DBConnector {
 
 		closeStatement(stmt);
 		
-		return list;
-	
+		return list;	
 	}
 	
 	// --- Queue ---
@@ -496,14 +589,14 @@ public class DBConnector {
 		ResultSet rset = null;
 		int queueID = -1;
 		
-		Object datetime = new java.sql.Timestamp(System.currentTimeMillis());
+		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
 		// insert new session
 		try {
 			stmt = dbConnection.prepareStatement("INSERT INTO waitingQueue (`userID`, `sessionID`, `time`) VALUES (?, ?, ?);");
 			stmt.setString(1, userID);
 			stmt.setInt(2, sessionID);
-			stmt.setObject(3, datetime);
+			stmt.setTimestamp(3, datetime);
 			
 			executeUpdate(stmt);
 		} catch (SQLException e) {
@@ -651,6 +744,42 @@ public class DBConnector {
 		else {
 			System.out.print("BAD\n");
 			return;
+		}
+		
+		GPS tmpGPS;
+		List<GPS> list;
+		
+		/**
+		 * get GPS by driveID
+		 */
+		System.out.print("getting GPS record for driveID " + driveID + " ... ");
+		list = getGPSByDriveID(driveID);
+		if(list.isEmpty()) {
+			System.out.print("BAD - list is empty\n");
+		} else {
+			System.out.print("OK\n");
+			System.out.println("time\tlat\tlong");
+			for(Iterator<GPS> it = list.iterator(); it.hasNext(); ) {
+				tmpGPS = it.next();
+				System.out.println(tmpGPS.getDateTimeFormated() + "\t" + tmpGPS.getLatitude() + "\t" + tmpGPS.getLongitude());
+			}
+		}
+		
+		/**
+		 * get GPS by time frame
+		 */
+		System.out.print("getting GPS record by time frame ... ");
+		Timestamp begin = new Timestamp(System.currentTimeMillis() - 1000 * 5), end = new Timestamp(System.currentTimeMillis() + 1000 * 5);
+		list = getGPSByTime(begin, end);
+		if(list.isEmpty()) {
+			System.out.print("BAD - list is empty\n");
+		} else {
+			System.out.print("OK\n");
+			System.out.println("driveID\tlat\tlong");
+			for(Iterator<GPS> it = list.iterator(); it.hasNext(); ) {
+				tmpGPS = it.next();
+				System.out.println(tmpGPS.getDriveID() + "\t" + tmpGPS.getLatitude() + "\t" + tmpGPS.getLongitude());
+			}
 		}
 		
 		System.out.println("GPS test done!");
