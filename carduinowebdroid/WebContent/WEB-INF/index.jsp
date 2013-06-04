@@ -8,7 +8,7 @@
 <title>CarDuinoDroid</title>
 <link rel="icon" href="static/favicon.ico" type="image/x-icon" />
 <!--JQuery Import-->
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/dot-luv/jquery-ui.css" />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/ui-lightness/jquery-ui.css" />
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
@@ -35,7 +35,7 @@ $(function() {
 
 <div id="index_loginbox">
 <form method="POST">
-	<input type="hidden" name="action" value="login"/>
+	<input type="hidden" name="action" value="login" />
 	<h1>Login</h1>
     	<table id="index_logintable">
         	<tr>
