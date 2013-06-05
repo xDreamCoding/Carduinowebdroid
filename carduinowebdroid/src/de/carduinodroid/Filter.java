@@ -57,7 +57,7 @@ public class Filter implements javax.servlet.Filter {
 					if(!m.containsKey("loginName") || !m.containsKey("password"))
 						break;
 					
-					DBConnector db = (DBConnector)config.getServletContext().getAttribute("db");
+					DBConnector db = (DBConnector)config.getServletContext().getAttribute("database");
 					String userID, pw;
 					userID = (String)m.get("loginName")[0];
 					pw = (String)m.get("password")[0];
