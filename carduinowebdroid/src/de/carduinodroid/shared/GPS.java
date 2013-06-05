@@ -34,6 +34,6 @@ public class GPS {
 	}
 	
 	public String getDateTimeFormated() {
-		return new SimpleDateFormat("MM/dd/yyyy").format(datetime);
+		return new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").format(datetime);
 	}
 }

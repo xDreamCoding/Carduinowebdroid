@@ -238,7 +238,7 @@ public class DBConnector {
 		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
 		try {
-			stmt = dbConnection.prepareStatement("INSERT INTO gps (`time`, `driveID`, `lat`, `long`) VALUES (?, ?, ?, ?)");
+			stmt = dbConnection.prepareStatement("INSERT INTO gps (`time`, `driveID`, `latitude`, `longitude`) VALUES (?, ?, ?, ?)");
 			stmt.setTimestamp(1, datetime);
 			stmt.setInt(2, driveID); 
 			stmt.setString(3, latitude);
@@ -267,7 +267,7 @@ public class DBConnector {
 		String latitude, longitude;
 		
 		try {
-			stmt = dbConnection.prepareStatement("SELECT 'time', 'lat', 'long' FROM gps WHERE driveID=?");
+			stmt = dbConnection.prepareStatement("SELECT time, latitude, longitude FROM gps WHERE driveID=?");
 			stmt.setInt(1, driveID);
 			
 			rset = executeQuery(stmt);
@@ -314,9 +314,9 @@ public class DBConnector {
 		String latitude, longitude;
 		
 		try {
-			stmt = dbConnection.prepareStatement("SELECT 'driveID', 'lat', 'long' FROM gps WHERE 'time'>? AND 'time'<?");
-			stmt.setObject(1, begin);
-			stmt.setObject(2, end);
+			stmt = dbConnection.prepareStatement("SELECT time, driveID, latitude, longitude FROM gps WHERE time BETWEEN ? AND ?");
+			stmt.setTimestamp(1, begin);
+			stmt.setTimestamp(2, end);
 			
 			rset = executeQuery(stmt);
 			
@@ -758,7 +758,7 @@ public class DBConnector {
 			System.out.print("BAD - list is empty\n");
 		} else {
 			System.out.print("OK\n");
-			System.out.println("time\tlat\tlong");
+			System.out.println("time\t\tlat\t\tlong");
 			for(Iterator<GPS> it = list.iterator(); it.hasNext(); ) {
 				tmpGPS = it.next();
 				System.out.println(tmpGPS.getDateTimeFormated() + "\t" + tmpGPS.getLatitude() + "\t" + tmpGPS.getLongitude());
@@ -769,13 +769,13 @@ public class DBConnector {
 		 * get GPS by time frame
 		 */
 		System.out.print("getting GPS record by time frame ... ");
-		Timestamp begin = new Timestamp(System.currentTimeMillis() - 1000 * 5), end = new Timestamp(System.currentTimeMillis() + 1000 * 5);
+		Timestamp begin = new Timestamp(System.currentTimeMillis() - 1000 * 60 * 5), end = new Timestamp(System.currentTimeMillis() + 1000 * 60 * 5);
 		list = getGPSByTime(begin, end);
 		if(list.isEmpty()) {
 			System.out.print("BAD - list is empty\n");
 		} else {
 			System.out.print("OK\n");
-			System.out.println("driveID\tlat\tlong");
+			System.out.println("driveID\tlat\t\tlong");
 			for(Iterator<GPS> it = list.iterator(); it.hasNext(); ) {
 				tmpGPS = it.next();
 				System.out.println(tmpGPS.getDriveID() + "\t" + tmpGPS.getLatitude() + "\t" + tmpGPS.getLongitude());
