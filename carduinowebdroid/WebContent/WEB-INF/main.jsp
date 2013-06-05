@@ -94,6 +94,39 @@ $(function() {
 	$( "#amount" ).val( $( ".slider-vertical" ).slider( "value" ) );
 });
 </script>
+<script>
+$(function() {
+    $( "input[type=button], button" ).button()
+});
+
+$(document).keydown(function(e){
+    if (e.keyCode == 37) { 
+       $('#main_steering_button_left').mouseover();
+       return false;
+    }
+    if (e.keyCode == 38) { 
+       $('#main_steering_button_up').mouseover();
+       return false;
+    }
+    if (e.keyCode == 39) { 
+       $('#main_steering_button_right').mouseover();
+       return false;
+    }
+    if (e.keyCode == 40) { 
+       $('#main_steering_button_down').mouseover();
+       return false;
+    }
+    if (e.keyCode == 72) { 
+       $('#main_gadget_button_horn').mouseover();
+       return false;
+    }
+    if (e.keyCode == 76) { 
+       $('#main_gadget_button_light').mouseover();
+       return false;
+    }
+});
+</script>
+
 
 </head>
 <body>
@@ -113,8 +146,47 @@ $(function() {
         
         	<div id="main_stream">Stream</div>
         	<div id="main_controls">
-            	<table>
-                <div class="slider-vertical" id="main_maxspeed"></div>
+            	<table id="main_control_table">
+            		<tr>
+            			<td id="main_slider">
+                			<center><div class="slider-vertical" id="main_maxspeed"></div></center>
+                			Max. Speed
+                		</td>
+                		<td id="main_slider">
+                			<center><div class="slider-vertical" id="main_steerangle"></div></center>
+                			Steering Angle
+                		</td>
+                        <td id="main_steering">
+                            <table id="main_steering_table">
+                                <tr>
+                                    <td>
+                                        &nbsp;
+                                    </td>                                    
+                                    <td>
+                                        <button value="Up" type="button" id="main_steering_button_up">Up</button>
+                                    </td>
+                                    <td>
+                                        &nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <button value="Left" type="button" id="main_steering_button_left">Left</button>
+                                    </td>
+                                    <td>
+                                        <button value="Down" type="button" id="main_steering_button_down">Down</button>
+                                    </td>
+                                    <td>
+                                        <button value="Right" type="button" id="main_steering_button_right">Right</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td id="main_gadget">
+                            <button value="Horn" type="button" id="main_gadget_button_horn">Horn</button><br>
+                            <button value="Light" type="button" id="main_gadget_button_light">Light</button>
+                        </td>
+                	</tr>
             	</table>
             </div>
             

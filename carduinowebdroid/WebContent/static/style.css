@@ -141,7 +141,7 @@ textarea{
     margin-right:auto;
     padding:3px;
     height: 75px;
-	width:97%;
+	width:96%;
     border-radius: 4px;
     margin-left:4px;
     padding:3px;
@@ -200,6 +200,78 @@ textarea{
 	min-height: 19%;
 }
 
+#main_control_table{
+width:100%;
+}
+
+#main_steering{
+	border:1px solid #ECD6BF;
+    margin-left:10px;
+    margin-right:auto;
+    padding:3px;
+    border-radius: 4px;
+    margin-left:4px;
+    margin-top: 8px;
+	width:45%; 
+}
+
+#main_gadget{
+	border:1px solid #ECD6BF;
+    margin-left:10px;
+    margin-right:auto;
+    padding:3px;
+    border-radius: 4px;
+    margin-left:4px;
+    margin-top: 8px;
+	width:30%;
+}
+
+#main_slider{
+    border:1px solid #ECD6BF;
+    margin-left:10px;
+    margin-right:auto;
+    padding:3px;
+    border-radius: 4px;
+    margin-left:4px;
+    margin-top: 8px;
+	
+}
+
+#main_gadget_button_horn{
+	margin-top:15px;
+	width:100%;
+}
+
+#main_gadget_button_light{
+	margin-top:15px;
+	width:100%;
+}
+
+#main_steering_button_up{
+	margin-top:10px;
+	width:100%;
+}
+
+#main_steering_button_left{
+	margin-top:10px;
+	width:100%;
+}
+
+#main_steering_button_down{
+	margin-top:10px;
+	width:100%;
+}
+
+#main_steering_button_right{
+	margin-top:10px;
+	width:100%;
+}
+
+#main_steering_table{
+	width:100%;
+	
+}
+
 #main_maxspeed{
 	height:100px;
 }
@@ -229,6 +301,8 @@ textarea{
 	width:20px;
 	display:none
 }
+
+
 
 #admin_menu{
 	margin-left:10px;
