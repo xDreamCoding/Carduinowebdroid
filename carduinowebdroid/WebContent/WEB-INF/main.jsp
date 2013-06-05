@@ -98,30 +98,61 @@ $(function() {
 $(function() {
     $( "input[type=button], button" ).button()
 });
-
+</script>
+<script>
 $(document).keydown(function(e){
     if (e.keyCode == 37) { 
-       $('#main_steering_button_left').mouseover();
+       $('#main_steering_button_left').mousedown();
        return false;
     }
     if (e.keyCode == 38) { 
-       $('#main_steering_button_up').mouseover();
+       $('#main_steering_button_up').mousedown();
+	   
        return false;
     }
     if (e.keyCode == 39) { 
-       $('#main_steering_button_right').mouseover();
+       $('#main_steering_button_right').mousedown();
        return false;
     }
     if (e.keyCode == 40) { 
-       $('#main_steering_button_down').mouseover();
+       $('#main_steering_button_down').mousedown();
        return false;
     }
     if (e.keyCode == 72) { 
-       $('#main_gadget_button_horn').mouseover();
+       $('#main_gadget_button_horn').mousedown();
        return false;
     }
     if (e.keyCode == 76) { 
-       $('#main_gadget_button_light').mouseover();
+       $('#main_gadget_button_light').mousedown();
+       return false;
+    }
+});
+</script>
+
+<script>
+$(document).keyup(function(e){
+    if (e.keyCode == 37) { 
+       $('#main_steering_button_left').removeClass("ui-state-active");
+       return false;
+    }
+    if (e.keyCode == 38) { 
+       $('#main_steering_button_up').removeClass("ui-state-active");
+	   return false;
+    }
+    if (e.keyCode == 39) { 
+       $('#main_steering_button_right').removeClass("ui-state-active");
+       return false;
+    }
+    if (e.keyCode == 40) { 
+       $('#main_steering_button_down').removeClass("ui-state-active");
+       return false;
+    }
+    if (e.keyCode == 72) { 
+       $('#main_gadget_button_horn').removeClass("ui-state-active");
+       return false;
+    }
+    if (e.keyCode == 76) { 
+       $('#main_gadget_button_light').removeClass("ui-state-active");
        return false;
     }
 });
@@ -159,14 +190,14 @@ $(document).keydown(function(e){
                         <td id="main_steering">
                             <table id="main_steering_table">
                                 <tr>
-                                    <td>
-                                        &nbsp;
+                                    <td>&nbsp;
+                                        
                                     </td>                                    
                                     <td>
                                         <button value="Up" type="button" id="main_steering_button_up">Up</button>
                                     </td>
-                                    <td>
-                                        &nbsp;
+                                    <td>&nbsp;
+                                        
                                     </td>
                                 </tr>
                                 <tr>
