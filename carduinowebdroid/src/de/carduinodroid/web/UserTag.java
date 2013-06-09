@@ -1,11 +1,14 @@
 package de.carduinodroid.web;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.JspWriter;
+import de.carduinodroid.utilities.DBConnector;
 
 import de.carduinodroid.shared.User;
 
@@ -16,20 +19,30 @@ public class UserTag extends TagSupport{
 		UserNumber = i;
 	}
 	
-	public String UserName() throws JspException{
+	public int doStartTag() throws JspException{
 		String Name;
+		DBConnector db = (DBConnector)pageContext.getServletContext().getAttribute("database");
+		JspWriter out = pageContext.getOut();
+		List<User> UserList = new ArrayList<User>();
+		UserList = db.getAllUser(); //TODO: Not working. Don't know why.
+		
+		Name = UserList.get(UserNumber).getNickname();
+		
+		
 		try {
-			List<User> UserList = new ArrayList<User>();
-			UserList = getAllUser(); //TODO: Not working. Don't know why.
-			
-			Name = UserList.get(UserNumber).getNickname();
-			
-		} catch(IOException ioe) {
-			throw new JspException("Error: " + ioe.getMessage());
+			out.print(Name);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return Name;
+		
+		return SKIP_BODY;
 		
 		
 	}
 
+	public int doEndTag() throws JspException{
+		return SKIP_PAGE;
+	}
+	
 }
