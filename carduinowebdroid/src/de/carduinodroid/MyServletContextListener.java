@@ -46,7 +46,7 @@ public class MyServletContextListener implements ServletContextListener {
 		context.setAttribute("log", log);
 		
 		// config & options
-		Config config = new Config(log, context.getRealPath("/WEB-INF/config"));
+		Config config = new Config(log, context.getRealPath("/WEB-INF/"));
 		config.readOptions();
 		Options options = config.getOptions();
 		if(options.dbAddress == null) {

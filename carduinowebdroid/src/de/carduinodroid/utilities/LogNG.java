@@ -1,5 +1,12 @@
 package de.carduinodroid.utilities;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import de.carduinodroid.desktop.Model.Log;
 import de.carduinodroid.shared.GPS;
 import de.carduinodroid.utilities.Config.Options;
@@ -9,8 +16,15 @@ public class LogNG {
 	Options options = null;
 	DBConnector db;
 	
+	BufferedWriter writer;
+	SimpleDateFormat dateformat;
+	Date date;
+	File file;
+	File path;
+	
 	public LogNG() {
 		oldLog = new Log();
+		file = null;
 	}
 	
 	/**
@@ -96,8 +110,38 @@ public class LogNG {
 	 * @param string
 	 */
 	public void writelogfile(String string) {
-		// TODO - soll für den moment reichen
-		oldLog.writelogfile(string);
+		if(file == null)	// TODO: better idea?
+			write_Live_Log(string);
+		else
+			writelogfile_second(string);
+	}
+	
+	/** All Log entries will be imported by the same format.
+	 *First you will get an information about the date and time
+	 *and then a short explanation about the function.
+	 *
+	 *@param line Contains the string which will be include
+	 */
+	public void writelogfile_second(String line){
+		try {
+			Date data = new Date();
+			SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss" );
+			String entry = df.format(data)+" "+line;
+			writer.write(entry,0,entry.length());
+			writer.write(System.getProperty("line.separator"));
+			writer.flush();
+			write_Live_Log(entry);
+		} catch (IOException e) { e.printStackTrace(); }
+	}
+	
+	/** 
+	 *The log is written in a separate file but the user would
+	 *like to see all information right in front of him. This
+	 *method put all entries at the same time in our live log
+	 *on the gui.
+	 */
+	private void write_Live_Log(String msg) {
+		System.out.println(msg);
 	}
 
 	/**
@@ -105,6 +149,28 @@ public class LogNG {
 	 */
 	public void setOptions(Options options) {
 		this.options = options;
+		initFile();
+	}
+	
+	private void initFile() {
+		Date date = new Date();
+		SimpleDateFormat dateformat = new SimpleDateFormat( "yyyy_MM_dd_HH_mm_ss" );
+		String logfile = "Log_"+dateformat.format(date)+".txt";
+		
+		File path = new File(options.filePath + "/logs");
+		path.mkdirs();
+		file = new File(path.getAbsolutePath(), logfile);
+
+		try {
+			file.createNewFile();
+		} catch (IOException e) { e.printStackTrace(); }
+		
+		file.canWrite();
+		file.canRead();
+		
+		try {
+			writer = new BufferedWriter(new FileWriter(file));
+		} catch (IOException e) { e.printStackTrace(); }
 	}
 
 	/**
