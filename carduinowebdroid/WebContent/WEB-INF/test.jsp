@@ -3,10 +3,8 @@
 <head></head>
 <html><body>
 
-    <ct:user num="1"/>
-    <ct:user num="2"/>
-    <ct:user num="3"/>
-    <ct:user num="4"/>
+	<ct:user num="1"/><br>
+    <ct:user num="2"/><br>
 
 
 </body></html>

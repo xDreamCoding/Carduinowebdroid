@@ -20,11 +20,13 @@ public class UserTag extends TagSupport{
 	}
 	
 	public int doStartTag() throws JspException{
+		
 		String Name;
 		DBConnector db = (DBConnector)pageContext.getServletContext().getAttribute("database");
 		JspWriter out = pageContext.getOut();
+		
 		List<User> UserList = new ArrayList<User>();
-		UserList = db.getAllUser(); //TODO: Not working. Don't know why.
+		UserList = db.getAllUser();
 		
 		Name = UserList.get(UserNumber).getNickname();
 		
@@ -36,13 +38,13 @@ public class UserTag extends TagSupport{
 			e.printStackTrace();
 		}
 		
-		return SKIP_BODY;
+		return EVAL_PAGE;
 		
 		
 	}
 
 	public int doEndTag() throws JspException{
-		return SKIP_PAGE;
+		return EVAL_PAGE;
 	}
 	
 }
