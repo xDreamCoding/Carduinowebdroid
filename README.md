@@ -6,38 +6,31 @@ Carduinodroid Webserver
 Webserver for the https://code.google.com/p/carduinodroid/ project
 _______________________
 
-Hi Leute hier eine kleine **Anleitung**:
+##Basics:
 
-Basics:
-
-1. Github Account anlegen  
- Sven den Accountnamen sagen
-2. Repo forken **[entfällt]**  
- oben rechts -> fork klicken  
-3. das eigenes Repo klonen **[das Hauptrepo clonen]**  
-	per Windows Programm
-	oder Shell  
-4. Work, Work  
-5. commiten und pushen  
+1. Checken ob neue Commits verfügbar sind
+2. Work, work
+3. Commiten und syncen 
 	per Eclipse (unter Team)  
 	oder per Windows Programm  
 	oder per Shell  
-	guckt euch an, WAS ihr commitet!
-6. pull request **[entfällt]**  
-	auf der Github Seite eures Repos oben auf pull request klicken  
-   
-Wie spiele ich updates aus dem Hauptrepo in meinen Fork ein?  
--> so: https://help.github.com/articles/syncing-a-fork  
-(FYI: der Schritt "$ git remote add upstream https://github.com/otheruser/repo.git" war bei mir nicht notwendig)  
-Konflikte beim Mergen: //TODO  
-PANIK! schreiend im Kreis laufen  
-Eclipse + Tomcat:  
-Java SDK (nicht JRE)(SE nicht EE)  
+	**Prüfen was commited wird!**
+
+##Konflikte beim Mergen:
+
+- Können nur auftreten wenn 2 Personen an geleichen Dateien arbeiten oder
+- Vor der arbeit nicht auf commits gecheckt wurde
+
+## How to set up CarDuinoWebDroid on a Tomcat v7 Server.
+
+1. download the latest .war or xport .war from Eclipse Project
+2. put the .war in your tomcat /webapps folder.
+3. Start the Tomcat service.
+4. your CarDuinoWebDroid website ist now in localhost:8080/webcarduinodroid/ (You can rename this folder to ROOT if you want the URL to be localhost:8080)
+
+
+**How to set up Eclipse for Tomcat development:**  
 http://www.coreservlets.com/Apache-Tomcat-Tutorial/tomcat-7-with-eclipse.html  
-WICHTIG: bei Eclipse: Java EE Developers (siehe Link)  
   
---Anleitung by Michael--
+--Anleitung by Michael optimized by st0ph--
 
-Nach Selbsthilfe durch Google usw. helfe ich bei Problemen so gut es geht aus.
-
-Grüße Sven
