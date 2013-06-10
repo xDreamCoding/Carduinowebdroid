@@ -46,16 +46,20 @@ public class MyServletContextListener implements ServletContextListener {
 		context.setAttribute("log", log);
 		
 		// config & options
-		Config config = new Config(log, context.getRealPath("/WEB-INF/config"));
+		Config config = new Config(log, context.getRealPath("/WEB-INF/"));
 		config.readOptions();
 		Options options = config.getOptions();
 		if(options.dbAddress == null) {
-			config.setDefault();
+			config.setDefault(false);
 			options = config.getOptions();
 		}
 		log.writelogfile("Options loaded");
 		context.setAttribute("options", options);
 			
+		//main
+		de.carduinodroid.shared.Warteschlange.initWarteschlange();
+		de.carduinodroid.Main.main(options.fahrZeit);
+		
 		// GPS		
 		GPSTrack gps = new GPSTrack();
 		log.writelogfile("GPSTracker instanciated");

@@ -118,14 +118,20 @@ $(document).keydown(function(e){
        $('#main_steering_button_down').mousedown();
        return false;
     }
-    if (e.keyCode == 72) { 
-       $('#main_gadget_button_horn').mousedown();
-       return false;
+
+    if($("#main_chat_textinput").is(":focus")){
+        true;
+    } else {
+        if (e.keyCode == 72) { 
+           $('#main_gadget_button_horn').mousedown();
+           return false;
+        }
+        if (e.keyCode == 76) { 
+           $('#main_gadget_button_light').mousedown();
+           return false;
+        }
     }
-    if (e.keyCode == 76) { 
-       $('#main_gadget_button_light').mousedown();
-       return false;
-    }
+    
 });
 </script>
 

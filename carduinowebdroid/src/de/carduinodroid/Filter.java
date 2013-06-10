@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import de.carduinodroid.shared.User;
 import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.utilities.LogNG;
+import de.carduinodroid.shared.Warteschlange;
 
 /**
  * Servlet Filter implementation class Filter
@@ -25,7 +26,7 @@ public class Filter implements javax.servlet.Filter {
 	
 	FilterConfig config;
 	LogNG log;
-
+	
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
@@ -52,6 +53,7 @@ public class Filter implements javax.servlet.Filter {
 			}
 			
 			if(m.size() > 0 && m.containsKey("action")) {
+				String SessionID = m.get("session")[0];
 				switch((String)m.get("action")[0])  {
 				case "login":
 					if(!m.containsKey("loginName") || !m.containsKey("password"))
@@ -68,6 +70,16 @@ public class Filter implements javax.servlet.Filter {
 					
 					session.setAttribute("name", u.getNickname());
 					System.out.println("user " + u.getNickname() + " has logged in");
+					break;
+				case "enqueue":
+					de.carduinodroid.shared.Warteschlange.insertUser(SessionID);
+					break;
+				case "dequeue":
+					de.carduinodroid.shared.Warteschlange.deleteTicket(SessionID);
+					break;
+				case "NextUser":
+					String nextUserID = de.carduinodroid.shared.Warteschlange.getNextUser();
+					//TODO wohin soll der übergeben werden
 					break;
 				}
 			}

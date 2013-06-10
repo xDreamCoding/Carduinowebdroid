@@ -9,6 +9,7 @@ public class Config {
 		public String dbAddress;
 		public String dbUser;
 		public String dbPW;
+		public String filePath;
 		public boolean logChat;
 		public boolean logChatToFile;
 		public boolean logGPS;
@@ -20,25 +21,25 @@ public class Config {
 	private LogNG log;
 	private Options options;
 	private String filePath;
+	private String optionsPath;
 	
-	public Config(LogNG logIN, String configPath) {
+	public Config(LogNG logIN, String filePath_in) {
 		this.log = logIN;
-		filePath = configPath + "/config.properties";
-		
-		//logIN.writelogfile("filePath: " + filePath);
-		
+		filePath = filePath_in;
+		optionsPath = filePath + "/config/config.properties";
 		options = new Options();
 		
-		File c = new File(configPath);
-		File f = new File(filePath);
-		if(!c.exists()) {
+		File folder = new File(filePath + "/config/");
+		if(!folder.exists()) {
 			logIN.writelogfile("creating folder");
-			c.mkdir();
+			folder.mkdir();
 		}
-		if(!f.exists())
+		
+		File file = new File(optionsPath);
+		if(!file.exists())
 			try {
 				logIN.writelogfile("creating empty settings file");
-				f.createNewFile();
+				file.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -47,7 +48,7 @@ public class Config {
 	public void readOptions() {
 		try{
 			Properties p = new Properties();			
-			p.load(new FileInputStream(filePath));
+			p.load(new FileInputStream(optionsPath));
 			
 			log.writelogfile("loading settings");
 		
@@ -62,6 +63,7 @@ public class Config {
 			options.dbAddress = p.getProperty("dbAddress");
 			options.dbUser = p.getProperty("dbUser");
 			options.dbPW = p.getProperty("dbPW");
+			options.filePath = p.getProperty("filePath");
 			options.logChat = Boolean.valueOf(p.getProperty("logChat"));
 			options.logChatToFile = Boolean.valueOf(p.getProperty("logChatToFile"));
 			options.logGPS = Boolean.valueOf(p.getProperty("logGPS"));
@@ -82,26 +84,28 @@ public class Config {
 			p.setProperty("dbAddress", options.dbAddress);
 			p.setProperty("dbUser", options.dbUser);
 			p.setProperty("dbPW", options.dbPW);
+			p.setProperty("filePath", filePath);
 			p.setProperty("logChat", String.valueOf(options.logChat));
 			p.setProperty("logChatToFile", String.valueOf(options.logChatToFile));
 			p.setProperty("logGPS", String.valueOf(options.logGPS));
 			p.setProperty("logGPSToFile", String.valueOf(options.logGPSToFile));
 			p.setProperty("logQueue", String.valueOf(options.logQueue));
 			p.setProperty("logQueueToFile", String.valueOf(options.logQueueToFile));
-			p.store(new FileOutputStream(filePath), null);
+			p.store(new FileOutputStream(optionsPath), null);
 		}
 		catch (Exception e) {
 			  System.out.println(e);
 		}
 	}
 	
-	public void setDefault() {    	
-    	/*
-    	 * DB läuft auf/im 
-    	 * 	localhost 	-> true
-    	 * 	FEM-Netz	-> false
-    	 */
-    	boolean localhost = false;	
+	/**
+	 * DB läuft auf/im
+	 * @param localhost
+	 * 	localhost 	-> true
+	 * 	FEM-Netz	-> false
+	 */
+	public void setDefault(boolean localhost) {    	
+    	
     	options = new Options();
     	options.fahrZeit = 10;
     	if(localhost) {
@@ -113,6 +117,7 @@ public class Config {
     		options.dbUser = "test";
     		options.dbPW = "test";
     	}
+    	options.filePath = filePath;
 		options.logChat = true;
 		options.logChatToFile = false;
 		options.logGPS = true;
