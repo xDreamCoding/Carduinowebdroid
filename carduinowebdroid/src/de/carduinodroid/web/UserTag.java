@@ -24,6 +24,7 @@ public class UserTag extends TagSupport{
 	private static final long serialVersionUID = 1L;
 	private int userNr;
 	private int param;
+//	private int totalNr;
 	
 	/*
 	 * 
@@ -69,6 +70,15 @@ public class UserTag extends TagSupport{
 			}
 			break;
 		
+//		case 3:
+//			try {
+//				totalNr = UserList.size();
+//				out.print(totalNr);
+//			} catch (IOException e) {
+//				throw new JspException("Error: " + e.getMessage());
+//			}
+//			break;
+			
 		default:
 			throw new JspException("Error: invalid parameter in UserTag");
 		}
