@@ -9,6 +9,7 @@
         <info>Returns user i</info>
         <attribute>
         	<name>num</name>
+        	<rtexprvalue>true</rtexprvalue>
             <required>true</required>
             <description>Which user to be selected from the list</description>
         </attribute>
