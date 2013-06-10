@@ -8,9 +8,14 @@
         <tag-class>de.carduinodroid.web.UserTag</tag-class>
         <info>Returns user i</info>
         <attribute>
-            <name>num</name>
+        	<name>num</name>
             <required>true</required>
             <description>Which user to be selected from the list</description>
+        </attribute>
+        <attribute>
+        	<name>par</name>
+            <required>true</required>
+            <description>Parameter which to output</description>
         </attribute>
     </tag>
 </taglib>

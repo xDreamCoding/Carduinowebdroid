@@ -2,9 +2,15 @@
  <%@ taglib uri="/WEB-INF/lib/tags/customTag.tld" prefix="ct" %>
 <head></head>
 <html><body>
-
-	<ct:user num="1"/><br>
-    <ct:user num="2"/><br>
-
+<table>
+	<c:forEach var="i" begin="0" end="2">
+		<tr>
+			<td><c:out value="${i}" /></td>
+			<td><ct:user par="1" num="${i}" /></td>
+			<td><ct:user par="2" num="${i}" /></td>
+		</tr>
+	
+	</c:forEach>
+</table>
 
 </body></html>

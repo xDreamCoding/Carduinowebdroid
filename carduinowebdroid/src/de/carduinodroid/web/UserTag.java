@@ -12,32 +12,62 @@ import de.carduinodroid.utilities.DBConnector;
 
 import de.carduinodroid.shared.User;
 
+/**
+ * Tag-Handler for all User-Tags in JSP files.
+ * @author Christoph Braun
+ *
+ */
 public class UserTag extends TagSupport{
-	private int UserNumber;
+	private int userNr;
+	private int param;
 	
+	/*
+	 * 
+	 */
 	public void setNum(int i) {
-		UserNumber = i;
+		userNr = i;
+	}
+	
+	public void setPar(int i) {
+		param = i;
 	}
 	
 	public int doStartTag() throws JspException{
 		
 		String Name;
+		boolean isAdmin;
 		DBConnector db = (DBConnector)pageContext.getServletContext().getAttribute("database");
 		JspWriter out = pageContext.getOut();
-		
 		List<User> UserList = new ArrayList<User>();
 		UserList = db.getAllUser();
 		
-		Name = UserList.get(UserNumber).getNickname();
+		/*
+		 * @param param =1: Get Nickname from User
+		 * @param param =2: Check if User is Admin
+		 */
+		switch(param) {
 		
+		case 1:	
+			try {
+				Name = UserList.get(userNr).getNickname();			
+				out.print(Name);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+			
+		case 2:
+			try {
+				isAdmin = UserList.get(userNr).isAdmin();
+				out.print(isAdmin);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
 		
-		try {
-			out.print(Name);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		default:
+			throw new JspException("Error: invalid parameter in UserTag");
 		}
-		
 		return EVAL_PAGE;
 		
 		
