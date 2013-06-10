@@ -18,6 +18,10 @@ import de.carduinodroid.shared.User;
  *
  */
 public class UserTag extends TagSupport{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int userNr;
 	private int param;
 	
