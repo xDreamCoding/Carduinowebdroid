@@ -577,6 +577,14 @@ public class DBConnector {
 		return list;	
 	}
 	
+	/**
+	 * get the number of all user in the database
+	 * @return number of users
+	 */
+	public int getAllUserCount() {
+		return getAllUser().size();
+	}
+	
 	// --- Queue ---
 	/**
 	 * log a user who enqueued himself
