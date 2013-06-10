@@ -56,6 +56,10 @@ public class MyServletContextListener implements ServletContextListener {
 		log.writelogfile("Options loaded");
 		context.setAttribute("options", options);
 			
+		//main
+		de.carduinodroid.shared.Warteschlange.initWarteschlange();
+		de.carduinodroid.Main.main(options.fahrZeit);
+		
 		// GPS		
 		GPSTrack gps = new GPSTrack();
 		log.writelogfile("GPSTracker instanciated");

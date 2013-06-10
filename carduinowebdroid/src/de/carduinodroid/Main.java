@@ -6,14 +6,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import de.carduinodroid.shared.*;
+import de.carduinodroid.utilities.*;
+import de.carduinodroid.utilities.Config.Options;
+import java.util.TimerTask;
+import java.util.Timer;
 
 /**
  * Servlet implementation class Main
  */
 @WebServlet(loadOnStartup=1, value = "/main")
 public class Main extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
+	private static final long serialVersionUID = 1L;   
+	private static Timer caretaker;
+	private static TimerTask action;
+	static int Fahrzeit;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -37,6 +44,28 @@ public class Main extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		System.out.println("doPost");
+	}
+
+	public static void main(int fahrzeit){
+		
+		Fahrzeit = fahrzeit;
+		System.out.println("Main-function");
+		action = new TimerTask() {
+            public void run() {
+            	if (de.carduinodroid.shared.Warteschlange.isEmpty() == true){
+    				caretaker.cancel();
+    				caretaker.schedule(action, 1000, 60000*Fahrzeit);
+    			}
+    			else{
+    				String aktSessionID = de.carduinodroid.shared.Warteschlange.getNextUser();
+    				//TODO Fahrrechte;
+    				}
+    			}
+            
+		};
+	
+		caretaker = new Timer();
+        caretaker.schedule(action, 100, 60000*Fahrzeit);
 	}
 
 }

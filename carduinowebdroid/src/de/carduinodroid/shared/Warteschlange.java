@@ -4,34 +4,51 @@ import java.util.LinkedList;
 
 public class Warteschlange {
 
-	private LinkedList<Integer> Warteschlange;
+	private static LinkedList<String> Warteschlange = null;
 	
-	public Warteschlange(){
-		Warteschlange = new LinkedList<Integer>();
+	public static void initWarteschlange(){
+		if (Warteschlange == null){
+			Warteschlange = new LinkedList<String>();
+		}
+		else{
+			
+		}
 	}
 	
-	public int getNextUser(){
+	public static LinkedList<String> getWarteschlange(){
+		return Warteschlange;
+	}
+	
+	public static String getNextUser(){
 		return Warteschlange.removeFirst();
 	}
 	
-	public void insertUser(int SessionID){
+	public static void insertUser(String SessionID){
 		Warteschlange.add(SessionID);
 	}
 	
-	public int getLength(){
+	public static int getLength(){
 		return Warteschlange.size();
 	}
 
-	public boolean isEmpty(){
+	public static boolean isEmpty(){
 		return Warteschlange.isEmpty();
 	}
 	
-	public void deleteTicket(int SessionID){
+	public static void deleteTicket(String SessionID){
 		int index = Warteschlange.indexOf(SessionID);
 		Warteschlange.remove(index);
 	}
 	
-	public void InsertFirst(int SessionID){
+	public static void InsertFirst(String SessionID){
 		Warteschlange.addFirst(SessionID);
+	}
+
+	public static String[] getAllSessions(){
+		String[] Liste = new  String [Warteschlange.size()];
+		for (int i = 0;i < Warteschlange.size();i++){
+			Liste[i] = Warteschlange.get(i);
+		}
+		return Liste;
 	}
 }
