@@ -98,13 +98,14 @@ public class Config {
 		}
 	}
 	
-	public void setDefault() {    	
-    	/*
-    	 * DB läuft auf/im 
-    	 * 	localhost 	-> true
-    	 * 	FEM-Netz	-> false
-    	 */
-    	boolean localhost = false;	
+	/**
+	 * DB läuft auf/im
+	 * @param localhost
+	 * 	localhost 	-> true
+	 * 	FEM-Netz	-> false
+	 */
+	public void setDefault(boolean localhost) {    	
+    	
     	options = new Options();
     	options.fahrZeit = 10;
     	if(localhost) {
