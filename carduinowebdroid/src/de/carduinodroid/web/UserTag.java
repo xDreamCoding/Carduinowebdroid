@@ -47,11 +47,18 @@ public class UserTag extends TagSupport{
 		UserList = db.getAllUser();
 		
 		/*
+		 * @param param =0: Get number of users
 		 * @param param =1: Get Nickname from User
 		 * @param param =2: Check if User is Admin
 		 */
 		switch(param) {
-		
+		case 0:
+			try {
+				out.print(db.getAllUserCount());
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
 		case 1:	
 			try {
 				Name = UserList.get(userNr).getNickname();			
@@ -59,8 +66,7 @@ public class UserTag extends TagSupport{
 			} catch (IOException e) {
 				throw new JspException("Error: " + e.getMessage());
 			}
-			break;
-			
+			break;			
 		case 2:
 			try {
 				isAdmin = UserList.get(userNr).isAdmin();

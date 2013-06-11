@@ -10,7 +10,7 @@
         <attribute>
         	<name>num</name>
         	<rtexprvalue>true</rtexprvalue>
-            <required>true</required>
+            <required>false</required>
             <description>Which user to be selected from the list</description>
         </attribute>
         <attribute>

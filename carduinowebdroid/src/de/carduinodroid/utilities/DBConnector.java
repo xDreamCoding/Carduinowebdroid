@@ -582,7 +582,29 @@ public class DBConnector {
 	 * @return number of users
 	 */
 	public int getAllUserCount() {
-		return getAllUser().size();
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		int returnValue = 0;
+
+		try {
+			stmt = dbConnection.prepareStatement("SELECT Count(userID) from user");
+			
+			rset = executeQuery(stmt);
+			
+			if(!rset.isBeforeFirst()) {
+				// kein user?
+				return 0;
+			} else {
+				rset.next();
+				returnValue = rset.getInt(1);
+			}			
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+
+		closeStatement(stmt);
+		
+		return returnValue;	
 	}
 	
 	// --- Queue ---
@@ -938,6 +960,16 @@ public class DBConnector {
 			System.out.print("error! exiting ...");
 			return;
 		}
+		
+		/**
+		 * zähle user in DB
+		 */
+		System.out.print("counting all users ... ");
+		int userCount = getAllUserCount();
+		if(userCount > 0)
+			System.out.print("OK - counting " + userCount + " users\n");
+		else
+			System.out.print("BAD - no users found\n");
 		
 		/**
 		 * Holt alle User aus der DB
