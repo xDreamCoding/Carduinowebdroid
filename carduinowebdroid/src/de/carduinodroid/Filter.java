@@ -96,6 +96,7 @@ public class Filter implements javax.servlet.Filter {
 		} else if(staticRequest) {
 			chain.doFilter(request, res);
 		} else {
+
 			config.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, res);
 		}
 	}

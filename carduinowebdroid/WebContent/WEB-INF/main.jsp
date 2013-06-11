@@ -96,7 +96,7 @@ $(function() {
 </script>
 <script>
 $(function() {
-    $( "input[type=button], button" ).button()
+    $( "input[type=submit], button,#mainqsubmit" ).button()
 });
 </script>
 <script>
@@ -172,10 +172,10 @@ $(document).keyup(function(e){
 	<tr>
     	<td id="main_table_sidebar_left">
         	<div id="main_chat_container">
-        	<div id="main_chat">Chat</div>
-            <textarea type="text" name="chat" id="main_chat_textinput" maxlength="256"></textarea>
-            <div id="main_chat_chars">256</div>
-            <button id="main_chat_speak">Chat</button>
+        		<div id="main_chat">Chat</div>
+          	  	<textarea type="text" name="chat" id="main_chat_textinput" maxlength="256"></textarea>
+           		<div id="main_chat_chars">256</div>
+            	<button id="main_chat_speak">Chat</button>
           	</div>
         </td>
         <td><button id="main_close_left" class="ui-icon ui-icon-triangle-1-w"></button> <button id="main_open_left" class="ui-icon ui-icon-triangle-1-e"></button></td>
@@ -229,10 +229,14 @@ $(document).keyup(function(e){
             
         </td>
         <td><button id="main_close_right" class="ui-icon ui-icon-triangle-1-e"></button> <button id="main_open_right" class="ui-icon ui-icon-triangle-1-w"></button></td>
-        <td id="main_table_sidebar_right">	
-        
-        	<div id="main_q">Q </div>
-        
+        <td id="main_table_sidebar_right">
+        	<div id="main_q_container">	
+               	<div id="main_q">Q </div>
+                <form method="POST">
+                <input type="hidden" name="queue" value="enQ"/>
+                <center><input id="main_qsubmit" type="submit" value="Enqueue" /></center>
+                </form>
+            </div>
         </td>
     </tr>
 </table>

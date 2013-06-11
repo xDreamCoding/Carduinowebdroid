@@ -11,6 +11,9 @@
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+ <%@ taglib uri="/WEB-INF/lib/tags/customTag.tld" prefix="ct" %>
+
 <!--Custom Stylesheet-->
 
 <link rel="stylesheet" href="static/style.css" />
@@ -39,8 +42,29 @@
 </li>
 <li><a href="#"><span class="ui-icon ui-icon-script" id="admin_menuicons"></span>Logging</a></li>
 <li><a href="#"><span class="ui-icon ui-icon-wrench" id="admin_menuicons"></span>Settings</a></li>
-
 </ul>
+
+<table>
+	<tr><td>~Add User foo</td></tr>
+	<tr><td>~Edit User foo</td></tr>
+</table>
+
+<c:set var="result">
+	<ct:user par="0" />
+</c:set>
+<c:set var="result" value="${result-1}" />
+
+<table>
+	<tr><th>UserID</th><th>Nickname</th><th>isAdmin</th></tr>
+	<c:forEach var="i" begin="0" end="${result}">
+		<tr>
+			<td><c:out value="${i}" /></td>
+			<td><ct:user par="1" num="${i}" /></td>
+			<td><ct:user par="2" num="${i}" /></td>
+		</tr>
+	
+	</c:forEach>
+</table>
 
 </body>
 </html>
