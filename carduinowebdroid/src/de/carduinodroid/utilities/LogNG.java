@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 
 import de.carduinodroid.desktop.Model.Log;
 import de.carduinodroid.shared.GPS;
@@ -15,6 +16,7 @@ public class LogNG {
 	Log oldLog;
 	Options options = null;
 	DBConnector db;
+	LinkedList<String> tmpLog;
 	
 	BufferedWriter writer;
 	SimpleDateFormat dateformat;
@@ -25,6 +27,7 @@ public class LogNG {
 	public LogNG() {
 		oldLog = new Log();
 		file = null;
+		tmpLog = new LinkedList<String>();
 	}
 	
 	/**
@@ -110,8 +113,10 @@ public class LogNG {
 	 * @param string
 	 */
 	public void writelogfile(String string) {
-		if(file == null)	// TODO: better idea?
+		if(file == null) {
+			tmpLog.addLast(string);
 			write_Live_Log(string);
+		}
 		else
 			writelogfile_second(string);
 	}
@@ -147,9 +152,10 @@ public class LogNG {
 	/**
 	 * @param options the options to set
 	 */
-	public void setOptions(Options options) {
+	public void setOptions(Options options) {		
 		this.options = options;
 		initFile();
+		addTmpLog();
 	}
 	
 	private void initFile() {
@@ -171,6 +177,15 @@ public class LogNG {
 		try {
 			writer = new BufferedWriter(new FileWriter(file));
 		} catch (IOException e) { e.printStackTrace(); }
+	}
+	
+	public void addTmpLog() {
+		if(tmpLog == null) return;
+		
+		for(String s : tmpLog)
+			writelogfile(s);
+		
+		tmpLog = null;
 	}
 
 	/**
