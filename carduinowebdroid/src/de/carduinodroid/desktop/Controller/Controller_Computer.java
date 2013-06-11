@@ -1,14 +1,15 @@
 package de.carduinodroid.desktop.Controller;
 
 import de.carduinodroid.desktop.Model.GPSTrack;
-import de.carduinodroid.desktop.Model.Log;
+import de.carduinodroid.utilities.CarControllerWrapper;
+import de.carduinodroid.utilities.LogNG;
 /** Class to include the controller classes. 
 * 
 * @author Felix L
 * @version 17.06.2012.
 */
 public class Controller_Computer {
-	public Log log;
+	public LogNG log;
 	public GPSTrack gpstrack;
 	public Sound_Output sound_output;
 	public Camera_Settings camera_settings;
@@ -18,17 +19,17 @@ public class Controller_Computer {
 	public GPS_Map gps_map;
 	public Soundrecording soundrecording;
 	public Network network;
-//	private GUI_Computer gui_computer;
+	public CarControllerWrapper parent;
 	
 	/** The constructor is a very important part of the facade pattern.
 	 * The facade is an object that provides a simplified interface to a larger body of code, such as a class library.
 	 *  
 	 * @param GUI_computer		includes an instance of GUI_computer
-	 * @param LOG 				includes an instance of LOG
+	 * @param log2 				includes an instance of LOG
 	 */
-	public Controller_Computer(Log LOG, /**GUI_Computer GUI_computer,**/ GPSTrack gpsTrack) {
-//		gui_computer = GUI_computer;
-		log = LOG;
+	public Controller_Computer(LogNG log2, CarControllerWrapper p, GPSTrack gpsTrack) {
+		parent = p;
+		log = log2;
 		gpstrack = gpsTrack;
 		camera_picture=new Camera_Picture(this);
 		packagedata=new Packagedata(this);

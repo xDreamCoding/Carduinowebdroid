@@ -25,20 +25,20 @@ public class Car_Controller {
 		public void run() {
 			//If someone pushes the up or down key, the Controlsignal will be send
 			if((!up&&down)||(up&&!down)){
-//				int Speed = controller_computer.gui_computer.speed_slider.getValue();
-//				int angle = controller_computer.gui_computer.angle_slider.getValue();
-//				if(!right&&!left)
-//					send_controlsignal(SpeedCalculation(Speed),0);
-//				else
-//					send_controlsignal(SpeedCalculation(Speed),DirectionCalculation(angle));
+				int Speed = controller_computer.parent.getSpeed();
+				int angle = controller_computer.parent.getAngle();
+				if(!right&&!left)
+					send_controlsignal(SpeedCalculation(Speed),0);
+				else
+					send_controlsignal(SpeedCalculation(Speed),DirectionCalculation(angle));
 			}
 			//With a 200ms period the Buttons will be released, if they are not any longer pushed.
 			delay++;
 			if(delay==2){
-//				if(!up){controller_computer.gui_computer.UnpressedBorderUp();}
-//				if(!down){controller_computer.gui_computer.UnpressedBorderDown();}
-//				if(!right||!(up||down)){controller_computer.gui_computer.UnpressedBorderRight();}
-//				if(!left||!(up||down)){controller_computer.gui_computer.UnpressedBorderLeft();}
+				if(!up) controller_computer.parent.confirmButtonUp(false);
+				if(!down) controller_computer.parent.confirmButtonDown(false);
+				if(!right||!(up||down)) controller_computer.parent.confirmButtonRight(false);
+				if(!left||!(up||down)) controller_computer.parent.confirmButtonLeft(false);
 				delay=0;
 			}
 		}
@@ -72,10 +72,10 @@ public class Car_Controller {
 				 * if the button is still pressed.
 				 */
 	private void feedback_output(){
-//		if(up){controller_computer.gui_computer.PressedBorderUp();}
-//		if(down){controller_computer.gui_computer.PressedBorderDown();}
-//		if(right){controller_computer.gui_computer.PressedBorderRight();}
-//		if(left){controller_computer.gui_computer.PressedBorderLeft();}
+		if(up){controller_computer.parent.confirmButtonUp(true);}
+		if(down){controller_computer.parent.confirmButtonDown(true);}
+		if(right){controller_computer.parent.confirmButtonRight(true);}
+		if(left){controller_computer.parent.confirmButtonLeft(true);}
 	}	
 	
 	// ***** Update Variables ***************************************

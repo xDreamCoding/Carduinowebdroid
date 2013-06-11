@@ -5,8 +5,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-import de.carduinodroid.desktop.Controller.Controller_Computer;
 import de.carduinodroid.desktop.Model.GPSTrack;
+import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.Config;
 import de.carduinodroid.utilities.Config.Options;
 import de.carduinodroid.utilities.DBConnector;
@@ -67,10 +67,11 @@ public class MyServletContextListener implements ServletContextListener {
 		log.writelogfile("GPSTracker instanciated");
 		
 		// controller
-		Controller_Computer controller = new Controller_Computer(log.getOldLog(), gps);		
+		//Controller_Computer controller = new Controller_Computer(log.getOldLog(), gps);	
+		CarControllerWrapper controller = new CarControllerWrapper(log, gps);
 		log.writelogfile("Controller_Computer instanciated.");
 		context.setAttribute("controller", controller);	
-		
+				
 		// database
 		DBConnector db = new DBConnector(log, options);
 		log.writelogfile("DBConnector instanciated.");
