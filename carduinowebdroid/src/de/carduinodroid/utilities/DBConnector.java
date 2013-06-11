@@ -607,6 +607,38 @@ public class DBConnector {
 		return returnValue;	
 	}
 	
+	/**
+	 * look up a userID by a given sessionID
+	 * @param sessionID 
+	 * @return userID or null if no session was found
+	 */
+	public String getUserIdBySession(int sessionID) {
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		String userID = null;
+
+		try {
+			stmt = dbConnection.prepareStatement("SELECT userID FROM session WHERE sessionID=?");
+			stmt.setInt(1, sessionID);
+			
+			rset = executeQuery(stmt);
+			
+			if(!rset.isBeforeFirst()) {
+				// kein eintrag?
+				return userID;
+			} else {
+				rset.next();
+				userID = rset.getString("userID");
+			}			
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+
+		closeStatement(stmt);
+		
+		return userID;	
+	}
+	
 	// --- Queue ---
 	/**
 	 * log a user who enqueued himself
@@ -875,6 +907,17 @@ public class DBConnector {
 			System.out.print("OK\n");
 		else
 			System.out.print("BAD\n");
+		
+		/**
+		 * UserID von Session nachgucken
+		 * Erwartung findet "userID"
+		 */
+		System.out.print("looking up userID by sessionID ... ");
+		String uID = getUserIdBySession(sessionID);
+		if(uID.equals(userID)) 
+			System.out.print("OK\n");
+		else
+			System.out.print("BAD - got " + uID + " instead of " + userID + "\n");
 		
 		System.out.println("session test done!");
 		System.out.println("");
