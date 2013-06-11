@@ -31,6 +31,12 @@ public class DBConnector {
 		
 	}
 	
+	public DBConnector() throws Exception {
+		if(log == null || options == null)
+		throw new Exception("wrong contructor for first time instancing");
+		}
+
+	
 	public void shutDown() {
 		if(dbConnection == null)
 			return;

@@ -60,7 +60,6 @@ public class MyServletContextListener implements ServletContextListener {
 		//main
 		activeSession.init();
 		de.carduinodroid.shared.Warteschlange.initWarteschlange();
-		de.carduinodroid.Main.main(options);
 		
 		// GPS		
 		GPSTrack gps = new GPSTrack();
@@ -80,6 +79,8 @@ public class MyServletContextListener implements ServletContextListener {
 		// send options and db to logNG 
 		log.setOptions(options);
 		log.setDB(db);
+		
+		de.carduinodroid.Main.main(options,db);
 
 		//db.dbTest();		
 	}

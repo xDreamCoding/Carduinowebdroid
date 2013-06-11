@@ -19,10 +19,16 @@ import java.util.Timer;
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;   
 	private static Timer caretaker;
+	private static Timer timeout;
+	private static Timer Sessionhandle;
+	private static TimerTask Session;
+	private static TimerTask kick;
 	private static TimerTask action;
 	static int Fahrzeit;
 	static Options opt;
 	static boolean flag;
+	static String aktSessionID;
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -53,8 +59,14 @@ public class Main extends HttpServlet {
     	flag = true;
     }
 	
-	public static void main(Options opt){
+    public static void DBlog(DBConnector db){
+    	int driverID = db.startDrive(db.getUserID(Integer.parseInt(aktSessionID)));
+    }
+	
+	public static void main(Options opt,DBConnector db){
 		
+		Sessionhandle = new Timer();
+		Sessionhandle.schedule(Session, 0, 5000);
 		Fahrzeit = opt.fahrZeit;
 		System.out.println("Main-function");
 		
@@ -71,7 +83,9 @@ public class Main extends HttpServlet {
     				caretaker.schedule(action, 1000, 60000*Fahrzeit);
     			}
     			else{
+    				DBConnector db = new DBConnector();
     				String aktSessionID = de.carduinodroid.shared.Warteschlange.getNextUser();
+    				db.startDrive(db.getUserID(Integer.parseInt(aktSessionID)));
     				//TODO Fahrrechte;
 
     				}
@@ -79,8 +93,30 @@ public class Main extends HttpServlet {
             
 		};
 	
+		Session = new TimerTask(){
+			public void run(){
+				
+			
+				String[] Sessions = new String[activeSession.getAllSessions().length];
+				Sessions = activeSession.getAllSessions();
+			
+				for(int i = 0; i < Sessions.length; i++){
+					aktSessionID = Sessions[i];
+					//TODO sende Nachricht an user und versuche diese wieder zu Empfangen
+					kick = new TimerTask(){
+			    		public void run(){
+			    			activeSession.deleteSession(aktSessionID);
+			    		}
+			    	};
+					timeout = new Timer();
+					timeout.schedule(kick, 10000);
+					//if(msg arrives) timeout.cancel();
+				}
+			}
+		};
+		
 		caretaker = new Timer();
         caretaker.schedule(action, 100, 60000*Fahrzeit);    
 	}
-
+		//TODO log GPS
 }

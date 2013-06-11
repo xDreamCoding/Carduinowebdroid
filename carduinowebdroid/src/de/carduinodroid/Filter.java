@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import de.carduinodroid.shared.User;
+import de.carduinodroid.shared.activeSession;
 import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.utilities.LogNG;
 import de.carduinodroid.shared.Warteschlange;
@@ -52,8 +53,8 @@ public class Filter implements javax.servlet.Filter {
 			    System.out.println("Key = " + key + ", Value = " + value[0]);
 			}
 			
+			String SessionID = session.getId();
 			if(m.size() > 0 && m.containsKey("action")) {
-				String SessionID = session.getId();
 				switch((String)m.get("action")[0])  {
 				case "login":
 					if(!m.containsKey("loginName") || !m.containsKey("password"))
@@ -73,6 +74,7 @@ public class Filter implements javax.servlet.Filter {
 					break;
 				case "enqueue":
 					de.carduinodroid.shared.Warteschlange.insertUser(SessionID);
+					log.logQueue((String)m.get("loginName")[0], Integer.parseInt(SessionID));
 					break;
 				case "dequeue":
 					de.carduinodroid.shared.Warteschlange.deleteTicket(SessionID);
@@ -81,12 +83,17 @@ public class Filter implements javax.servlet.Filter {
 					String nextUserID = de.carduinodroid.shared.Warteschlange.getNextUser();
 					//TODO wohin soll der übergeben werden
 					break;
+				case "watchDriver":
+					activeSession.insertSession(SessionID);
+					config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);
+					//TODO unterschied zwischen watch a driver und login
 				}
 			}
 			
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
 			
 			if(session.getAttribute("name") != null) {
+				activeSession.insertSession(SessionID);
 				authorized = true;
 			}
 		}
