@@ -19,8 +19,8 @@ import de.carduinodroid.utilities.Config.Options;
 public class DBConnector {
 
 	static Connection dbConnection = null;
-	LogNG log;
-	Options options;
+	static LogNG log;
+	static Options options;
 	
 	public DBConnector(LogNG logIN, Options opt) {
 		log = logIN;
@@ -34,7 +34,7 @@ public class DBConnector {
 	public DBConnector() throws Exception {
 		if(log == null || options == null)
 		throw new Exception("wrong contructor for first time instancing");
-		}
+	}
 
 	
 	public void shutDown() {

@@ -59,10 +59,6 @@ public class Main extends HttpServlet {
     	flag = true;
     }
 	
-    public static void DBlog(DBConnector db){
-    	int driverID = db.startDrive(db.getUserID(Integer.parseInt(aktSessionID)));
-    }
-	
 	public static void main(Options opt,DBConnector db){
 		
 		Sessionhandle = new Timer();
@@ -83,9 +79,14 @@ public class Main extends HttpServlet {
     				caretaker.schedule(action, 1000, 60000*Fahrzeit);
     			}
     			else{
-    				DBConnector db = new DBConnector();
+    				DBConnector db = null;
+					try {
+						db = new DBConnector();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+					}
     				String aktSessionID = de.carduinodroid.shared.Warteschlange.getNextUser();
-    				db.startDrive(db.getUserID(Integer.parseInt(aktSessionID)));
+    				db.startDrive(db.getUserIdBySession(Integer.parseInt(aktSessionID)));
     				//TODO Fahrrechte;
 
     				}
