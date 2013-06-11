@@ -39,6 +39,7 @@ public class Packagedata {
 	 * This method send the separate information to the GUI. 
 	 */
 	
+	// TODO: brauchen wir das?
 	private void updateInformationbox()
 	{
 		double doublelong= ((double)Math.round(Double.parseDouble(tokens[5]) * 1000000)) / 1000000;
@@ -78,7 +79,7 @@ public class Packagedata {
 			resolution[itemslength-2-i] = tokens[i+1];
 		}
 		
-		//controller_computer.gui_computer.FillResolutionbox(resolution);
+		controller_computer.parent.setResolutions(resolution);
 	}
 	
 }

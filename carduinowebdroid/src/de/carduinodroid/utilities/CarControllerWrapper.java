@@ -1,12 +1,16 @@
 package de.carduinodroid.utilities;
 
+import java.awt.image.BufferedImage;
+
 import de.carduinodroid.desktop.Controller.Controller_Computer;
 import de.carduinodroid.desktop.Model.GPSTrack;
 
 public class CarControllerWrapper {
 	Controller_Computer cc;
 	int speed, angle;
-	
+	BufferedImage img;
+	String[] resolutions;
+
 	public CarControllerWrapper(LogNG log, GPSTrack gps) {
 		cc = new Controller_Computer(log, this, gps);
 	}
@@ -57,5 +61,33 @@ public class CarControllerWrapper {
 	 */
 	public void setAngle(int angle) {
 		this.angle = angle;
+	}
+
+	/**
+	 * @return the img
+	 */
+	public BufferedImage getImg() {
+		return img;
+	}
+
+	/**
+	 * @param img the img to set
+	 */
+	public void setImg(BufferedImage img) {
+		this.img = img;
+	}	
+	
+	/**
+	 * @return the resolutions
+	 */
+	public String[] getResolutions() {
+		return resolutions;
+	}
+
+	/**
+	 * @param resolutions the resolutions to set
+	 */
+	public void setResolutions(String[] resolutions) {
+		this.resolutions = resolutions;
 	}
 }

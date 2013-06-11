@@ -30,7 +30,7 @@ public class Camera_Picture {
 	public void receive_picture(BufferedImage bufferedImage) {
 		BufferedImage image = bufferedImage;
 		image = rotate(image, Math.toRadians(90));
-//		controller.gui_computer.image.setIcon(new ImageIcon(image));
+		controller.parent.setImg(image);
 	}
 	
 	public BufferedImage rotate(BufferedImage image, double angle) {
@@ -47,11 +47,10 @@ public class Camera_Picture {
 	    return result;
 	}
 	
-	   public static GraphicsConfiguration getDefaultConfiguration() {
-		   GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		   GraphicsDevice gd = ge.getDefaultScreenDevice();
-		   return gd.getDefaultConfiguration();
-		   }
-
+	public static GraphicsConfiguration getDefaultConfiguration() {
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice gd = ge.getDefaultScreenDevice();
+		return gd.getDefaultConfiguration();
+	}
 
 }
