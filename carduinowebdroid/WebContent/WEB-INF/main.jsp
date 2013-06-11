@@ -101,23 +101,7 @@ $(function() {
 </script>
 <script>
 $(document).keydown(function(e){
-    if (e.keyCode == 37) { 
-       $('#main_steering_button_left').mousedown();
-       return false;
-    }
-    if (e.keyCode == 38) { 
-       $('#main_steering_button_up').mousedown();
-	   
-       return false;
-    }
-    if (e.keyCode == 39) { 
-       $('#main_steering_button_right').mousedown();
-       return false;
-    }
-    if (e.keyCode == 40) { 
-       $('#main_steering_button_down').mousedown();
-       return false;
-    }
+    
 
     if($("#main_chat_textinput").is(":focus")){
         true;
@@ -128,6 +112,22 @@ $(document).keydown(function(e){
         }
         if (e.keyCode == 76) { 
            $('#main_gadget_button_light').mousedown();
+           return false;
+        }
+        if (e.keyCode == 37) { 
+            $('#main_steering_button_left').mousedown();
+            return false;
+        }
+        if (e.keyCode == 38) { 
+           $('#main_steering_button_up').mousedown();           
+           return false;
+        }
+        if (e.keyCode == 39) { 
+           $('#main_steering_button_right').mousedown();
+           return false;
+        }
+        if (e.keyCode == 40) { 
+           $('#main_steering_button_down').mousedown();
            return false;
         }
     }
