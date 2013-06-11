@@ -1,14 +1,17 @@
 package de.carduinodroid.shared;
 
 import java.util.LinkedList;
+import de.carduinodroid.utilities.DBConnector;
 
 public class Warteschlange {
 
 	private static LinkedList<String> Warteschlange = null;
+	static DBConnector db;
 	
-	public static void initWarteschlange(){
+	public static void initWarteschlange(DBConnector db2){
 		if (Warteschlange == null){
 			Warteschlange = new LinkedList<String>();
+			db = db2;
 		}
 		else{
 			

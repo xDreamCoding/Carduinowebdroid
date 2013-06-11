@@ -11,6 +11,8 @@ import de.carduinodroid.utilities.*;
 import de.carduinodroid.utilities.Config.Options;
 import java.util.TimerTask;
 import java.util.Timer;
+import java.util.ArrayList;
+import de.carduinodroid.Dummy;;
 
 /**
  * Servlet implementation class Main
@@ -19,11 +21,9 @@ import java.util.Timer;
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;   
 	private static Timer caretaker;
-	private static Timer timeout;
-	private static Timer Sessionhandle;
 	private static TimerTask Session;
-	private static TimerTask kick;
 	private static TimerTask action;
+	private static ArrayList<String> aliveSessions;
 	static int Fahrzeit;
 	static Options opt;
 	static boolean flag;
@@ -59,24 +59,55 @@ public class Main extends HttpServlet {
     	flag = true;
     }
 	
-	public static void main(Options opt,DBConnector db){
-		
-		Sessionhandle = new Timer();
-		Sessionhandle.schedule(Session, 0, 5000);
+	public static void shutDown(){
+		System.out.println("Shut-Down main");
+		Session.cancel();
+		action.cancel();
+	}
+    
+    public static void main(Options opt,DBConnector db){
+    	
+    	aliveSessions = new ArrayList<String>();
+    	
+    	Session = new TimerTask(){
+			public void run(){
+							
+				for (int i = 0; i < aliveSessions.size(); i++){
+					activeSession.deleteSession(aliveSessions.get(i));
+				}
+				
+				String[] Sessions = new String[activeSession.getAllSessions().length];
+				Sessions = activeSession.getAllSessions();
+			
+				for(int i = 0; i < Sessions.length; i++){
+					aliveSessions.add(Sessions[i]);
+					//TODO sende Nachricht an user und versuche diese wieder zu Empfangen
+				}
+			
+				//TODO wenn Nachrichten ankommen entferne User aus aliveSessions
+			}
+		};
+    	
+		Timer Sessionhandle = new Timer();
+		Sessionhandle.schedule(Session, 10, 5000);
 		Fahrzeit = opt.fahrZeit;
 		System.out.println("Main-function");
 		
 		action = new TimerTask() {
 			public void run() {
             	if(flag){
-            		caretaker.cancel();
-    				caretaker.schedule(action, 60000*Fahrzeit, 60000*Fahrzeit);
+            		//Timer caretaker = new Timer();
+    				caretaker.cancel();
+    				caretaker = new Timer();
+            		caretaker.schedule(new de.carduinodroid.Dummy(action), 60000*Fahrzeit, 60000*Fahrzeit);
     				flag = false;
             	}
 				
 				if (de.carduinodroid.shared.Warteschlange.isEmpty() == true){
-            		caretaker.cancel();
-    				caretaker.schedule(action, 1000, 60000*Fahrzeit);
+					caretaker.cancel();
+					caretaker = new Timer();
+					caretaker.schedule(new de.carduinodroid.Dummy(action), 1000, 60000*Fahrzeit);				
+    				return;
     			}
     			else{
     				DBConnector db = null;
@@ -94,30 +125,10 @@ public class Main extends HttpServlet {
             
 		};
 	
-		Session = new TimerTask(){
-			public void run(){
-				
-			
-				String[] Sessions = new String[activeSession.getAllSessions().length];
-				Sessions = activeSession.getAllSessions();
-			
-				for(int i = 0; i < Sessions.length; i++){
-					aktSessionID = Sessions[i];
-					//TODO sende Nachricht an user und versuche diese wieder zu Empfangen
-					kick = new TimerTask(){
-			    		public void run(){
-			    			activeSession.deleteSession(aktSessionID);
-			    		}
-			    	};
-					timeout = new Timer();
-					timeout.schedule(kick, 10000);
-					//if(msg arrives) timeout.cancel();
-				}
-			}
-		};
+		
 		
 		caretaker = new Timer();
-        caretaker.schedule(action, 100, 60000*Fahrzeit);    
-	}
+      caretaker.schedule(action, 100, 60000*Fahrzeit);  
+    }   
 		//TODO log GPS
 }

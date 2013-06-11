@@ -30,6 +30,7 @@ public class MyServletContextListener implements ServletContextListener {
 		
 		DBConnector db = (DBConnector)event.getServletContext().getAttribute("database");
 		db.shutDown();
+		Main.shutDown();
 	}
 
 
@@ -56,10 +57,6 @@ public class MyServletContextListener implements ServletContextListener {
 		}
 		log.writelogfile("Options loaded");
 		context.setAttribute("options", options);
-			
-		//main
-		activeSession.init();
-		de.carduinodroid.shared.Warteschlange.initWarteschlange();
 		
 		// GPS		
 		GPSTrack gps = new GPSTrack();
@@ -80,6 +77,9 @@ public class MyServletContextListener implements ServletContextListener {
 		log.setOptions(options);
 		log.setDB(db);
 		
+		//main
+		activeSession.init();
+		de.carduinodroid.shared.Warteschlange.initWarteschlange(db);
 		de.carduinodroid.Main.main(options,db);
 
 		//db.dbTest();		
