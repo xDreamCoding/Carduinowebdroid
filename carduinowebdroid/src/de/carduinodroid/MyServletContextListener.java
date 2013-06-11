@@ -11,6 +11,7 @@ import de.carduinodroid.utilities.Config;
 import de.carduinodroid.utilities.Config.Options;
 import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.utilities.LogNG;
+import de.carduinodroid.shared.activeSession;
 
 @WebListener
 public class MyServletContextListener implements ServletContextListener {
@@ -57,8 +58,9 @@ public class MyServletContextListener implements ServletContextListener {
 		context.setAttribute("options", options);
 			
 		//main
+		activeSession.init();
 		de.carduinodroid.shared.Warteschlange.initWarteschlange();
-		de.carduinodroid.Main.main(options.fahrZeit);
+		de.carduinodroid.Main.main(options);
 		
 		// GPS		
 		GPSTrack gps = new GPSTrack();

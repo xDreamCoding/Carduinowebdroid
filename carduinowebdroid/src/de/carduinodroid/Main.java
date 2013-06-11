@@ -21,6 +21,8 @@ public class Main extends HttpServlet {
 	private static Timer caretaker;
 	private static TimerTask action;
 	static int Fahrzeit;
+	static Options opt;
+	static boolean flag;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -46,26 +48,39 @@ public class Main extends HttpServlet {
 		System.out.println("doPost");
 	}
 
-	public static void main(int fahrzeit){
+    public static void refresh(Options opt){
+    	Fahrzeit = opt.fahrZeit;
+    	flag = true;
+    }
+	
+	public static void main(Options opt){
 		
-		Fahrzeit = fahrzeit;
+		Fahrzeit = opt.fahrZeit;
 		System.out.println("Main-function");
+		
 		action = new TimerTask() {
-            public void run() {
-            	if (de.carduinodroid.shared.Warteschlange.isEmpty() == true){
-    				caretaker.cancel();
+			public void run() {
+            	if(flag){
+            		caretaker.cancel();
+    				caretaker.schedule(action, 60000*Fahrzeit, 60000*Fahrzeit);
+    				flag = false;
+            	}
+				
+				if (de.carduinodroid.shared.Warteschlange.isEmpty() == true){
+            		caretaker.cancel();
     				caretaker.schedule(action, 1000, 60000*Fahrzeit);
     			}
     			else{
     				String aktSessionID = de.carduinodroid.shared.Warteschlange.getNextUser();
     				//TODO Fahrrechte;
+
     				}
     			}
             
 		};
 	
 		caretaker = new Timer();
-        caretaker.schedule(action, 100, 60000*Fahrzeit);
+        caretaker.schedule(action, 100, 60000*Fahrzeit);    
 	}
 
 }

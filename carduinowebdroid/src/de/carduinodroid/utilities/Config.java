@@ -3,6 +3,8 @@ package de.carduinodroid.utilities;
 import java.io.*;
 import java.util.*;
 
+import de.carduinodroid.Main;
+
 public class Config {
 	public class Options {
 		public int fahrZeit;
@@ -125,6 +127,7 @@ public class Config {
 		options.logQueue = true;
 		options.logQueueToFile = false;
     	saveOptions();
+    	Main.refresh(options);
 	}
 
 	/**
@@ -136,6 +139,7 @@ public class Config {
 	
 	public void setOptions(Options options) {
 		this.options = options;
+		Main.refresh(options);
 	}
 	
 	

@@ -53,7 +53,7 @@ public class Filter implements javax.servlet.Filter {
 			}
 			
 			if(m.size() > 0 && m.containsKey("action")) {
-				String SessionID = m.get("session")[0];
+				String SessionID = session.getId();
 				switch((String)m.get("action")[0])  {
 				case "login":
 					if(!m.containsKey("loginName") || !m.containsKey("password"))
@@ -96,7 +96,7 @@ public class Filter implements javax.servlet.Filter {
 		} else if(staticRequest) {
 			chain.doFilter(request, res);
 		} else {
-			config.getServletContext().getRequestDispatcher("/WEB-INF/test.jsp").forward(request, res);
+			config.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, res);
 		}
 	}
 
