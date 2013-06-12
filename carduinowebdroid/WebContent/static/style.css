@@ -182,6 +182,17 @@ textarea{
 
 #main_qsubmit{
 	margin-top:10px;
+	width:100%;
+}
+
+#main_logout{
+	position:absolute; 
+	bottom:0;	
+	right:0;
+	width:19%;
+	margin-bottom:5px;
+	padding-left:8px;
+	padding-right:8px;
 }
 
 #main_stream{

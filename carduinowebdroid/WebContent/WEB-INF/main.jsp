@@ -233,8 +233,9 @@ $(document).keyup(function(e){
         	<div id="main_q_container">	
                	<div id="main_q">Q </div>
                 <form method="POST">
-                <input type="hidden" name="queue" value="enQ"/>
-                <center><input id="main_qsubmit" type="submit" value="Enqueue" /></center>
+                    <input type="hidden" name="queue" value="enQ"/>
+                    <center><input id="main_qsubmit" type="submit" value="Enqueue" /></center>
+                    <button id="main_logout" type="button" value="Logout" />Logout</button>
                 </form>
             </div>
         </td>
