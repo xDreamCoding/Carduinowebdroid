@@ -60,12 +60,12 @@ public class MyServletContextListener implements ServletContextListener {
 		context.setAttribute("options", options);
 		
 		// GPS		
-		GPSTrack gps = new GPSTrack();
-		log.writelogfile("GPSTracker instanciated");
+		//GPSTrack gps = new GPSTrack();
+		//log.writelogfile("GPSTracker instanciated");
 		
 		// controller
 		//Controller_Computer controller = new Controller_Computer(log.getOldLog(), gps);	
-		CarControllerWrapper controller = new CarControllerWrapper(log, gps);
+		CarControllerWrapper controller = new CarControllerWrapper(log);
 		log.writelogfile("Controller_Computer instanciated.");
 		context.setAttribute("controller", controller);	
 				

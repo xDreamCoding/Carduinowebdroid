@@ -11,8 +11,8 @@ public class CarControllerWrapper {
 	BufferedImage img;
 	String[] resolutions;
 
-	public CarControllerWrapper(LogNG log, GPSTrack gps) {
-		cc = new Controller_Computer(log, this, gps);
+	public CarControllerWrapper(LogNG log) {
+		cc = new Controller_Computer(log, this);		
 	}
 
 	public void confirmButtonUp(boolean b) {

@@ -29,7 +29,7 @@ public class GPSTrack {
 			 *@param dateformat Format for the date
 			 *@param trackfile Say how to save the *.gpx-file
 			 */
-	public GPSTrack(){
+	private GPSTrack(){
 		Date date = new Date();
 		SimpleDateFormat dateformat = new SimpleDateFormat( "yyyy_MM_dd_HH_mm_ss" );
 		String trackfile = "Track_"+dateformat.format(date)+".gpx";

@@ -115,10 +115,10 @@ public class LogNG {
 	public void writelogfile(String string) {
 		if(file == null) {
 			tmpLog.addLast(string);
-			write_Live_Log(string);
+			writelogfile_second(string, false, true);
 		}
 		else
-			writelogfile_second(string);
+			writelogfile_second(string, false, false);
 	}
 	
 	/** All Log entries will be imported by the same format.
@@ -127,15 +127,17 @@ public class LogNG {
 	 *
 	 *@param line Contains the string which will be include
 	 */
-	public void writelogfile_second(String line){
+	public void writelogfile_second(String line, boolean skipLiveLog, boolean skipFile){
 		try {
 			Date data = new Date();
 			SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss" );
 			String entry = df.format(data)+" "+line;
-			writer.write(entry,0,entry.length());
-			writer.write(System.getProperty("line.separator"));
-			writer.flush();
-			write_Live_Log(entry);
+			if(!skipFile) {
+				writer.write(entry,0,entry.length());
+				writer.write(System.getProperty("line.separator"));
+				writer.flush();
+			}
+			if(!skipLiveLog) write_Live_Log(entry);
 		} catch (IOException e) { e.printStackTrace(); }
 	}
 	
@@ -183,7 +185,7 @@ public class LogNG {
 		if(tmpLog == null) return;
 		
 		for(String s : tmpLog)
-			writelogfile(s);
+			writelogfile_second(s, true, false);
 		
 		tmpLog = null;
 	}

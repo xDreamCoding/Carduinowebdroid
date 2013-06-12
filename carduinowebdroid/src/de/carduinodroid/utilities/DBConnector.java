@@ -645,6 +645,40 @@ public class DBConnector {
 		return userID;	
 	}
 	
+	/**
+	 * get a user object based on an given session ID
+	 * @param sessionID
+	 * @return user or null
+	 */
+	public User getUserBySession(int sessionID) {
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		User user = null;
+		try {
+			stmt = dbConnection.prepareStatement("SELECT userID, nickname, rightFlag FROM user WHERE userID = (SELECT userID FROM session WHERE sessionID=?)");
+			stmt.setInt(1, sessionID);
+			
+			rset = executeQuery(stmt);
+			
+			if(!rset.isBeforeFirst()) {
+				// no user found
+			} else {
+				rset.next();
+				String userID = rset.getString("userID");
+				String nickname = rset.getString("nickname");
+				if(nickname == null) nickname = userID;
+				byte right = rset.getByte("rightFlag");
+				user = new User(userID, nickname, Right.values()[right]);
+			}			
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+
+		closeStatement(stmt);
+		
+		return user;
+	}
+	
 	// --- Queue ---
 	/**
 	 * log a user who enqueued himself
