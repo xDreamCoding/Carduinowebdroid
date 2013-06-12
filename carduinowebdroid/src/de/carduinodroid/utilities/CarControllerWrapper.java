@@ -3,13 +3,13 @@ package de.carduinodroid.utilities;
 import java.awt.image.BufferedImage;
 
 import de.carduinodroid.desktop.Controller.Controller_Computer;
-import de.carduinodroid.desktop.Model.GPSTrack;
 
 public class CarControllerWrapper {
 	Controller_Computer cc;
 	int speed, angle;
 	BufferedImage img;
 	String[] resolutions;
+	String latitude, longitude;
 
 	public CarControllerWrapper(LogNG log) {
 		cc = new Controller_Computer(log, this);		
@@ -89,5 +89,33 @@ public class CarControllerWrapper {
 	 */
 	public void setResolutions(String[] resolutions) {
 		this.resolutions = resolutions;
+	}
+
+	/**
+	 * @return the latitude
+	 */
+	public String getLatitude() {
+		return latitude;
+	}
+
+	/**
+	 * @param latitude the latitude to set
+	 */
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	/**
+	 * @return the longitude
+	 */
+	public String getLongitude() {
+		return longitude;
+	}
+
+	/**
+	 * @param longitude the longitude to set
+	 */
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 }

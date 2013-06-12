@@ -1,6 +1,5 @@
 package de.carduinodroid.desktop.Controller;
 
-import de.carduinodroid.desktop.Model.GPSTrack;
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.LogNG;
 /** Class to include the controller classes. 
@@ -10,7 +9,6 @@ import de.carduinodroid.utilities.LogNG;
 */
 public class Controller_Computer {
 	public LogNG log;
-	//private GPSTrack gpstrack;
 	public Sound_Output sound_output;
 	public Camera_Settings camera_settings;
 	public Camera_Picture camera_picture;
@@ -27,10 +25,9 @@ public class Controller_Computer {
 	 * @param GUI_computer		includes an instance of GUI_computer
 	 * @param log2 				includes an instance of LOG
 	 */
-	public Controller_Computer(LogNG log2, CarControllerWrapper p/*, GPSTrack gpsTrack*/) {
+	public Controller_Computer(LogNG log2, CarControllerWrapper p) {
 		parent = p;
 		log = log2;
-		//gpstrack = gpsTrack;
 		camera_picture=new Camera_Picture(this);
 		packagedata=new Packagedata(this);
 		gps_map=new GPS_Map(this);

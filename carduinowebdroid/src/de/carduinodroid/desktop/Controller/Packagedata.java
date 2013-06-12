@@ -49,19 +49,21 @@ public class Packagedata {
 		
 		if(!(Long.equals("0.0")&Lat.equals("0.0")))
 		{	
-			//controller_computer.gui_computer.longitude.setText(Long);
-			//controller_computer.gui_computer.latitude.setText(Lat);
-			//controller_computer.gpstrack.writegpxfile(String.valueOf(tokens[5]), String.valueOf(tokens[6]));
+			controller_computer.parent.setLongitude(String.valueOf(tokens[5]));
+			controller_computer.parent.setLatitude(String.valueOf(tokens[6]));
+//			controller_computer.gpstrack.writegpxfile(String.valueOf(tokens[5]), String.valueOf(tokens[6]));
 		}else
 		{
-			//controller_computer.gui_computer.longitude.setText("N/A");
-			//controller_computer.gui_computer.latitude.setText("N/A");
+//			controller_computer.gui_computer.longitude.setText("N/A");
+//			controller_computer.gui_computer.latitude.setText("N/A");
+			controller_computer.parent.setLongitude(null);
+			controller_computer.parent.setLatitude(null);
 		}
-		
-	//	if (tokens[4].equals("1"))
-			//controller_computer.gui_computer.connection_type.setText("WLAN");
-	//	if (tokens[3].equals("1"))
-			//controller_computer.gui_computer.connection_type.setText("Mobile Internet");
+				
+//		if (tokens[4].equals("1"))
+//			controller_computer.gui_computer.connection_type.setText("WLAN");
+//		if (tokens[3].equals("1"))
+//			controller_computer.gui_computer.connection_type.setText("Mobile Internet");
 
 		//MobileAvailable tokens[1]; 
 		//WLANAvailable tokens[2];
