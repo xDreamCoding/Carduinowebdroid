@@ -12,6 +12,7 @@ import de.carduinodroid.utilities.Config.Options;
 import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.utilities.LogNG;
 import de.carduinodroid.shared.activeSession;
+import de.carduinodroid.shared.waitingqueue;
 
 @WebListener
 public class MyServletContextListener implements ServletContextListener {
@@ -79,7 +80,7 @@ public class MyServletContextListener implements ServletContextListener {
 		
 		//main
 		activeSession.init();
-		de.carduinodroid.shared.Warteschlange.initWarteschlange(db);
+		waitingqueue.initqueue(db);
 		de.carduinodroid.Main.main(options,db);
 
 		//db.dbTest();		

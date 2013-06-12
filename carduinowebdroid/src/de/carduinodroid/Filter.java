@@ -17,7 +17,7 @@ import de.carduinodroid.shared.User;
 import de.carduinodroid.shared.activeSession;
 import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.utilities.LogNG;
-import de.carduinodroid.shared.Warteschlange;
+import de.carduinodroid.shared.waitingqueue;
 
 /**
  * Servlet Filter implementation class Filter
@@ -73,14 +73,14 @@ public class Filter implements javax.servlet.Filter {
 					System.out.println("user " + u.getNickname() + " has logged in");
 					break;
 				case "enqueue":
-					de.carduinodroid.shared.Warteschlange.insertUser(SessionID);
+					waitingqueue.insertUser(SessionID);
 					log.logQueue((String)m.get("loginName")[0], Integer.parseInt(SessionID));
 					break;
 				case "dequeue":
-					de.carduinodroid.shared.Warteschlange.deleteTicket(SessionID);
+					waitingqueue.deleteTicket(SessionID);
 					break;
 				case "NextUser":
-					String nextUserID = de.carduinodroid.shared.Warteschlange.getNextUser();
+					//String nextUserID = waitingqueue.getNextUser();
 					//TODO wohin soll der übergeben werden
 					break;
 				case "watchDriver":

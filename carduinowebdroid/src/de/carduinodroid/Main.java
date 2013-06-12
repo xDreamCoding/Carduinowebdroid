@@ -12,7 +12,6 @@ import de.carduinodroid.utilities.Config.Options;
 import java.util.TimerTask;
 import java.util.Timer;
 import java.util.ArrayList;
-import de.carduinodroid.Dummy;;
 
 /**
  * Servlet implementation class Main
@@ -103,7 +102,7 @@ public class Main extends HttpServlet {
     				flag = false;
             	}
 				
-				if (de.carduinodroid.shared.Warteschlange.isEmpty() == true){
+				if (waitingqueue.isEmpty() == true){
 					caretaker.cancel();
 					caretaker = new Timer();
 					caretaker.schedule(new de.carduinodroid.Dummy(action), 1000, 60000*Fahrzeit);				
@@ -116,7 +115,7 @@ public class Main extends HttpServlet {
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 					}
-    				String aktSessionID = de.carduinodroid.shared.Warteschlange.getNextUser();
+    				String aktSessionID = waitingqueue.getNextUser();
     				db.startDrive(db.getUserIdBySession(Integer.parseInt(aktSessionID)));
     				//TODO Fahrrechte;
 
