@@ -21,7 +21,7 @@ _______________________
 - Können nur auftreten wenn 2 Personen an geleichen Dateien arbeiten oder
 - Vor der arbeit nicht auf commits gecheckt wurde
 
-## How to set up CarDuinoWebDroid on a Tomcat v7 Server.
+## How to set up CarDuinoWebDroid on a Tomcat 7 (min 7.0.34) Server.
 
 1. download the latest .war or xport .war from Eclipse Project
 2. put the .war in your tomcat /webapps folder.
