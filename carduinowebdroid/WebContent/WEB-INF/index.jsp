@@ -54,8 +54,9 @@ $(function() {
 <br>
 
 <div id="index_guestbox">
-    <form action="guest.jsp" method="post" id="guest">
-        <td><input type="submit" value="Watch a Driver" /></td>       
+    <form action="POST">
+    	<input type="hidden" name="action" value="watchDriver" />
+        <input type="submit" value="Watch a Driver" />       
     </form> 
 </div>
 

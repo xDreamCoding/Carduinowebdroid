@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="static/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
 <script src="static/jquery-1.9.1.js"></script>
 <script src="static/jquery-ui.js"></script>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="/WEB-INF/lib/tags/customTag.tld" prefix="ct" %>
 
 <!--Custom Stylesheet-->
 
@@ -240,7 +242,8 @@ $(document).keyup(function(e){
                 	<input type="hidden" name="action" value="logout"/>
                 	<input id="main_logout" type="submit" value="Logout" />
                 </form>
-                <a href="admin.jsp"><button id="main_admin">Admin</button></a>
+                <c:set value="isAdmin"><ct:isAdmin /></c:set>
+                <c:if test="isAdmin"><a href="admin.jsp"><button id="main_admin">Admin</button></a></c:if>
             </div> 
         </td>
     </tr>

@@ -19,4 +19,9 @@
             <description>Parameter which to output</description>
         </attribute>
     </tag>
+    <tag>
+    	<name>isAdmin</name>
+    	<tag-class>de.carduinodroid.web.SessionTag</tag-class>
+    	<info>Asks if current User is an Admin or not</info>
+    </tag>
 </taglib>
