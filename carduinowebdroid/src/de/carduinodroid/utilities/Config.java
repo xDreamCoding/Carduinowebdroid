@@ -7,7 +7,14 @@ import de.carduinodroid.Main;
 
 public class Config {
 	public class Options {
+		/**
+		 * in minutes
+		 */
 		public int fahrZeit;
+		/**
+		 * in seconds
+		 */
+		public int logGPSInterval;		
 		public String dbAddress;
 		public String dbUser;
 		public String dbPW;
@@ -61,7 +68,7 @@ public class Config {
 				log.writelogfile(key + " = " + value);
 			}		
 			
-			options.fahrZeit = Integer.parseInt(p.getProperty("fahrZeit"));
+			options.fahrZeit = Integer.parseInt(p.getProperty("fahrZeit"));			
 			options.dbAddress = p.getProperty("dbAddress");
 			options.dbUser = p.getProperty("dbUser");
 			options.dbPW = p.getProperty("dbPW");
@@ -70,6 +77,7 @@ public class Config {
 			options.logChatToFile = Boolean.valueOf(p.getProperty("logChatToFile"));
 			options.logGPS = Boolean.valueOf(p.getProperty("logGPS"));
 			options.logGPSToFile = Boolean.valueOf(p.getProperty("logGPSToFile"));
+			options.logGPSInterval = Integer.parseInt(p.getProperty("logGPSInterval"));
 			options.logQueue = Boolean.valueOf(p.getProperty("logQueue"));
 			options.logQueueToFile = Boolean.valueOf(p.getProperty("logQueueToFile"));
 		}
@@ -82,7 +90,7 @@ public class Config {
 		try{
 			log.writelogfile("saving settings");
 			Properties p = new Properties();
-			p.setProperty("fahrZeit", String.valueOf(options.fahrZeit));
+			p.setProperty("fahrZeit", String.valueOf(options.fahrZeit));			
 			p.setProperty("dbAddress", options.dbAddress);
 			p.setProperty("dbUser", options.dbUser);
 			p.setProperty("dbPW", options.dbPW);
@@ -91,6 +99,7 @@ public class Config {
 			p.setProperty("logChatToFile", String.valueOf(options.logChatToFile));
 			p.setProperty("logGPS", String.valueOf(options.logGPS));
 			p.setProperty("logGPSToFile", String.valueOf(options.logGPSToFile));
+			p.setProperty("logGPSInterval", String.valueOf(options.logGPSInterval));
 			p.setProperty("logQueue", String.valueOf(options.logQueue));
 			p.setProperty("logQueueToFile", String.valueOf(options.logQueueToFile));
 			p.store(new FileOutputStream(optionsPath), null);
@@ -110,6 +119,7 @@ public class Config {
     	
     	options = new Options();
     	options.fahrZeit = 10;
+    	options.logGPSInterval = 5;
     	if(localhost) {
     		options.dbAddress = "localhost:3306/carduinodroid";
     		options.dbUser = "root";
