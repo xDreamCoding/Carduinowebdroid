@@ -27,6 +27,7 @@ public class Filter implements javax.servlet.Filter {
 	
 	FilterConfig config;
 	LogNG log;
+	static int GuestID = 0;
 	
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
@@ -60,6 +61,7 @@ public class Filter implements javax.servlet.Filter {
 			//TODO Sessions sind wirklich Strings werden aber später nach int gecastet
 			String SessionID = session.getId();
 			if(m.size() > 0 && m.containsKey("action")) {
+				
 				switch((String)m.get("action")[0])  {
 				case "login":
 					if(!m.containsKey("loginName") || !m.containsKey("password"))
@@ -75,19 +77,17 @@ public class Filter implements javax.servlet.Filter {
 					
 					session.setAttribute("name", u.getNickname());
 					System.out.println("user " + u.getNickname() + " has logged in");
-					activeSession.insertSession(SessionID,ipAdress);
+					activeSession.insertSession(SessionID,ipAdress,userID);
 					break;
 				case "enqueue":					
-					System.out.println("debug: "+activeSession.getSessionInt(SessionID)+"	"+ SessionID+"	"+activeSession.getSession(SessionID));
 					User user = db.getUserBySession(activeSession.getSessionInt(SessionID));
-					//TODO user=null
 					if (user == null){
 						System.out.println("User nicht gefunden");
 						break;
 					}
 					if (user.isGuest() == true) return;
 					waitingqueue.insertUser(SessionID);
-					log.logQueue((String)m.get("loginName")[0], activeSession.getSessionInt(SessionID));
+					log.logQueue(user.getUserID(), activeSession.getSessionInt(SessionID));
 					break;
 				case "dequeue":
 					waitingqueue.deleteTicket(SessionID);
@@ -97,7 +97,9 @@ public class Filter implements javax.servlet.Filter {
 					//TODO wohin soll der übergeben werden
 					break;
 				case "watchDriver":
-					activeSession.insertSession(SessionID, ipAdress);
+					userID = "guest" + (GuestID);
+					activeSession.insertSession(SessionID, ipAdress, userID);
+					GuestID++;
 					config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);
 				case "toMainPage":
 					config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);

@@ -8,7 +8,6 @@ public class activeSession {
 
 	private static ArrayList<String> activeSessions;
 	private static ArrayList<Integer> activeInt;
-	private static int LaufNummer = 0;
 	static DBConnector db;
 	
 	public static void init(){
@@ -22,23 +21,26 @@ public class activeSession {
 		}
 	}
 	
-	public static void insertSession(String SessionID,String ipadress){
+	public static void insertSession(String SessionID,String ipadress,String userid){
 		Inet4Address ip4 = null;
+		int ID = 0;
+		
 		try{
 			ip4 = (Inet4Address) Inet4Address.getByName(ipadress);
 		}
 		catch(Exception ie){
 			System.out.println("kann IP nicht casten");
 		}
-		activeSessions.add(SessionID);
-		activeInt.add(LaufNummer);
 
 		if (!(ip4 == null)){
-			db.createSession(db.getUserIdBySession(getSessionInt(SessionID)), ip4.toString());
+			ID = db.createSession(userid, ip4.toString());
 		}
 		else{
-			db.createSession(db.getUserIdBySession(getSessionInt(SessionID)), "255.255.255.255");
+			ID = db.createSession(userid, "255.255.255.255");
 		}
+		
+		activeSessions.add(SessionID);
+		activeInt.add(ID);
 	}
 	
 	public static String[] getAllSessions(){
@@ -65,9 +67,12 @@ public class activeSession {
 	}
 	
 	public static void deleteAll(){
+		for (int i = 0; i < activeSessions.size(); i++){
+			db.closeSession(getSessionInt(activeSessions.get(i)));
+		}
+		
 		activeSessions.clear();
-		activeInt.clear();
-		LaufNummer = 0;
+		activeInt.clear();		
 	}
 
 	public static int getSessionInt(String SessionID){

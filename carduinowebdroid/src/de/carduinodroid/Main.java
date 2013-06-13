@@ -82,6 +82,7 @@ public class Main extends HttpServlet {
 		action.cancel();
 		GPSLogger.cancel();
 		GPSLog.cancel();
+		activeSession.deleteAll();
 	}
     
     public static void main(Options opt,DBConnector db,LogNG logng){
