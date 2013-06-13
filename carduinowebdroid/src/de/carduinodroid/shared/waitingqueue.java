@@ -47,7 +47,17 @@ public class waitingqueue {
 	public static void InsertFirst(String SessionID){
 		Warteschlange.addFirst(SessionID);
 	}
-
+	
+	public static String[] getNickname(){
+		String[] Nickname = new String[Warteschlange.size()];
+		for(int i = 0;i < Nickname.length; i++){
+			User user = db.getUserBySession(Integer.parseInt(Warteschlange.get(i)));
+			Nickname[i] = user.getNickname();
+		}
+		
+		return Nickname;
+	}
+	
 	public static String[] getAllSessions(){
 		String[] Liste = new  String [Warteschlange.size()];
 		for (int i = 0;i < Warteschlange.size();i++){

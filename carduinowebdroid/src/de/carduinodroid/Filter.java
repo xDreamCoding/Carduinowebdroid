@@ -37,6 +37,7 @@ public class Filter implements javax.servlet.Filter {
 		
 		boolean authorized = false;
 		boolean staticRequest = false;
+		DBConnector db = (DBConnector)config.getServletContext().getAttribute("database");
 		
 		DBConnector db = (DBConnector)config.getServletContext().getAttribute("database");
 		
@@ -90,6 +91,15 @@ public class Filter implements javax.servlet.Filter {
 				case "watchDriver":
 					activeSession.insertSession(SessionID, ipAdress);
 					config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);
+				case "toMainPage":
+					config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);
+					break;
+				case "toAdminPage":
+					User user2 = db.getUserBySession(Integer.parseInt(SessionID));
+					if (user2.isAdmin() == true){
+						config.getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, res);
+					}
+					break;
 				}
 			}
 			

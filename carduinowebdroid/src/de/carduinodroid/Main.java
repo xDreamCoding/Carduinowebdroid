@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import de.carduinodroid.shared.*;
 import de.carduinodroid.utilities.*;
 import de.carduinodroid.utilities.Config.Options;
+import de.carduinodroid.utilities.LogNG;
 import java.util.TimerTask;
 import java.util.Timer;
 import java.util.ArrayList;
@@ -20,9 +21,13 @@ import java.util.ArrayList;
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;   
 	private static Timer caretaker;
+	private static Timer GPSLog;
+	private static TimerTask GPSLogger;
 	private static TimerTask Session;
 	private static TimerTask action;
 	private static ArrayList<String> aliveSessions;
+	static LogNG log;
+	static int driveID;
 	static int Fahrzeit;
 	static Options opt;
 	static boolean flag;
@@ -62,10 +67,13 @@ public class Main extends HttpServlet {
 		System.out.println("Shut-Down main");
 		Session.cancel();
 		action.cancel();
+		GPSLogger.cancel();
+		GPSLog.cancel();
 	}
     
-    public static void main(Options opt,DBConnector db){
+    public static void main(Options opt,DBConnector db,LogNG logng){
     	
+    	log = logng;
     	aliveSessions = new ArrayList<String>();
     	
     	Session = new TimerTask(){
@@ -95,7 +103,6 @@ public class Main extends HttpServlet {
 		action = new TimerTask() {
 			public void run() {
             	if(flag){
-            		//Timer caretaker = new Timer();
     				caretaker.cancel();
     				caretaker = new Timer();
             		caretaker.schedule(new de.carduinodroid.Dummy(action), 60000*Fahrzeit, 60000*Fahrzeit);
@@ -116,7 +123,7 @@ public class Main extends HttpServlet {
 						// TODO Auto-generated catch block
 					}
     				String aktSessionID = waitingqueue.getNextUser();
-    				db.startDrive(db.getUserIdBySession(Integer.parseInt(aktSessionID)));
+    				driveID = db.startDrive(db.getUserIdBySession(Integer.parseInt(aktSessionID)));
     				//TODO Fahrrechte;
 
     				}
@@ -127,7 +134,18 @@ public class Main extends HttpServlet {
 		
 		
 		caretaker = new Timer();
-      caretaker.schedule(action, 100, 60000*Fahrzeit);  
+		caretaker.schedule(action, 100, 60000*Fahrzeit);  
+		
+		GPSLogger = new TimerTask(){
+			public void run(){
+				CarControllerWrapper Controller = new CarControllerWrapper(log);
+				String longitude = Controller.getLongitude();
+				String latitude = Controller.getLatitude();
+				log.logGPS(driveID, longitude, latitude);
+			}
+		};
+		GPSLog = new Timer();
+		GPSLog.schedule(GPSLogger, 10, 1000);
     }   
-		//TODO log GPS
+		//TODO logNG
 }

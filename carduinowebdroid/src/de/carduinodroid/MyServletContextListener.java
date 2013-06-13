@@ -81,7 +81,7 @@ public class MyServletContextListener implements ServletContextListener {
 		//main
 		activeSession.init();
 		waitingqueue.initqueue(db);
-		de.carduinodroid.Main.main(options,db);
+		de.carduinodroid.Main.main(options,db,log);
 
 		//db.dbTest();		
 	}

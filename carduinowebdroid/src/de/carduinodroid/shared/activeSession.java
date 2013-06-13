@@ -7,9 +7,16 @@ import de.carduinodroid.utilities.DBConnector;
 public class activeSession {
 
 	private static ArrayList<String> activeSessions;
+	static DBConnector db;
 	
 	public static void init(){
 		activeSessions = new ArrayList<String>();
+		db = null;
+		try {
+			db = new DBConnector();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		}
 	}
 	
 	public static void insertSession(String SessionID,String ipadress){
@@ -21,12 +28,7 @@ public class activeSession {
 			System.out.println("kann IP nicht casten");
 		}
 		activeSessions.add(SessionID);
-		DBConnector db = null;
-		try {
-			db = new DBConnector();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-		}
+
 		if (!(ip4 == null))db.createSession(db.getUserIdBySession(Integer.parseInt(SessionID)), ip4);
 	}
 	
@@ -45,6 +47,8 @@ public class activeSession {
 			return;
 		}
 		activeSessions.remove(index);
+	
+		db.closeSession(Integer.parseInt(SessionID));
 	}
 	
 	public static void deleteAll(){
