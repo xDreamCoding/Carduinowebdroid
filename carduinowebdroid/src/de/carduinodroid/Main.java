@@ -81,6 +81,7 @@ public class Main extends HttpServlet {
 							
 				for (int i = 0; i < aliveSessions.size(); i++){
 					activeSession.deleteSession(aliveSessions.get(i));
+					waitingqueue.deleteTicket(aliveSessions.get(i));
 				}
 				
 				String[] Sessions = new String[activeSession.getAllSessions().length];
@@ -141,11 +142,15 @@ public class Main extends HttpServlet {
 				CarControllerWrapper Controller = new CarControllerWrapper(log);
 				String longitude = Controller.getLongitude();
 				String latitude = Controller.getLatitude();
+				if (longitude == null || latitude == null){
+					System.out.println("GPS does not work");
+					return;
+				}
 				log.logGPS(driveID, longitude, latitude);
 			}
 		};
 		GPSLog = new Timer();
-		GPSLog.schedule(GPSLogger, 10, 1000);
+		GPSLog.schedule(GPSLogger, 10, 5000);
     }   
-		//TODO logNG
+    
 }

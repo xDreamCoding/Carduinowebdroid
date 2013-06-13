@@ -37,7 +37,6 @@ public class Filter implements javax.servlet.Filter {
 		
 		boolean authorized = false;
 		boolean staticRequest = false;
-		DBConnector db = (DBConnector)config.getServletContext().getAttribute("database");
 		
 		DBConnector db = (DBConnector)config.getServletContext().getAttribute("database");
 		
@@ -56,7 +55,7 @@ public class Filter implements javax.servlet.Filter {
 			    String[] value = (String[])entry.getValue();
 			    System.out.println("Key = " + key + ", Value = " + value[0]);
 			}
-			
+			//TODO Sessions sind wirklich Strings werden aber später nach int gecastet
 			String SessionID = session.getId();
 			if(m.size() > 0 && m.containsKey("action")) {
 				switch((String)m.get("action")[0])  {
@@ -99,6 +98,10 @@ public class Filter implements javax.servlet.Filter {
 					if (user2.isAdmin() == true){
 						config.getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, res);
 					}
+					break;
+				case "logout":
+					activeSession.deleteSession(SessionID);
+					waitingqueue.deleteTicket(SessionID);
 					break;
 				}
 			}
