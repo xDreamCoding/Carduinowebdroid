@@ -33,7 +33,9 @@ public class Filter implements javax.servlet.Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		// place your code here
-		System.out.println("filter");
+		System.out.println("filter");		
+		
+		config.getServletContext().getRequestDispatcher("/main").include(request, res);
 		
 		boolean authorized = false;
 		boolean staticRequest = false;

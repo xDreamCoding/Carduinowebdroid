@@ -41,6 +41,19 @@ public class Main extends HttpServlet {
         // TODO Auto-generated constructor stub
         System.out.println("Main");
     }
+    
+    /*
+     * what is get and what is post?
+     * 
+     * get:
+     * 
+     * post:
+     * 	- login
+     * 	- enqueue
+     * 	- dequeue
+     * 	- watchDriver
+     * 	-
+     */
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
