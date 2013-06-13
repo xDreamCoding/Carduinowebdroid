@@ -38,6 +38,8 @@ public class Filter implements javax.servlet.Filter {
 		boolean authorized = false;
 		boolean staticRequest = false;
 		
+		DBConnector db = (DBConnector)config.getServletContext().getAttribute("database");
+		
 		if(request instanceof HttpServletRequest) {
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();
@@ -61,7 +63,6 @@ public class Filter implements javax.servlet.Filter {
 					if(!m.containsKey("loginName") || !m.containsKey("password"))
 						break;
 					
-					DBConnector db = (DBConnector)config.getServletContext().getAttribute("database");
 					String userID, pw;
 					userID = (String)m.get("loginName")[0];
 					pw = (String)m.get("password")[0];
@@ -74,7 +75,7 @@ public class Filter implements javax.servlet.Filter {
 					System.out.println("user " + u.getNickname() + " has logged in");
 					break;
 				case "enqueue":					
-					User user = db.getUserbySession(Integer.parseInt(SessionID));
+					User user = db.getUserBySession(Integer.parseInt(SessionID));
 					if (user.isGuest() == true) return;
 					waitingqueue.insertUser(SessionID);
 					log.logQueue((String)m.get("loginName")[0], Integer.parseInt(SessionID));

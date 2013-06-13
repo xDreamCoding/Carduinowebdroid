@@ -235,7 +235,10 @@ $(document).keyup(function(e){
                 <form method="POST">
                     <input type="hidden" name="action" value="enqueue"/>
                     <center><input id="main_qsubmit" type="submit" value="Enqueue" /></center>
-                    <button id="main_logout" type="button" value="Logout" />Logout</button>
+                </form>
+                <form method="POST">
+                	<input type="hidden" name="action" value="logout"/>
+                	<center><button id="main_logout" type="button" value="Logout" />Logout</button></center>
                 </form>
             </div>
         </td>
