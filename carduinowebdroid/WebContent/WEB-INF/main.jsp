@@ -234,13 +234,14 @@ $(document).keyup(function(e){
                	<div id="main_q">Q </div>
                 <form method="POST">
                     <input type="hidden" name="action" value="enqueue"/>
-                    <center><input id="main_qsubmit" type="submit" value="Enqueue" /></center>
+                    <input id="main_qsubmit" type="submit" value="Enqueue" />
                 </form>
                 <form method="POST">
                 	<input type="hidden" name="action" value="logout"/>
-                	<center><button id="main_logout" type="button" value="Logout" />Logout</button></center>
+                	<input id="main_logout" type="submit" value="Logout" />
                 </form>
-            </div>
+                <a href="admin.jsp"><button id="main_admin">Admin</button></a>
+            </div> 
         </td>
     </tr>
 </table>

@@ -186,10 +186,18 @@ textarea{
 }
 
 #main_logout{
-	position:absolute; 
+	position:absolute;
 	bottom:0;	
 	right:0;
-	width:19%;
+	margin-bottom:5px;
+	padding-left:8px;
+	padding-right:8px;
+}
+
+#main_admin{
+	position:absolute;
+	bottom:0;
+	left:1;
 	margin-bottom:5px;
 	padding-left:8px;
 	padding-right:8px;
