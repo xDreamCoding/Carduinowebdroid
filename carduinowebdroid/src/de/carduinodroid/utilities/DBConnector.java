@@ -359,7 +359,7 @@ public class DBConnector {
 	 * @param ip address
 	 * @return sessionID
 	 */
-	public int createSession(String userID, Inet4Address ip) {
+	public int createSession(String userID, String ip) {
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
 		int sessionID = -1;
@@ -372,7 +372,7 @@ public class DBConnector {
 		try {
 			stmt = dbConnection.prepareStatement("INSERT INTO session (`userID`, `ipAddress`, `loginTime`) VALUES (?, ?, ?);");
 			stmt.setString(1, userID);
-			stmt.setString(2, ip.getHostAddress());
+			stmt.setString(2, ip);
 			stmt.setTimestamp(3, datetime);
 			
 			executeUpdate(stmt);
@@ -384,7 +384,7 @@ public class DBConnector {
 		try {
 			stmt = dbConnection.prepareStatement("SELECT sessionID FROM session WHERE `userID`=? AND `ipAddress`=? AND `loginTime`=?");
 			stmt.setString(1, userID);
-			stmt.setString(2, ip.getHostAddress());
+			stmt.setString(2, ip);
 			stmt.setTimestamp(3, datetime);
 			
 			rset = executeQuery(stmt);
@@ -929,7 +929,7 @@ public class DBConnector {
 		 * Erwartung: sessionID > -1
 		 */
 		System.out.print("creating new session ... ");
-		sessionID = createSession(userID, addr);
+		sessionID = createSession(userID, addr.getHostAddress());
 		System.out.print("sessionID: " + sessionID + " ");
 		if(sessionID > -1) 
 			System.out.print("OK\n");
