@@ -28,6 +28,7 @@ public class waitingqueue {
 	
 	public static void insertUser(String SessionID){
 		Warteschlange.add(SessionID);
+		System.out.println("User in Warteschlange eingereiht");
 	}
 	
 	public static int getLength(){

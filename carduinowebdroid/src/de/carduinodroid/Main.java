@@ -99,7 +99,7 @@ public class Main extends HttpServlet {
     				caretaker.cancel();
     				caretaker = new Timer();
             		caretaker.schedule(new de.carduinodroid.Dummy(action), 60000*Fahrzeit, 60000*Fahrzeit);
-    				flag = false;
+            		flag = false;
             	}
 				
 				if (waitingqueue.isEmpty() == true){

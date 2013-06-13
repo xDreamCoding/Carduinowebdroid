@@ -41,7 +41,8 @@ public class Filter implements javax.servlet.Filter {
 		if(request instanceof HttpServletRequest) {
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();
-			
+			String ipAdress = req.getRemoteAddr();
+			System.out.println(ipAdress);
 			System.out.println("-> " + req.getRequestURI());
 			
 			Map<String, String[]> m = req.getParameterMap();
@@ -72,7 +73,9 @@ public class Filter implements javax.servlet.Filter {
 					session.setAttribute("name", u.getNickname());
 					System.out.println("user " + u.getNickname() + " has logged in");
 					break;
-				case "enqueue":
+				case "enqueue":					
+					User user = db.getUserbySession(Integer.parseInt(SessionID));
+					if (user.isGuest() == true) return;
 					waitingqueue.insertUser(SessionID);
 					log.logQueue((String)m.get("loginName")[0], Integer.parseInt(SessionID));
 					break;
@@ -84,16 +87,15 @@ public class Filter implements javax.servlet.Filter {
 					//TODO wohin soll der übergeben werden
 					break;
 				case "watchDriver":
-					activeSession.insertSession(SessionID);
+					activeSession.insertSession(SessionID, ipAdress);
 					config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);
-					//TODO unterschied zwischen watch a driver und login
 				}
 			}
 			
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
 			
 			if(session.getAttribute("name") != null) {
-				activeSession.insertSession(SessionID);
+				activeSession.insertSession(SessionID,ipAdress);
 				authorized = true;
 			}
 		}

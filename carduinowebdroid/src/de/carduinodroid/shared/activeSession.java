@@ -1,6 +1,8 @@
 package de.carduinodroid.shared;
 
 import java.util.ArrayList;
+import java.net.Inet4Address;
+import de.carduinodroid.utilities.DBConnector;
 
 public class activeSession {
 
@@ -10,8 +12,22 @@ public class activeSession {
 		activeSessions = new ArrayList<String>();
 	}
 	
-	public static void insertSession(String SessionID){
+	public static void insertSession(String SessionID,String ipadress){
+		Inet4Address ip4 = null;
+		try{
+			ip4 = (Inet4Address) Inet4Address.getByName(ipadress);
+		}
+		catch(Exception ie){
+			System.out.println("kann IP nicht casten");
+		}
 		activeSessions.add(SessionID);
+		DBConnector db = null;
+		try {
+			db = new DBConnector();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+		}
+		if (!(ip4 == null))db.createSession(db.getUserIdBySession(Integer.parseInt(SessionID)), ip4);
 	}
 	
 	public static String[] getAllSessions(){
@@ -24,6 +40,10 @@ public class activeSession {
 	
 	public static void deleteSession(String SessionID){
 		int index = activeSessions.indexOf(SessionID);
+		if (index == -1){
+			System.out.println("Session bereits gelöscht");
+			return;
+		}
 		activeSessions.remove(index);
 	}
 	
