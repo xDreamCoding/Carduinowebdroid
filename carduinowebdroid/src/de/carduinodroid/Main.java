@@ -76,28 +76,28 @@ public class Main extends HttpServlet {
     	log = logng;
     	aliveSessions = new ArrayList<String>();
     	
-    	Session = new TimerTask(){
-			public void run(){
-							
-				for (int i = 0; i < aliveSessions.size(); i++){
-					activeSession.deleteSession(aliveSessions.get(i));
-					waitingqueue.deleteTicket(aliveSessions.get(i));
-				}
-				
-				String[] Sessions = new String[activeSession.getAllSessions().length];
-				Sessions = activeSession.getAllSessions();
-			
-				for(int i = 0; i < Sessions.length; i++){
-					aliveSessions.add(Sessions[i]);
-					//TODO sende Nachricht an user und versuche diese wieder zu Empfangen
-				}
-			
-				//TODO wenn Nachrichten ankommen entferne User aus aliveSessions
-			}
-		};
-    	
-		Timer Sessionhandle = new Timer();
-		Sessionhandle.schedule(Session, 10, 5000);
+//    	Session = new TimerTask(){
+//			public void run(){
+//							
+//				for (int i = 0; i < aliveSessions.size(); i++){
+//					activeSession.deleteSession(aliveSessions.get(i));
+//					waitingqueue.deleteTicket(aliveSessions.get(i));
+//				}
+//				
+//				String[] Sessions = new String[activeSession.getAllSessions().length];
+//				Sessions = activeSession.getAllSessions();
+//			
+//				for(int i = 0; i < Sessions.length; i++){
+//					aliveSessions.add(Sessions[i]);
+//					//TODO sende Nachricht an user und versuche diese wieder zu Empfangen
+//				}
+//			
+//				//TODO wenn Nachrichten ankommen entferne User aus aliveSessions
+//			}
+//		};
+//    	
+//		Timer Sessionhandle = new Timer();
+//		Sessionhandle.schedule(Session, 10, 5000);
 		Fahrzeit = opt.fahrZeit;
 		System.out.println("Main-function");
 		
@@ -124,7 +124,7 @@ public class Main extends HttpServlet {
 						// TODO Auto-generated catch block
 					}
     				String aktSessionID = waitingqueue.getNextUser();
-    				driveID = db.startDrive(db.getUserIdBySession(Integer.parseInt(aktSessionID)));
+    				driveID = db.startDrive(db.getUserIdBySession(activeSession.getSessionInt(aktSessionID)));
     				//TODO Fahrrechte;
 
     				}

@@ -73,12 +73,19 @@ public class Filter implements javax.servlet.Filter {
 					
 					session.setAttribute("name", u.getNickname());
 					System.out.println("user " + u.getNickname() + " has logged in");
+					activeSession.insertSession(SessionID,ipAdress);
 					break;
 				case "enqueue":					
-					User user = db.getUserBySession(Integer.parseInt(SessionID));
+					System.out.println("debug: "+activeSession.getSessionInt(SessionID)+"	"+ SessionID+"	"+activeSession.getSession(SessionID));
+					User user = db.getUserBySession(activeSession.getSessionInt(SessionID));
+					//TODO user=null
+					if (user == null){
+						System.out.println("User nicht gefunden");
+						break;
+					}
 					if (user.isGuest() == true) return;
 					waitingqueue.insertUser(SessionID);
-					log.logQueue((String)m.get("loginName")[0], Integer.parseInt(SessionID));
+					log.logQueue((String)m.get("loginName")[0], activeSession.getSessionInt(SessionID));
 					break;
 				case "dequeue":
 					waitingqueue.deleteTicket(SessionID);
@@ -94,7 +101,7 @@ public class Filter implements javax.servlet.Filter {
 					config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);
 					break;
 				case "toAdminPage":
-					User user2 = db.getUserBySession(Integer.parseInt(SessionID));
+					User user2 = db.getUserBySession(activeSession.getSessionInt(SessionID));
 					if (user2.isAdmin() == true){
 						config.getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, res);
 					}
@@ -109,7 +116,6 @@ public class Filter implements javax.servlet.Filter {
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
 			
 			if(session.getAttribute("name") != null) {
-				activeSession.insertSession(SessionID,ipAdress);
 				authorized = true;
 			}
 		}
