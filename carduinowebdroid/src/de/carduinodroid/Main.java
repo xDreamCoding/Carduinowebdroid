@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import de.carduinodroid.shared.*;
 import de.carduinodroid.utilities.*;
 import de.carduinodroid.utilities.Config.Options;
-import de.carduinodroid.utilities.LogNG;
 import java.util.TimerTask;
 import java.util.Timer;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class Main extends HttpServlet {
 	private static ArrayList<String> aliveSessions;
 	static LogNG log;
 	static int driveID;
-	static int Fahrzeit;
+	static int Fahrzeit, gpsLogInterval;
 	static Options opt;
 	static boolean flag;
 	static String aktSessionID;
@@ -73,6 +72,7 @@ public class Main extends HttpServlet {
 
     public static void refresh(Options opt){
     	Fahrzeit = opt.fahrZeit;
+    	gpsLogInterval = opt.logGPSInterval;
     	flag = true;
     }
 	
@@ -85,7 +85,7 @@ public class Main extends HttpServlet {
 		activeSession.deleteAll();
 	}
     
-    public static void main(Options opt,DBConnector db,LogNG logng){
+    public static void main(Options opt, DBConnector db, LogNG logng){
     	
     	log = logng;
     	aliveSessions = new ArrayList<String>();
@@ -113,58 +113,63 @@ public class Main extends HttpServlet {
 //		Timer Sessionhandle = new Timer();
 //		Sessionhandle.schedule(Session, 10, 5000);
 		Fahrzeit = opt.fahrZeit;
+		gpsLogInterval = opt.logGPSInterval;
 		System.out.println("Main-function");
 		
-		action = new TimerTask() {
-			public void run() {
-            	if(flag){
-    				caretaker.cancel();
-    				caretaker = new Timer();
-            		caretaker.schedule(new de.carduinodroid.Dummy(action), 60000*Fahrzeit, 60000*Fahrzeit);
-            		flag = false;
-            	}
-				
-				if (waitingqueue.isEmpty() == true){
-					caretaker.cancel();
-					caretaker = new Timer();
-					caretaker.schedule(new de.carduinodroid.Dummy(action), 1000, 60000*Fahrzeit);				
-    				return;
-    			}
-    			else{
-    				DBConnector db = null;
-					try {
-						db = new DBConnector();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
+		try {
+			action = new TimerTask() {
+				DBConnector db = new DBConnector();
+				public void run() {
+			    	if(flag){
+						caretaker.cancel();
+						caretaker = new Timer();
+			    		caretaker.schedule(new de.carduinodroid.Dummy(action), 60000*Fahrzeit, 60000*Fahrzeit);
+			    		flag = false;
+			    	}
+					
+					if (waitingqueue.isEmpty() == true){
+						caretaker.cancel();
+						caretaker = new Timer();
+						caretaker.schedule(new de.carduinodroid.Dummy(action), 1000, 60000*Fahrzeit);				
+						return;
 					}
-    				String aktSessionID = waitingqueue.getNextUser();
-    				driveID = db.startDrive(db.getUserIdBySession(activeSession.getSessionInt(aktSessionID)));
-    				//TODO Fahrrechte;
+					else{
+						String aktSessionID = waitingqueue.getNextUser();
+						driveID = db.startDrive(db.getUserIdBySession(activeSession.getSessionInt(aktSessionID)));
+						//TODO Fahrrechte;
 
-    				}
-    			}
-            
-		};
+						}
+					}
+			    
+			};
+		} catch (Exception e) {
+			log.writelogfile(e.getMessage());
+			e.printStackTrace();
+		}
 	
 		
 		
 		caretaker = new Timer();
 		caretaker.schedule(action, 100, 60000*Fahrzeit);  
 		
-		GPSLogger = new TimerTask(){
-			public void run(){
-				CarControllerWrapper Controller = new CarControllerWrapper(log);
-				String longitude = Controller.getLongitude();
-				String latitude = Controller.getLatitude();
-				if (longitude == null || latitude == null){
-					System.out.println("GPS does not work");
-					return;
+		try {
+			GPSLogger = new TimerTask(){
+				CarControllerWrapper Controller = CarControllerWrapper.getCarController();				
+				public void run(){
+					String longitude = Controller.getLongitude();
+					String latitude = Controller.getLatitude();
+					if (longitude == null || latitude == null){
+						System.out.println("GPS: N/A");
+					} else
+						log.logGPS(driveID, longitude, latitude);
 				}
-				log.logGPS(driveID, longitude, latitude);
-			}
-		};
+			};
+		} catch (Exception e) {
+			log.writelogfile(e.getMessage());
+			e.printStackTrace();
+		}
 		GPSLog = new Timer();
-		GPSLog.schedule(GPSLogger, 10, 5000);
+		GPSLog.schedule(GPSLogger, 10, gpsLogInterval * 1000);
     }   
     
 }

@@ -5,14 +5,28 @@ import java.awt.image.BufferedImage;
 import de.carduinodroid.desktop.Controller.Controller_Computer;
 
 public class CarControllerWrapper {
+	static CarControllerWrapper ccw = null;
+	
 	Controller_Computer cc;
 	int speed, angle;
 	BufferedImage img;
 	String[] resolutions;
 	String latitude, longitude;
 
-	public CarControllerWrapper(LogNG log) {
+	private CarControllerWrapper(LogNG log) {
 		cc = new Controller_Computer(log, this);		
+	}
+	
+	public static CarControllerWrapper getCarController(LogNG log) {
+		if(ccw == null)
+			ccw = new CarControllerWrapper(log);
+		return ccw;
+	}
+	
+	public static CarControllerWrapper getCarController() throws Exception {
+		if(ccw == null)
+			throw new Exception("wrong contructor for first time instancing");
+		return ccw;
 	}
 
 	public void confirmButtonUp(boolean b) {

@@ -127,7 +127,7 @@ public class LogNG {
 	 *
 	 *@param line Contains the string which will be include
 	 */
-	public void writelogfile_second(String line, boolean skipLiveLog, boolean skipFile){
+	private void writelogfile_second(String line, boolean skipLiveLog, boolean skipFile){
 		try {
 			Date data = new Date();
 			SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss" );
