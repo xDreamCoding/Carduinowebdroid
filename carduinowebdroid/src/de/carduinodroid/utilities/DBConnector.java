@@ -16,12 +16,24 @@ import de.carduinodroid.shared.*;
 import de.carduinodroid.shared.User.Right;
 import de.carduinodroid.utilities.Config.Options;
 
+/**
+ * \brief This Class implements all functions which interact the database
+ * The contructor public DBConnector(LogNG logIN, Options opt) is needed for first time initialisation.
+ * @author Michael Röding
+ *
+ */
 public class DBConnector {
 
 	static Connection dbConnection = null;
 	static LogNG log;
 	static Options options;
 	
+	/**
+	 * \brief Initialises database connection and sets static variables.
+	 * This contructor sets or updates the static log and options. It also calls connect() is necessary.
+	 * @param logIN Log which should be used for loggin.
+	 * @param opt Options which contains database connection parameters (server address, username and password).
+	 */
 	public DBConnector(LogNG logIN, Options opt) {
 		log = logIN;
 		options = opt;
@@ -31,12 +43,19 @@ public class DBConnector {
 		
 	}
 	
+	/**
+	 * \brief 
+	 * This contructor checks if all necessary variables are set.
+	 * @throws Exception This constructor should never be used for first time instancing since log and options are not set
+	 */
 	public DBConnector() throws Exception {
 		if(log == null || options == null)
 		throw new Exception("wrong contructor for first time instancing");
 	}
 
-	
+	/**
+	 * \brief Commits all pending queries/updates and closes database connecting
+	 */
 	public void shutDown() {
 		if(dbConnection == null)
 			return;
@@ -47,10 +66,15 @@ public class DBConnector {
 			dbConnection.commit();
 			dbConnection.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			log.writelogfile(e.getMessage());
 		}
 	}
 	
+	/**
+	 * \brief Establishs the connetion to the database.
+	 * Establish the connetion to the database based on given options. It can be called even if the connections is already established.
+	 * @return Returns "true" if successful or "false" if an error occurs.
+	 */
 	private boolean connect() {
 		try {
 			if(dbConnection == null || dbConnection.isClosed()) {			
@@ -63,13 +87,20 @@ public class DBConnector {
 		}
 		catch (Exception e) {
 			log.writelogfile("DB Connection failed.");
-			e.printStackTrace();
+			log.writelogfile(e.getMessage());
 			return false;
 		}
 		return true;
 	}	
 		
 	// --------------------- Hilfsfunktionen ---------------------
+	/**
+	 * \brief Executs a given PreparedStatement.
+	 * Use this function for statements without a return value like INSERT, UPDATE or DELETE.
+	 * The PreparedStatement will be closed by this function.
+	 * @param stmt PreparedStatement to execute
+	 * @return Returns "true" if successful or "false" if an error occurs.
+	 */
 	private boolean executeUpdate(PreparedStatement stmt) {
 		try {
 			stmt.executeUpdate();
@@ -93,7 +124,12 @@ public class DBConnector {
 		}
 		return true;
 	}
-	
+	/**
+	 * \brief Executs a given PreparedStatement. 
+	 * Use this function for statements with a return value like SELECT. Don't forget to close the PreparedStatement later!
+	 * @param stmt PreparedStatement to execute
+	 * @return Returns the resulting ResultSet.
+	 */
 	private ResultSet executeQuery(PreparedStatement stmt) {
 		ResultSet rset = null;
 		try {	
@@ -109,10 +145,14 @@ public class DBConnector {
 			}
 			return null;
 		}
-		// don't close the statement yet, you need it for the result set!
-		return rset;
+		return rset; /**  don't close the statement yet, you need it for the result set! */
 	}
 	
+	/**
+	 * \brief Closes a given PreparedStatement
+	 * Use this function to close 
+	 * @param stmt
+	 */
 	private void closeStatement(PreparedStatement stmt) {
 		try {
 			stmt.close();
@@ -124,11 +164,12 @@ public class DBConnector {
 	// --------------------- API ---------------------
 	// --- Chat ---
 	/**
-	 * save chat to DB
-	 * @param userID
-	 * @param sessionID
-	 * @param text
-	 * @return 
+	 * \brief Saves a chat text to database
+	 * A timestamp is added by this function.
+	 * @param userID The UserID of teh user who sad that.
+	 * @param sessionID	The associated SessionID.
+	 * @param text The actual chat text (max length is 256!)
+	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
 	protected boolean logChat(String userID, int sessionID, String text) {
 		PreparedStatement stmt = null;
