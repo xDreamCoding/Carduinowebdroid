@@ -19,7 +19,7 @@ import de.carduinodroid.utilities.Config.Options;
 /**
  * \brief This Class implements all functions which interact the database
  * The contructor public DBConnector(LogNG logIN, Options opt) is needed for first time initialisation.
- * @author Michael Röding
+ * @author Michael RÃ¶ding
  *
  */
 public class DBConnector {
@@ -812,7 +812,7 @@ public class DBConnector {
 			System.out.println("drive test has failed! exiting...");
 			return;
 		}
-		dbGPSTest(driveID, "51°03'09.5\"", "001°07'54.9\"");
+		dbGPSTest(driveID, "51Â°03'09.5\"", "001Â°07'54.9\"");
 		
 		dbQueueTest(userID, sessionID);
 		
@@ -860,7 +860,7 @@ public class DBConnector {
 		}
 		
 		/**
-		 * Session schließen
+		 * Session schlieÃŸen
 		 * Erwartung: geht
 		 */
 		System.out.print("finishing drive ... ");
@@ -980,7 +980,7 @@ public class DBConnector {
 		}
 		
 		/**
-		 * Session schließen
+		 * Session schlieÃŸen
 		 * Erwartung: geht
 		 */
 		System.out.print("closing new session ... ");
@@ -1014,8 +1014,8 @@ public class DBConnector {
 		System.out.println("starting user test!");
 		
 		/**
-		 * Versucht sich mit einem ungültigen User einzuloggen 
-		 * Erwartung: schlägt fehl
+		 * Versucht sich mit einem ungÃ¼ltigen User einzuloggen 
+		 * Erwartung: schlÃ¤gt fehl
 		 */
 		System.out.print("trying to login in as (invalid) user " + user + "... ");
 		if(loginUser(user, pw) == null) {
@@ -1056,7 +1056,7 @@ public class DBConnector {
 		}
 		
 		/**
-		 * Ändern des Nicknames
+		 * Ã„ndern des Nicknames
 		 * Erwartung: geht
 		 */
 		System.out.print("changing nickname to " + nick + "... ");
@@ -1086,7 +1086,7 @@ public class DBConnector {
 		}
 		
 		/**
-		 * zähle user in DB
+		 * zÃ¤hle user in DB
 		 */
 		System.out.print("counting all users ... ");
 		int userCount = getAllUserCount();
@@ -1115,7 +1115,7 @@ public class DBConnector {
 		}
 		
 		/**
-		 * Löscht den Test-User
+		 * LÃ¶scht den Test-User
 		 * Erwartung: geht
 		 */
 		System.out.print("deleting user " + user + "... ");
@@ -1127,8 +1127,8 @@ public class DBConnector {
 		}
 		
 		/**
-		 * Versucht sich mit einem ungültigen User einzuloggen 
-		 * Erwartung: schlägt fehl
+		 * Versucht sich mit einem ungÃ¼ltigen User einzuloggen 
+		 * Erwartung: schlÃ¤gt fehl
 		 */
 		System.out.print("trying to login in as (invalid) user " + user + "... ");
 		if(loginUser(user, pw) == null) {
