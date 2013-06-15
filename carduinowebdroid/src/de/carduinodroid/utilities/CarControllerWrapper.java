@@ -16,7 +16,7 @@ public class CarControllerWrapper {
 	
 	Controller_Computer cc;
 	int speed, angle;
-	BufferedImage img;
+	static BufferedImage img;
 	String[] resolutions;
 	String latitude, longitude;
 
@@ -120,7 +120,7 @@ public class CarControllerWrapper {
 	 * \brief Returns the current image.
 	 * @return Returns the current image.
 	 */
-	public BufferedImage getImg() {
+	public static BufferedImage getImg() {
 		return img;
 	}
 
