@@ -96,8 +96,12 @@
                 	<input type="hidden" name="action" value="logout"/>
                 	<input id="main_logout" type="submit" value="Logout" />
                 </form>
-                <c:set value="isAdmin"><ct:isAdmin /></c:set>
-                <c:if test="isAdmin"><a href="admin.jsp"><button id="main_admin">Admin</button></a></c:if>
+                <c:set var="isAdmin"><ct:isAdmin /></c:set>
+                <c:if test="${isAdmin == 1}">
+                	<a href="admin.jsp">
+                		<button id="main_admin">Admin</button>
+                	</a>
+                </c:if>
             </div> 
         </td>
     </tr>

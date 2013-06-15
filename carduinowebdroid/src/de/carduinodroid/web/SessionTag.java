@@ -24,7 +24,11 @@ public class SessionTag extends TagSupport {
 	public int doStartTag() throws JspException {
 		JspWriter out = pageContext.getOut();
 		try {
-			out.print(pageContext.getSession().getAttribute("isAdmin"));		
+			if((Boolean)pageContext.getSession().getAttribute("isAdmin")) {
+                out.print("1");
+            } else {
+                out.print("0");
+            }	
 		} catch (IOException e){
 			throw new JspException("Error: " + e.getMessage());
 		}
