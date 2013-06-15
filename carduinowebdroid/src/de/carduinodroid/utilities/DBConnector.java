@@ -21,7 +21,7 @@ import de.carduinodroid.utilities.Config.Options;
 
 /**
  * \brief This Class implements all functions which interact the database
- * The contructor DBConnector(LogNG logIN, Options opt) is needed for first time initialisation.
+ * \details The contructor DBConnector(LogNG logIN, Options opt) is needed for first time initialisation.
  * @author Michael Röding
  *
  */
@@ -33,7 +33,7 @@ public class DBConnector {
 	
 	/**
 	 * \brief Initialises database connection and sets static variables.
-	 * This contructor sets or updates the static log and options. It also calls connect() is necessary.
+	 * \details This contructor sets or updates the static log and options. It also calls connect() is necessary.
 	 * @param logIN Log which should be used for loggin.
 	 * @param opt Options which contains database connection parameters (server address, username and password).
 	 */
@@ -48,7 +48,7 @@ public class DBConnector {
 	
 	/**
 	 * \brief 
-	 * This contructor checks if all necessary variables are set.
+	 * \details This contructor checks if all necessary variables are set.
 	 * @throws Exception This constructor should never be used for first time instancing since log and options are not set
 	 */
 	public DBConnector() throws Exception {
@@ -75,7 +75,7 @@ public class DBConnector {
 	
 	/**
 	 * \brief Establishs the connetion to the database.
-	 * Establish the connetion to the database based on given options. It can be called even if the connections is already established.
+	 * \details Establish the connetion to the database based on given options. It can be called even if the connections is already established.
 	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
 	private boolean connect() {
@@ -99,7 +99,7 @@ public class DBConnector {
 	// --------------------- Hilfsfunktionen ---------------------
 	/**
 	 * \brief Executs a given PreparedStatement.
-	 * Use this function for statements without a return value like INSERT, UPDATE or DELETE.
+	 * \details Use this function for statements without a return value like INSERT, UPDATE or DELETE.
 	 * The PreparedStatement will be closed by this function.
 	 * @param stmt PreparedStatement to execute.
 	 * @return Returns "true" if successful or "false" if an error occurs.
@@ -129,7 +129,7 @@ public class DBConnector {
 	}
 	/**
 	 * \brief Executs a given PreparedStatement. 
-	 * Use this function for statements with a return value like SELECT. Don't forget to close the PreparedStatement later!
+	 * \details Use this function for statements with a return value like SELECT. Don't forget to close the PreparedStatement later!
 	 * @param stmt PreparedStatement to execute
 	 * @return Returns the resulting ResultSet.
 	 */
@@ -153,7 +153,7 @@ public class DBConnector {
 	
 	/**
 	 * \brief Closes a given PreparedStatement
-	 * Use this function to close a PreparedStatement. 
+	 * \details Use this function to close a PreparedStatement. 
 	 * You will mostly need this function together with executeQuery(PreparedStatement stmt).
 	 * @param stmt
 	 */
@@ -191,7 +191,7 @@ public class DBConnector {
 	// --- Chat ---
 	/**
 	 * \brief Saves a chat text to database.
-	 * The current timestamp is added by this function.
+	 * \details The current timestamp is added by this function.
 	 * @param userID The UserID of the user who sad that.
 	 * @param sessionID	The associated SessionID.
 	 * @param text The actual chat text (max length is 256!).
@@ -226,7 +226,7 @@ public class DBConnector {
 	// --- Drive ---	
 	/**
 	 * \brief Creates a new drive.
-	 * Create a database entry for a given userID and sets the current timestamp.
+	 * \details Create a database entry for a given userID and sets the current timestamp.
 	 * @param userID UserID of the driver.
 	 * @return DriverID assigned by the database or -1 if an error occurs.
 	 */
@@ -280,7 +280,7 @@ public class DBConnector {
 	
 	/**
 	 * \brief Adds stop time timestamp.
-	 * End a drive by inserting the current timestamp in the database.
+	 * \details End a drive by inserting the current timestamp in the database.
 	 * @param driveID DriverID of the current driver.
 	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
@@ -339,7 +339,7 @@ public class DBConnector {
 	// --- GPS ---
 	/**
 	 * \brief Logs GPS coordinates.
-	 * Save lat, long and the current timestamp in the database.
+	 * \details Save lat, long and the current timestamp in the database.
 	 * @param driveID DriveID to search GPS coordinates to.
 	 * @param longitude Longitude
 	 * @param latitude Latitude
@@ -463,7 +463,7 @@ public class DBConnector {
 	// --- Session ---	
 	/**
 	 * \brief Creates a new session.
-	 * Creates a database entry for the given userID and IP.
+	 * \details Creates a database entry for the given userID and IP.
 	 * @param userID User who creates a new session.
 	 * @param ip address IP of the user.
 	 * @return SessionID assigned by the database.
@@ -763,7 +763,7 @@ public class DBConnector {
 	
 	/**
 	 * \brief Looks up a userID by a given sessionID.
-	 * Similar to getUserBySession(int sessionID).
+	 * \details Similar to getUserBySession(int sessionID).
 	 * @param sessionID SessionID to search for.
 	 * @return UserID associated with the session or null if no session was found.
 	 */
@@ -796,7 +796,7 @@ public class DBConnector {
 	
 	/**
 	 * \brief Gets a user object based on an given session ID.
-	 * Similar to getUserIdBySession(int sessionID).
+	 * \details Similar to getUserIdBySession(int sessionID).
 	 * @param sessionID SessionID to search for.
 	 * @return Returns an User-object associated with the session or null if no session was found.
 	 */
@@ -913,7 +913,7 @@ public class DBConnector {
 	// --------------------- self tests ---------------------
 	/**
 	 * \brief Database self test.
-	 * Testing most function of this class. A test user is reuquired -> username: "test" password: "test456".
+	 * \details Testing most function of this class. A test user is reuquired -> username: "test" password: "test456".
 	 * This functions adds database entries and do not delete all of them!
 	 */
 	public void dbTest() {

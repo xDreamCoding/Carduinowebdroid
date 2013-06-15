@@ -12,11 +12,11 @@ import de.carduinodroid.shared.GPS;
 import de.carduinodroid.utilities.Config.Options;
 
 /**
- * \brief Log class fpr logging everything.
- * This class logs everything to a file or to the database.
+ * \brief Log class for logging everything.
+ * \details This class logs everything to a file or to the database.
  * The log is instanced before everything else. Therefor it has no options in the begining and doesn't know where to save the log file. 
  * The solution to this is to save eveything in a list and copy the list to the log file as soon as the options are set. 
- * @author Michael Röding
+ * @author Michael RÃ¶ding
  * //TODO: rename!
  */
 public class LogNG {
@@ -115,7 +115,7 @@ public class LogNG {
 
 	/**
 	 * \brief General purpose log function.
-	 * The curent timestamp will be added latet.
+	 * \details The curent timestamp will be added latet.
 	 * @param string Text to save to the log.
 	 */
 	public void writelogfile(String string) {
@@ -129,7 +129,7 @@ public class LogNG {
 	
 	/**
 	 * \brief Writes the given text to log file and to System.out.
-	 * Optional you can diable writing to file or System.out if you only want one action to take place.
+	 * \details Optional you can diable writing to file or System.out if you only want one action to take place.
 	 * This is used when options are not yet sent and the log file is unknonw or the other way round when the temporary list log is written to the log file.
 	 * @param line Text to log.
 	 * @param skipLiveLog Set to "true" if the text shouldn't printed to System.out.
