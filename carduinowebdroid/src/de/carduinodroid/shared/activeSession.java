@@ -3,11 +3,21 @@ package de.carduinodroid.shared;
 import java.util.ArrayList;
 import de.carduinodroid.utilities.DBConnector;
 
+/**
+ * \brief This Class is used to store all active sessions and provides access to them
+ * @author Alexander ROse
+ *
+ */
+
 public class activeSession {
 
 	private static ArrayList<String> activeSessions;
 	private static ArrayList<Integer> activeInt;
 	static DBConnector db;
+	
+	/** 
+	 * \brief initializes the activeSession queue
+	 */
 	
 	public static void init(){
 		activeSessions = new ArrayList<String>();
@@ -20,6 +30,13 @@ public class activeSession {
 		}
 	}
 	
+	/** 
+	 * \brief inserts a session into the queue and also creates a session in the DB
+	 * @param SessionID Tomcat session of the user
+	 * @param ipadress of the user (ipv4 and ipv6 are possible)
+	 * @param userid of the user
+	 */
+	
 	public static void insertSession(String SessionID,String ipadress,String userid){
 		int ID = -1;		
 		ID = db.createSession(userid, ipadress);
@@ -31,6 +48,10 @@ public class activeSession {
 		activeInt.add(ID);
 	}
 	
+	/** 
+	 * @return Returns all SessionID's in the queue
+	 */
+	
 	public static String[] getAllSessions(){
 		String[] AllSessions = new String[activeSessions.size()];
 		for(int i = 0; i < AllSessions.length; i++){
@@ -39,10 +60,15 @@ public class activeSession {
 		return AllSessions;
 	}
 	
+	/** 
+	 * \brief removes a session from the queue and closes the DB Session
+	 * @param SessionID of the user
+	 */
+	
 	public static void deleteSession(String SessionID){
 		int index = activeSessions.indexOf(SessionID);
 		if (index == -1){
-			System.out.println("Session bereits gelöscht");
+			System.out.println("Session bereits gelï¿½scht");
 			return;
 		}
 		db.closeSession(getSessionInt(SessionID));
@@ -54,6 +80,10 @@ public class activeSession {
 		}
 	}
 	
+	/** 
+	 * \brief removes all sessions from the queue and closes all DB sessions
+	 */
+	
 	public static void deleteAll(){
 		for (int i = 0; i < activeSessions.size(); i++){
 			db.closeSession(getSessionInt(activeSessions.get(i)));
@@ -63,6 +93,12 @@ public class activeSession {
 		activeInt.clear();		
 	}
 
+	/** 
+	 * \brief returns the SessionID of the DB which belongs to the given Tomcat SessionID
+	 * @param SessionID from Tomcat
+	 * @return Returns SessionID from DB
+	 */
+	
 	public static int getSessionInt(String SessionID){
 		int SessionInt = activeInt.get(activeSessions.indexOf(SessionID));
 		return SessionInt;

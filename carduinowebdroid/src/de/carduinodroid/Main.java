@@ -17,6 +17,13 @@ import java.util.ArrayList;
  * Servlet implementation class Main
  */
 @WebServlet(loadOnStartup=1, value = "/main")
+
+/**
+ * \brief This Class is used to handle user-timeouts and to log GPS in a given interval and to handle the waiting queue
+ * @author Alexander Rose
+ *
+ */
+
 public class Main extends HttpServlet {
 	private static final long serialVersionUID = 1L;   
 	private static Timer caretaker;
@@ -70,11 +77,20 @@ public class Main extends HttpServlet {
 		System.out.println("doPost");
 	}
 
-    public static void refresh(Options opt){
+	/** 
+	 * \brief refreshes the options needed in this class (Fahrzeit and GPS interval)
+	 * @param opt Options object
+	 */
+	
+	public static void refresh(Options opt){
     	Fahrzeit = opt.fahrZeit;
     	gpsLogInterval = opt.logGPSInterval;
     	flag = true;
     }
+	
+	/** 
+	 * \brief deletes all Timers and TimerTasks and also deletes all active sessions
+	 */
 	
 	public static void shutDown(){
 		System.out.println("Shut-Down main");
@@ -153,11 +169,10 @@ public class Main extends HttpServlet {
 		caretaker.schedule(action, 100, 60000*Fahrzeit);  
 		
 		try {
-			GPSLogger = new TimerTask(){
-				CarControllerWrapper Controller = CarControllerWrapper.getCarController();				
+			GPSLogger = new TimerTask(){		
 				public void run(){
-					String longitude = Controller.getLongitude();
-					String latitude = Controller.getLatitude();
+					String longitude = CarControllerWrapper.getLongitude();
+					String latitude = CarControllerWrapper.getLatitude();
 					if (longitude == null || latitude == null){
 						System.out.println("GPS: N/A");
 					} else

@@ -23,6 +23,13 @@ import de.carduinodroid.shared.waitingqueue;
  * Servlet Filter implementation class Filter
  */
 @WebFilter("/*")
+
+/**
+ * \brief This Class is used to catch ServletRequest e.g. Login,Logout or enqueue into the waiting queue
+ * @author Alexander Rose, wer noch?
+ *
+ */
+
 public class Filter implements javax.servlet.Filter {
 	
 	FilterConfig config;
@@ -57,7 +64,7 @@ public class Filter implements javax.servlet.Filter {
 			    String[] value = (String[])entry.getValue();
 			    System.out.println("Key = " + key + ", Value = " + value[0]);
 			}
-			//TODO Sessions sind wirklich Strings werden aber später nach int gecastet
+			//TODO Sessions sind wirklich Strings werden aber spï¿½ter nach int gecastet
 			String SessionID = session.getId();
 			if(m.size() > 0 && m.containsKey("action")) {
 				
@@ -96,7 +103,7 @@ public class Filter implements javax.servlet.Filter {
 					break;
 				case "NextUser":
 					//String nextUserID = waitingqueue.getNextUser();
-					//TODO wohin soll der übergeben werden
+					//TODO wohin soll der ï¿½bergeben werden
 					break;
 				case "watchDriver":
 					userID = "guest" + System.currentTimeMillis();

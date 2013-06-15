@@ -2,6 +2,12 @@ package de.carduinodroid;
 
 import de.carduinodroid.shared.*;
 
+/**
+ * \brief This Class is used to forward the Chat-messages to all users
+ * @author Alexander Rose
+ *
+ */
+
 public class Chat {
 
 	public static void BroadcastChat(){
