@@ -8,12 +8,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 
-import de.carduinodroid.desktop.Model.Log;
 import de.carduinodroid.shared.GPS;
 import de.carduinodroid.utilities.Config.Options;
 
+/**
+ * \brief Log class fpr logging everything.
+ * This class logs everything to a file or to the database.
+ * The log is instanced before everything else. Therefor it has no options in the begining and doesn't know where to save the log file. 
+ * The solution to this is to save eveything in a list and copy the list to the log file as soon as the options are set. 
+ * @author Michael Röding
+ * //TODO: rename!
+ */
 public class LogNG {
-	Log oldLog;
 	Options options = null;
 	DBConnector db;
 	LinkedList<String> tmpLog;
@@ -25,17 +31,16 @@ public class LogNG {
 	File path;
 	
 	public LogNG() {
-		oldLog = new Log();
 		file = null;
 		tmpLog = new LinkedList<String>();
 	}
 	
 	/**
-	 * log chat to DB or file depending on settings
-	 * @param userID
-	 * @param sessionID
-	 * @param text
-	 * @return true if successful
+	 * \brief Logs chat to database or file depending on settings.
+	 * @param userID The UserID of the user who sad that.
+	 * @param sessionID	The associated SessionID.
+	 * @param text The actual chat text (max length is 256!).
+	 * @return Returns "true" if successful or "false" if an error occurs. 
 	 */
 	public boolean logChat(String userID, int sessionID, String text) {
 		if(options == null)
@@ -54,11 +59,11 @@ public class LogNG {
 	}
 	
 	/**
-	 * log GPS to DB or file depending on settings
-	 * @param driveID
-	 * @param longitude
-	 * @param latitude
-	 * @return true if successful
+	 * \brief Logs GPS coordinates to database or file depending on settings.
+	 * @param driveID DriveID to search GPS coordinates to. 
+	 * @param longitude Longitude
+	 * @param latitude Latitude
+	 * @return Returns "true" if successful or "false" if an error occurs. 
 	 */
 	public boolean logGPS(int driveID, String longitude, String latitude) {
 		if(options == null)
@@ -77,19 +82,19 @@ public class LogNG {
 	}
 	
 	/**
-	 * log GPS to DB or file depending on settings
-	 * @param gps
-	 * @return true if successful
+	 * \brief Logs GPS coordinates to database or file depending on settings
+	 * @param gps GPS coordinates to log.
+	 * @return Returns "true" if successful or "false" if an error occurs. 
 	 */
 	public boolean logGPS(GPS gps) {
 		return (logGPS(gps.getDriveID(), gps.getLongitude(), gps.getLatitude()));
 	}
 	
 	/**
-	 * log enqueue event to DB or file depending on settings
-	 * @param userID
-	 * @param sessionID
-	 * @return queueID
+	 * \brief Logs enqueue event to databse or file depending on settings
+	 * @param userID UserID from the user who is enqueued. 
+	 * @param sessionID SessionID from the current session. 
+	 * @return QueueID assinged by the database. 
 	 */
 	public int logQueue(String userID, int sessionID) {
 		if(options == null)
@@ -109,8 +114,9 @@ public class LogNG {
 	}
 
 	/**
-	 * downward compatible to old log
-	 * @param string
+	 * \brief General purpose log function.
+	 * The curent timestamp will be added latet.
+	 * @param string Text to save to the log.
 	 */
 	public void writelogfile(String string) {
 		if(file == null) {
@@ -121,11 +127,13 @@ public class LogNG {
 			writelogfile_second(string, false, false);
 	}
 	
-	/** All Log entries will be imported by the same format.
-	 *First you will get an information about the date and time
-	 *and then a short explanation about the function.
-	 *
-	 *@param line Contains the string which will be include
+	/**
+	 * \brief Writes the given text to log file and to System.out.
+	 * Optional you can diable writing to file or System.out if you only want one action to take place.
+	 * This is used when options are not yet sent and the log file is unknonw or the other way round when the temporary list log is written to the log file.
+	 * @param line Text to log.
+	 * @param skipLiveLog Set to "true" if the text shouldn't printed to System.out.
+	 * @param skipFile Set to "true" if the text shouldn't be written to the log file.
 	 */
 	private void writelogfile_second(String line, boolean skipLiveLog, boolean skipFile){
 		try {
@@ -141,18 +149,17 @@ public class LogNG {
 		} catch (IOException e) { e.printStackTrace(); }
 	}
 	
-	/** 
-	 *The log is written in a separate file but the user would
-	 *like to see all information right in front of him. This
-	 *method put all entries at the same time in our live log
-	 *on the gui.
+	/**
+	 * \brief Prints a given text to System.out.
+	 * @param msg Text to send to System.out
 	 */
 	private void write_Live_Log(String msg) {
 		System.out.println(msg);
 	}
 
 	/**
-	 * @param options the options to set
+	 * \brief Sets the options.
+	 * @param options The options to set.
 	 */
 	public void setOptions(Options options) {		
 		this.options = options;
@@ -160,6 +167,9 @@ public class LogNG {
 		addTmpLog();
 	}
 	
+	/**
+	 * \brief Creates the file to write logs to.
+	 */
 	private void initFile() {
 		Date date = new Date();
 		SimpleDateFormat dateformat = new SimpleDateFormat( "yyyy_MM_dd_HH_mm_ss" );
@@ -181,7 +191,10 @@ public class LogNG {
 		} catch (IOException e) { e.printStackTrace(); }
 	}
 	
-	public void addTmpLog() {
+	/**
+	 * \brief Moves the temporary list log to the log file
+	 */
+	private void addTmpLog() {
 		if(tmpLog == null) return;
 		
 		for(String s : tmpLog)
@@ -189,20 +202,13 @@ public class LogNG {
 		
 		tmpLog = null;
 	}
-
-	/**
-	 * @return the oldLog
-	 */
-	public Log getOldLog() {
-		return oldLog;
-	}
-
 	
 	/**
-	 * @param db the db to set
+	 * \brief Sets the database to use for loggin.
+	 * @param database The database to set.
 	 */
-	public void setDB(DBConnector db) {
-		this.db = db;
+	public void setDB(DBConnector database) {
+		this.db = database;
 	}
 		
 }

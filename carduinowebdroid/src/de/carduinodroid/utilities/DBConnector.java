@@ -192,9 +192,9 @@ public class DBConnector {
 	/**
 	 * \brief Saves a chat text to database.
 	 * The current timestamp is added by this function.
-	 * @param userID The UserID of teh user who sad that.
+	 * @param userID The UserID of the user who sad that.
 	 * @param sessionID	The associated SessionID.
-	 * @param text The actual chat text (max length is 256!)
+	 * @param text The actual chat text (max length is 256!).
 	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
 	protected boolean logChat(String userID, int sessionID, String text) {
@@ -228,7 +228,7 @@ public class DBConnector {
 	 * \brief Creates a new drive.
 	 * Create a database entry for a given userID and sets the current timestamp.
 	 * @param userID UserID of the driver.
-	 * @return driveID DriverID assigned by the database or -1 if an error occurs.
+	 * @return DriverID assigned by the database or -1 if an error occurs.
 	 */
 	public int startDrive(String userID) {
 		PreparedStatement stmt = null;
@@ -466,7 +466,7 @@ public class DBConnector {
 	 * Creates a database entry for the given userID and IP.
 	 * @param userID User who creates a new session.
 	 * @param ip address IP of the user.
-	 * @return sessionID SessionID assigned by the database.
+	 * @return SessionID assigned by the database.
 	 */
 	public int createSession(String userID, String ip) {
 		PreparedStatement stmt = null;
@@ -863,7 +863,7 @@ public class DBConnector {
 	 * \bief Logs a user who enqueued himself.
 	 * @param userID UserID from the user who is enqueued.
 	 * @param sessionID SessionID from the current session.
-	 * @return queueID QueueID assinged by the database.
+	 * @return QueueID assinged by the database.
 	 */
 	protected int logQueue(String userID, int sessionID) {
 		PreparedStatement stmt = null;
