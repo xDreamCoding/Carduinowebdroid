@@ -6,7 +6,7 @@ import de.carduinodroid.desktop.Controller.Controller_Computer;
 
 /**
  * \brief Wrapper to combine the given source code in one class.
- * \details Since the code in de.carduinodroid.desktop was given to us we created this function to have one interface to interfere with it.
+ * \details Since the code in de.carduinodroid.desktop was given to us we created this function to have one interface to interact with it.
  * \details This is implemented as a Singleton.
  * @author Michael Röding
  *
@@ -25,11 +25,11 @@ public class CarControllerWrapper {
 	}
 	
 	/**
-	 * \brief Use this contructor for first time instancing.
+	 * \brief Use this constructor for first time instancing.
 	 * \details if necessary it creates the static CarControllerWrapper object.
-	 * \datails If this function was called once use getCarController() instead.
-	 * @param log Log for logging
-	 * @return Returns the static CarControllerWrapper object
+	 * \details If this function was called once use getCarController() instead.
+	 * @param log Log for logging.
+	 * @return Returns the static CarControllerWrapper object.
 	 */
 	public static CarControllerWrapper getCarController(LogNG log) {
 		if(ccw == null)
@@ -40,16 +40,16 @@ public class CarControllerWrapper {
 	/**
 	 * \brief Use this function to access the static CarControllerWrapper object.
 	 * @return Returns the static CarControllerWrapper object.
-	 * @throws Exception In case the static CarControllerWrapper object is not present.
+	 * @throws Exception in case the static CarControllerWrapper object is not present.
 	 */
 	public static CarControllerWrapper getCarController() throws Exception {
 		if(ccw == null)
-			throw new Exception("wrong contructor for first time instancing");
+			throw new Exception("wrong constructor for first time instancing");
 		return ccw;
 	}
 	
 	/**
-	 * \brief Send controll signal to the car
+	 * \brief Send control signal to the car.
 	 * @param up
 	 * @param down
 	 * @param right
@@ -94,7 +94,7 @@ public class CarControllerWrapper {
 
 	/**
 	 * \brief Sets the current max speed of the car.
-	 * @param speed The speed to sets
+	 * @param speed The speed to set.
 	 */
 	public void setSpeed(int speed) {
 		ccw.speed = speed;
@@ -126,7 +126,7 @@ public class CarControllerWrapper {
 
 	/**
 	 * \brief Sets the current image.
-	 * @param img The img to set.
+	 * @param img The image to set.
 	 */
 	public void setImg(BufferedImage img) {
 		ccw.img = img;
@@ -134,14 +134,14 @@ public class CarControllerWrapper {
 	
 	/**
 	 * \brief Returns all possible resolutions.
-	 * @return Returns all possible resolutions as a String array
+	 * @return Returns all possible resolutions as a String array.
 	 */
 	public static String[] getResolutions() {
 		return ccw.resolutions;
 	}
 
 	/**
-	 * \brief Sets the all possible resolutions.
+	 * \brief Sets the possible resolutions.
 	 * @param resolutions The resolutions to set.
 	 */
 	public void setResolutions(String[] resolutions) {
