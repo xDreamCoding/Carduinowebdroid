@@ -16,7 +16,7 @@ public class CarControllerWrapper {
 	
 	Controller_Computer cc;
 	int speed, angle;
-	static BufferedImage img;
+	BufferedImage img;
 	String[] resolutions;
 	String latitude, longitude;
 
@@ -55,14 +55,14 @@ public class CarControllerWrapper {
 	 * @param right
 	 * @param left
 	 */
-	public void setDirection(boolean up, boolean down, boolean right, boolean left) {
+	public static void setDirection(boolean up, boolean down, boolean right, boolean left) {
 		ccw.cc.car_controller.UpdateVariables(up, down, right, left);
 	}
 	
-	public void driveForward() { setDirection(true, false, false, false); }
-	public void driveBackward() { setDirection(false, true, false, false); }
-	public void driveRight() { setDirection(false, false, true, false); }
-	public void driveLeft() { setDirection(false, false, false, true); }
+	public static void driveForward() { setDirection(true, false, false, false); }
+	public static void driveBackward() { setDirection(false, true, false, false); }
+	public static void driveRight() { setDirection(false, false, true, false); }
+	public static void driveLeft() { setDirection(false, false, false, true); }
 
 	public void confirmButtonUp(boolean b) {
 		// TODO Auto-generated method stub
@@ -88,8 +88,8 @@ public class CarControllerWrapper {
 	 * \brief Returns the current max speed of the car.
 	 * @return Returns the current max speed of the car.
 	 */
-	public int getSpeed() {
-		return speed;
+	public static int getSpeed() {
+		return ccw.speed;
 	}
 
 	/**
@@ -97,15 +97,15 @@ public class CarControllerWrapper {
 	 * @param speed The speed to sets
 	 */
 	public void setSpeed(int speed) {
-		this.speed = speed;
+		ccw.speed = speed;
 	}
 
 	/**
 	 * \brief Returns the current steering angle of the car.
 	 * @return Returns the current steering angle of the car.
 	 */
-	public int getAngle() {
-		return angle;
+	public static int getAngle() {
+		return ccw.angle;
 	}
 
 	/**
@@ -113,7 +113,7 @@ public class CarControllerWrapper {
 	 * @param angle The angle to set.
 	 */
 	public void setAngle(int angle) {
-		this.angle = angle;
+		ccw.angle = angle;
 	}
 
 	/**
@@ -121,7 +121,7 @@ public class CarControllerWrapper {
 	 * @return Returns the current image.
 	 */
 	public static BufferedImage getImg() {
-		return img;
+		return ccw.img;
 	}
 
 	/**
@@ -129,15 +129,15 @@ public class CarControllerWrapper {
 	 * @param img The img to set.
 	 */
 	public void setImg(BufferedImage img) {
-		this.img = img;
+		ccw.img = img;
 	}	
 	
 	/**
 	 * \brief Returns all possible resolutions.
 	 * @return Returns all possible resolutions as a String array
 	 */
-	public String[] getResolutions() {
-		return resolutions;
+	public static String[] getResolutions() {
+		return ccw.resolutions;
 	}
 
 	/**
@@ -145,15 +145,15 @@ public class CarControllerWrapper {
 	 * @param resolutions The resolutions to set.
 	 */
 	public void setResolutions(String[] resolutions) {
-		this.resolutions = resolutions;
+		ccw.resolutions = resolutions;
 	}
 
 	/**
 	 * \brief Returns the current latitude.
 	 * @return Returns the current latitude or null if not available.
 	 */
-	public String getLatitude() {
-		return latitude;
+	public static String getLatitude() {
+		return ccw.latitude;
 	}
 
 	/**
@@ -161,15 +161,15 @@ public class CarControllerWrapper {
 	 * @param latitude The latitude to set.
 	 */
 	public void setLatitude(String latitude) {
-		this.latitude = latitude;
+		ccw.latitude = latitude;
 	}
 
 	/**
 	 * \brief Returns the current longitude.
 	 * @return Returns the current longitude or null if not available.
 	 */
-	public String getLongitude() {
-		return longitude;
+	public static String getLongitude() {
+		return ccw.longitude;
 	}
 
 	/**
@@ -177,6 +177,6 @@ public class CarControllerWrapper {
 	 * @param longitude The longitude to set.
 	 */
 	public void setLongitude(String longitude) {
-		this.longitude = longitude;
+		ccw.longitude = longitude;
 	}
 }
