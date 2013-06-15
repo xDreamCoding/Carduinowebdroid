@@ -1,7 +1,6 @@
 package de.carduinodroid.shared;
 
 import java.util.ArrayList;
-import java.net.Inet4Address;
 import de.carduinodroid.utilities.DBConnector;
 
 public class activeSession {
@@ -22,23 +21,12 @@ public class activeSession {
 	}
 	
 	public static void insertSession(String SessionID,String ipadress,String userid){
-		Inet4Address ip4 = null;
-		int ID = 0;
-		
-		try{
-			ip4 = (Inet4Address) Inet4Address.getByName(ipadress);
+		int ID = -1;		
+		ID = db.createSession(userid, ipadress);
+		if (ID == -1){
+			System.out.println("konnte Session nicht erstellen");
+			return;
 		}
-		catch(Exception ie){
-			System.out.println("kann IP nicht casten");
-		}
-
-		if (!(ip4 == null)){
-			ID = db.createSession(userid, ip4.toString());
-		}
-		else{
-			ID = db.createSession(userid, "255.255.255.255");
-		}
-		
 		activeSessions.add(SessionID);
 		activeInt.add(ID);
 	}

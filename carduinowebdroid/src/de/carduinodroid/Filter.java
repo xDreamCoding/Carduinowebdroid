@@ -27,7 +27,6 @@ public class Filter implements javax.servlet.Filter {
 	
 	FilterConfig config;
 	LogNG log;
-	static int GuestID = 0;
 	
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
@@ -75,6 +74,9 @@ public class Filter implements javax.servlet.Filter {
 					if(u == null)
 						break;
 					
+					//TODO session attribute (Rechte der user)
+					session.setAttribute("isAdmin", u.isAdmin());
+					session.setAttribute("isUser", u.isUser());
 					session.setAttribute("name", u.getNickname());
 					System.out.println("user " + u.getNickname() + " has logged in");
 					activeSession.insertSession(SessionID,ipAdress,userID);
@@ -97,10 +99,10 @@ public class Filter implements javax.servlet.Filter {
 					//TODO wohin soll der übergeben werden
 					break;
 				case "watchDriver":
-					userID = "guest" + (GuestID);
+					userID = "guest" + System.currentTimeMillis();
 					activeSession.insertSession(SessionID, ipAdress, userID);
-					GuestID++;
 					config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);
+					break;
 				case "toMainPage":
 					config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);
 					break;
