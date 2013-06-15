@@ -14,8 +14,8 @@ import de.carduinodroid.utilities.Config.Options;
 /**
  * \brief Log class for logging everything.
  * \details This class logs everything to a file or to the database.
- * The log is instanced before everything else. Therefor it has no options in the begining and doesn't know where to save the log file. 
- * The solution to this is to save eveything in a list and copy the list to the log file as soon as the options are set. 
+ * The log is instanced before everything else. Therefore it has no options in the beginning and doesn't know where to save the log file. 
+ * The solution to this is to save everything in a list and copy the list to the log file as soon as the options are set. 
  * @author Michael Röding
  * //TODO: rename!
  */
@@ -37,7 +37,7 @@ public class LogNG {
 	
 	/**
 	 * \brief Logs chat to database or file depending on settings.
-	 * @param userID The UserID of the user who sad that.
+	 * @param userID The UserID of the user who said that.
 	 * @param sessionID	The associated SessionID.
 	 * @param text The actual chat text (max length is 256!).
 	 * @return Returns "true" if successful or "false" if an error occurs. 
@@ -91,10 +91,10 @@ public class LogNG {
 	}
 	
 	/**
-	 * \brief Logs enqueue event to databse or file depending on settings
+	 * \brief Logs enqueue event to database or file depending on settings
 	 * @param userID UserID from the user who is enqueued. 
 	 * @param sessionID SessionID from the current session. 
-	 * @return QueueID assinged by the database. 
+	 * @return QueueID assigned by the database. 
 	 */
 	public int logQueue(String userID, int sessionID) {
 		if(options == null)
@@ -115,7 +115,7 @@ public class LogNG {
 
 	/**
 	 * \brief General purpose log function.
-	 * \details The curent timestamp will be added latet.
+	 * \details The current timestamp will be added last.
 	 * @param string Text to save to the log.
 	 */
 	public void writelogfile(String string) {
@@ -129,8 +129,8 @@ public class LogNG {
 	
 	/**
 	 * \brief Writes the given text to log file and to System.out.
-	 * \details Optional you can diable writing to file or System.out if you only want one action to take place.
-	 * This is used when options are not yet sent and the log file is unknonw or the other way round when the temporary list log is written to the log file.
+	 * \details Optional you can disable writing to file or System.out if you only want one action to take place.
+	 * This is used when options are not yet sent and the log file is unknown or the other way round when the temporary list log is written to the log file.
 	 * @param line Text to log.
 	 * @param skipLiveLog Set to "true" if the text shouldn't printed to System.out.
 	 * @param skipFile Set to "true" if the text shouldn't be written to the log file.
@@ -204,7 +204,7 @@ public class LogNG {
 	}
 	
 	/**
-	 * \brief Sets the database to use for loggin.
+	 * \brief Sets the database to use for logging.
 	 * @param database The database to set.
 	 */
 	public void setDB(DBConnector database) {

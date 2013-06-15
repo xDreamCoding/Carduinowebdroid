@@ -17,11 +17,8 @@
 <link rel="stylesheet" href="static/style.css" />
 
 <!--Custom jS-->
-<script>
-$(function() {
-	$( "input[type=submit], button" ).button()
-});
-</script>
+
+<script src="static/index.jsp"></script>
 </head>
 <body>
 

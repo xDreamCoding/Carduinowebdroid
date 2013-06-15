@@ -23,7 +23,7 @@ import javax.imageio.ImageWriter;
 import de.carduinodroid.utilities.CarControllerWrapper;
  
 /**
- * Dieses Package dient dem Senden von Bilddaten über das Internet von einem Server zu einem Client
+ * Dieses Package dient dem Senden von Bilddaten Ã¼ber das Internet von einem Server zu einem Client
  * @author Vincenz
  * @version 15.06.2012
  */ 
@@ -54,7 +54,7 @@ class FrameProducer implements Runnable {
     public FrameProducer() {
         Image img = null;
         ImageWriter wr = null;
-		// Bilddatei für Testzwecke mit Abmaßen >= 640 x 480 pix
+		// Bilddatei fÃ¼r Testzwecke mit Abmaï¿½en >= 640 x 480 pix
         //Test File file = new File("H:\\Eclipse-Apps\\Sender\\GutscheinHinten.jpg");
         try {
             //Hier jpg Bilder laden
@@ -261,17 +261,17 @@ class RawFrameServer extends Server {
  
  public class ImageTransferSender {
 /**
- * Diese Klasse dient dem Senden von Bilddaten über das Internet von einem Server zu einem Client
+ * Diese Klasse dient dem Senden von Bilddaten ï¿½ber das Internet von einem Server zu einem Client
  * @author Vincenz
  * @version 15.06.2012
  */
     private static final Logger logger = Logger.getLogger(ImageTransferSender.class.getName());
-    // FrameProducer stellt die Bilder, die Gesendet werden zur Verfügung --> Testzwecke
+    // FrameProducer stellt die Bilder, die Gesendet werden zur Verfï¿½gung --> Testzwecke
     static final FrameProducer frameProducer = new FrameProducer();
     // MJPGServer Sendet die Bilder von FrameProducer an Port 8889
     // kann in Firefox direkt aufgerufen werden
     static final MJPGServer MJPGServer = new MJPGServer(frameProducer, 8889);
-    // RawFrameServer sorgt dafür, daß der Buffer mit dem richtigen Frame gefüllt wird
+    // RawFrameServer sorgt dafï¿½r, daï¿½ der Buffer mit dem richtigen Frame gefï¿½llt wird
     // Kontrollieren kann man den Datenstrom an Port 8888
     static final RawFrameServer rawFrameServer = new RawFrameServer(frameProducer, 8888);
     // EXS ist die Javainterne Threadverwaltung

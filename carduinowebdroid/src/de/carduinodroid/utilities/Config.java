@@ -6,29 +6,29 @@ import java.util.*;
 import de.carduinodroid.Main;
 
 /**
- * \brief Config-cass managing options.
+ * \brief Config class managing options.
  * \details This class proved methods to load and save options.
  * The options will be saved in config.properties and can be edited with a normal text editor.
- * \details To change the options call setOptions(Options options) follewed by saveOptions()
+ * \details To change the options call setOptions(Options options) followed by saveOptions()
  * @author Michael Röding
  *
  */
 public class Config {
 	/**
 	 * \brief Actual options
-	 * \details This class containt all avialable options.
+	 * \details This class contains all available options.
 	 * @author Michael Röding
 	 *
 	 */
 	public class Options {
 		public int fahrZeit; /** in minutes */	
-		public String dbAddress; /** internet address of the database server */
+		public String dbAddress; /** Internet address of the database server */
 		public String dbUser; /** database username */
 		public String dbPW; /** database password */
 		public String filePath; /**  file path which should be used as root folder for everything else (like log and options) */
 		public boolean logChat; /** should the chat be logged */
 		public boolean logChatToFile; /** should the chat be logged to file */
-		public boolean logGPS; /** should gpd be logged */
+		public boolean logGPS; /** should gps be logged */
 		public boolean logGPSToFile; /** should gps be logged to file */
 		public int logGPSInterval; /** in seconds */
 		public boolean logQueue; /** should queue events be logged */
@@ -41,7 +41,7 @@ public class Config {
 	private String optionsPath;
 	
 	/**
-	 * \brief Sets log, file path and creates the options file id necessary.
+	 * \brief Sets log, file path and creates the options file if necessary.
 	 * @param logIN Log to use for logging
 	 * @param filePath_in File path which should be used as root folder for everything else
 	 */

@@ -21,7 +21,7 @@ import de.carduinodroid.utilities.Config.Options;
 
 /**
  * \brief This Class implements all functions which interact the database
- * \details The contructor DBConnector(LogNG logIN, Options opt) is needed for first time initialisation.
+ * \details The constructor DBConnector(LogNG logIN, Options opt) is needed for first time initialization.
  * @author Michael Röding
  *
  */
@@ -32,9 +32,9 @@ public class DBConnector {
 	static Options options;
 	
 	/**
-	 * \brief Initialises database connection and sets static variables.
-	 * \details This contructor sets or updates the static log and options. It also calls connect() is necessary.
-	 * @param logIN Log which should be used for loggin.
+	 * \brief Initializes database connection and sets static variables.
+	 * \details This constructor sets or updates the static log and options. It also calls connect() is necessary.
+	 * @param logIN Log which should be used for logging.
 	 * @param opt Options which contains database connection parameters (server address, username and password).
 	 */
 	public DBConnector(LogNG logIN, Options opt) {
@@ -48,7 +48,7 @@ public class DBConnector {
 	
 	/**
 	 * \brief 
-	 * \details This contructor checks if all necessary variables are set.
+	 * \details This constructor checks if all necessary variables are set.
 	 * @throws Exception This constructor should never be used for first time instancing since log and options are not set
 	 */
 	public DBConnector() throws Exception {
@@ -74,8 +74,8 @@ public class DBConnector {
 	}
 	
 	/**
-	 * \brief Establishs the connetion to the database.
-	 * \details Establish the connetion to the database based on given options. It can be called even if the connections is already established.
+	 * \brief Establishes the connection to the database.
+	 * \details Establish the connection to the database based on given options. It can be called even if the connections is already established.
 	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
 	private boolean connect() {
@@ -98,7 +98,7 @@ public class DBConnector {
 		
 	// --------------------- Hilfsfunktionen ---------------------
 	/**
-	 * \brief Executs a given PreparedStatement.
+	 * \brief Executes a given PreparedStatement.
 	 * \details Use this function for statements without a return value like INSERT, UPDATE or DELETE.
 	 * The PreparedStatement will be closed by this function.
 	 * @param stmt PreparedStatement to execute.
@@ -128,7 +128,7 @@ public class DBConnector {
 		return true;
 	}
 	/**
-	 * \brief Executs a given PreparedStatement. 
+	 * \brief Executes a given PreparedStatement. 
 	 * \details Use this function for statements with a return value like SELECT. Don't forget to close the PreparedStatement later!
 	 * @param stmt PreparedStatement to execute
 	 * @return Returns the resulting ResultSet.
@@ -166,7 +166,7 @@ public class DBConnector {
 	}
 	
 	/**
-	 * \brief Hashs password with MD5.
+	 * \brief Hashes password with MD5.
 	 * @param pw Password to hash.
 	 * @return Resulting hash.
 	 */
@@ -615,7 +615,7 @@ public class DBConnector {
 	}
 
 	/**
-	 * \brief Changes the nicknam of a user.
+	 * \brief Changes the nickname of a user.
 	 * @param userID UserID to change the nickname of.
 	 * @param newNick new nickname.
 	 * @return Returns "true" if the SessionID was found or "false" if not.
@@ -863,7 +863,7 @@ public class DBConnector {
 	 * \bief Logs a user who enqueued himself.
 	 * @param userID UserID from the user who is enqueued.
 	 * @param sessionID SessionID from the current session.
-	 * @return QueueID assinged by the database.
+	 * @return QueueID assigned by the database.
 	 */
 	protected int logQueue(String userID, int sessionID) {
 		PreparedStatement stmt = null;

@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-// Empf‰nger
+// Empf√§nger
 public class ImageTransferReceiver extends JFrame implements Runnable {
 
     final JPanel picPanel = new JPanel();

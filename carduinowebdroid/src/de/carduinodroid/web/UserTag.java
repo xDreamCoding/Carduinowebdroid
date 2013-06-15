@@ -13,30 +13,39 @@ import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.shared.User;
 
 /**
- * Tag-Handler for all User-Tags in JSP files.
+ * \brief This class handles the User related custom tags.
+ * \details The User tag returns User data (Nickname,Rights,UserCount).
  * @author Christoph Braun
  *
  */
 public class UserTag extends TagSupport{
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private int userNr;
 	private int param;
-//	private int totalNr;
 	
-	/*
-	 * 
+	/**
+	 * \brief Setter methods
+	 * @param i Number in UserList
+	 * @param o Parameter on which function to call
 	 */
 	public void setNum(int i) {
 		userNr = i;
 	}
 	
-	public void setPar(int i) {
-		param = i;
+	public void setPar(int o) {
+		param = o;
 	}
 	
+	/**
+	 * \brief Starting tag handler
+	 * \details This tag has 3 Functions.
+	 * 1. Get how many Users are registered.
+	 * 2. Get the Nickname of a specific User.
+	 * 3. Check if the User is an admin.
+	 * @return EVAL_PAGE. Tells the Server to continue evaluating Tags.
+	 * @throws Exception Throws a default Jsp Exception with full stacktrace.
+	 */
 	public int doStartTag() throws JspException{
 		
 		String Name;
@@ -46,11 +55,6 @@ public class UserTag extends TagSupport{
 		List<User> UserList = new ArrayList<User>();
 		UserList = db.getAllUser();
 		
-		/*
-		 * @param param =0: Get number of users
-		 * @param param =1: Get Nickname from User
-		 * @param param =2: Check if User is Admin
-		 */
 		switch(param) {
 		case 0:
 			try {
@@ -76,15 +80,6 @@ public class UserTag extends TagSupport{
 			}
 			break;
 		
-//		case 3:
-//			try {
-//				totalNr = UserList.size();
-//				out.print(totalNr);
-//			} catch (IOException e) {
-//				throw new JspException("Error: " + e.getMessage());
-//			}
-//			break;
-			
 		default:
 			throw new JspException("Error: invalid parameter in UserTag");
 		}
