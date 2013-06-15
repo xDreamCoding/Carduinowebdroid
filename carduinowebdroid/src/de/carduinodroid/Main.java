@@ -6,12 +6,18 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import de.carduinodroid.shared.*;
 import de.carduinodroid.utilities.*;
 import de.carduinodroid.utilities.Config.Options;
+
+import java.util.Iterator;
+import java.util.Map;
 import java.util.TimerTask;
 import java.util.Timer;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 
 /**
  * Servlet implementation class Main
@@ -59,6 +65,8 @@ public class Main extends HttpServlet {
      * 	- dequeue
      * 	- watchDriver
      * 	-
+     * 
+     * NO REDIRECT FROM HERE!
      */
 
 	/**
@@ -67,6 +75,7 @@ public class Main extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		System.out.println("doGet");
+		
 	}
 
 	/**
@@ -75,6 +84,100 @@ public class Main extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		System.out.println("doPost");
+		
+		boolean authorized = false;
+		
+		if(request instanceof HttpServletRequest) {			
+			HttpServletRequest req = (HttpServletRequest) request;
+			HttpSession session = req.getSession();	
+//			System.out.println(ipAdress);
+//			System.out.println("-> " + req.getRequestURI());			
+
+			Map<String, String[]> m = req.getParameterMap();
+//			Iterator<Entry<String, String[]>> entries = m.entrySet().iterator();
+//			while (entries.hasNext()) {
+//			    Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) entries.next();
+//			    String key = (String)entry.getKey();
+//			    String[] value = (String[])entry.getValue();
+//			    System.out.println("Key = " + key + ", Value = " + value[0]);
+//			}
+			///TODO \todo Sessions sind wirklich Strings werden aber später nach int gecastet
+			if(m.size() > 0 && m.containsKey("action")) {
+				String SessionID = session.getId();
+				String ipAdress = req.getRemoteAddr();
+				DBConnector db = (DBConnector)request.getServletContext().getAttribute("database");
+				
+				switch((String)m.get("action")[0])  {				
+				case "login":
+					if(!m.containsKey("loginName") || !m.containsKey("password"))
+						break;
+					
+					String userID, pw;
+					userID = (String)m.get("loginName")[0];
+					pw = (String)m.get("password")[0];
+					User u = db.loginUser(userID, pw);
+					
+					if(u == null)
+						break;
+					
+					///TODO \todo session attribute (Rechte der user)
+					session.setAttribute("isAdmin", u.isAdmin());
+					session.setAttribute("isUser", u.isUser());
+					session.setAttribute("nickName", u.getNickname());
+					session.setAttribute("userId", u.getUserID());
+					System.out.println("user " + u.getNickname() + " has logged in");
+					activeSession.insertSession(SessionID, ipAdress, userID);
+					break;
+				case "enqueue":					
+					User user = db.getUserBySession(activeSession.getSessionInt(SessionID));
+					if (user == null){
+						System.out.println("User nicht gefunden");
+						break;
+					}
+					if (user.isGuest() == true) return;
+					waitingqueue.insertUser(SessionID);
+					log.logQueue(user.getUserID(), activeSession.getSessionInt(SessionID));
+					break;
+				case "dequeue":
+					waitingqueue.deleteTicket(SessionID);
+					break;
+				case "NextUser":
+					//String nextUserID = waitingqueue.getNextUser();
+					///TODO \todo wohin soll der übergeben werden
+					break;
+				case "watchDriver":
+					userID = "guest" + System.currentTimeMillis();
+					activeSession.insertSession(SessionID, ipAdress, userID);
+					///TODO \todo user objekt anlegen wie bei login
+					break;
+				case "toMainPage":
+					//request.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, response);
+					break;
+				case "toAdminPage":
+//					if ((boolean)session.getAttribute("isAdmin"))
+//						request.getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);					
+//					break;
+					///TODO \todo get, post oder sonst was -> main.jsp gucken und machen 
+					break;
+				case "logout":
+					activeSession.deleteSession(SessionID);
+					waitingqueue.deleteTicket(SessionID);
+					session.removeAttribute("nickName");
+					///TODO \todo logout = ich lösche ein paar sachen und das wars? session? rechte? zurück zum index?
+					break;
+				}
+			}
+			
+//			if(session.getAttribute("nickName") != null) {
+//				authorized = true;
+//			}
+		}
+//		
+//		if(authorized) {
+//			request.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, response);
+//		} else {
+//			request.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+//		}
 	}
 
 	/** 
