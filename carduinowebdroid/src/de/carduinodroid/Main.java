@@ -85,13 +85,9 @@ public class Main extends HttpServlet {
 		// TODO Auto-generated method stub
 		System.out.println("doPost");
 		
-		boolean authorized = false;
-		
 		if(request instanceof HttpServletRequest) {			
 			HttpServletRequest req = (HttpServletRequest) request;
-			HttpSession session = req.getSession();	
-//			System.out.println(ipAdress);
-//			System.out.println("-> " + req.getRequestURI());			
+			HttpSession session = req.getSession();			
 
 			Map<String, String[]> m = req.getParameterMap();
 //			Iterator<Entry<String, String[]>> entries = m.entrySet().iterator();
@@ -150,15 +146,14 @@ public class Main extends HttpServlet {
 					activeSession.insertSession(SessionID, ipAdress, userID);
 					///TODO \todo user objekt anlegen wie bei login
 					break;
-				case "toMainPage":
-					//request.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, response);
-					break;
-				case "toAdminPage":
+//				case "toMainPage":
+//					//request.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, response);
+//					break;
+//				case "toAdminPage":
 //					if ((boolean)session.getAttribute("isAdmin"))
 //						request.getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);					
 //					break;
-					///TODO \todo get, post oder sonst was -> main.jsp gucken und machen 
-					break;
+//					break;
 				case "logout":
 					activeSession.deleteSession(SessionID);
 					waitingqueue.deleteTicket(SessionID);
@@ -167,17 +162,7 @@ public class Main extends HttpServlet {
 					break;
 				}
 			}
-			
-//			if(session.getAttribute("nickName") != null) {
-//				authorized = true;
-//			}
 		}
-//		
-//		if(authorized) {
-//			request.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, response);
-//		} else {
-//			request.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
-//		}
 	}
 
 	/** 

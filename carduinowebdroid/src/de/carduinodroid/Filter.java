@@ -1,9 +1,6 @@
 package de.carduinodroid;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -13,11 +10,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import de.carduinodroid.shared.User;
-import de.carduinodroid.shared.activeSession;
-import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.utilities.LogNG;
-import de.carduinodroid.shared.waitingqueue;
 
 /**
  * Servlet Filter implementation class Filter
@@ -39,19 +32,15 @@ public class Filter implements javax.servlet.Filter {
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		// place your code here
 		System.out.println("filter");		
 		
 		config.getServletContext().getRequestDispatcher("/main").include(request, res);
 		
 		boolean authorized = false;
-		boolean isAdmin = false;
 		boolean staticRequest = false;
 		boolean chatRequest = false;
 		String target = "index";
-		
-		//DBConnector db = (DBConnector)config.getServletContext().getAttribute("database");
-		
+
 		if(request instanceof HttpServletRequest) {
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();
@@ -129,17 +118,21 @@ public class Filter implements javax.servlet.Filter {
 //				}
 //			}
 			
+//			Enumeration<String> sessionKeys = session.getAttributeNames();
+//		    while(sessionKeys.hasMoreElements())
+//		    {
+//		        String value=(String) sessionKeys.nextElement();
+//		        System.out.println(value + " -> " + session.getAttribute(value));
+//		    }
+
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
 			chatRequest = req.getRequestURI().startsWith(req.getContextPath() + "/chat");
 			
 			if(session.getAttribute("nickName") != null && ((String)session.getAttribute("nickName")) != "") {
 				authorized = true;
 				target = "main";
-				if((boolean)session.getAttribute("isAdmin")) {
-					isAdmin = true;
-					if(req.getRequestURI().endsWith("admin.jsp")) 
-						target = "admin";
-				}
+				if(req.getRequestURI().endsWith("admin.jsp") && (boolean)session.getAttribute("isAdmin")) 
+					target = "admin";				
 			}
 		}
 		if(staticRequest || chatRequest) 
