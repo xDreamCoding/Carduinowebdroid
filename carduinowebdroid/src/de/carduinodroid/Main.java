@@ -174,7 +174,7 @@ public class Main extends HttpServlet {
 					String longitude = CarControllerWrapper.getLongitude();
 					String latitude = CarControllerWrapper.getLatitude();
 					if (longitude == null || latitude == null){
-						System.out.println("GPS: N/A");
+						//System.out.println("GPS: N/A");
 					} else
 						log.logGPS(driveID, longitude, latitude);
 				}
