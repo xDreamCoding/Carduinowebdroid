@@ -5,26 +5,34 @@ import java.util.*;
 
 import de.carduinodroid.Main;
 
+/**
+ * \brief Config-cass managing options.
+ * \details This class proved methods to load and save options.
+ * The options will be saved in config.properties and can be edited with a normal text editor.
+ * \details To change the options call setOptions(Options options) follewed by saveOptions()
+ * @author Michael Röding
+ *
+ */
 public class Config {
+	/**
+	 * \brief Actual options
+	 * \details This class containt all avialable options.
+	 * @author Michael Röding
+	 *
+	 */
 	public class Options {
-		/**
-		 * in minutes
-		 */
-		public int fahrZeit;
-		/**
-		 * in seconds
-		 */
-		public int logGPSInterval;		
-		public String dbAddress;
-		public String dbUser;
-		public String dbPW;
-		public String filePath;
-		public boolean logChat;
-		public boolean logChatToFile;
-		public boolean logGPS;
-		public boolean logGPSToFile;
-		public boolean logQueue;
-		public boolean logQueueToFile;
+		public int fahrZeit; /** in minutes */	
+		public String dbAddress; /** internet address of the database server */
+		public String dbUser; /** database username */
+		public String dbPW; /** database password */
+		public String filePath; /**  file path which should be used as root folder for everything else (like log and options) */
+		public boolean logChat; /** should the chat be logged */
+		public boolean logChatToFile; /** should the chat be logged to file */
+		public boolean logGPS; /** should gpd be logged */
+		public boolean logGPSToFile; /** should gps be logged to file */
+		public int logGPSInterval; /** in seconds */
+		public boolean logQueue; /** should queue events be logged */
+		public boolean logQueueToFile; /** should queue events be logged to file */
 	}
 	
 	private LogNG log;
@@ -32,6 +40,11 @@ public class Config {
 	private String filePath;
 	private String optionsPath;
 	
+	/**
+	 * \brief Sets log, file path and creates the options file id necessary.
+	 * @param logIN Log to use for logging
+	 * @param filePath_in File path which should be used as root folder for everything else
+	 */
 	public Config(LogNG logIN, String filePath_in) {
 		this.log = logIN;
 		filePath = filePath_in;
@@ -54,6 +67,9 @@ public class Config {
 			}
 	}
 	
+	/**
+	 * \brief Loads options from file
+	 */
 	public void readOptions() {
 		try{
 			Properties p = new Properties();			
@@ -86,6 +102,9 @@ public class Config {
 		}
 	}
 	
+	/**
+	 * \brief Saves options to file
+	 */
 	public void saveOptions() {
 		try{
 			log.writelogfile("saving settings");
@@ -110,10 +129,8 @@ public class Config {
 	}
 	
 	/**
-	 * DB l�uft auf/im
-	 * @param localhost
-	 * 	localhost 	-> true
-	 * 	FEM-Netz	-> false
+	 * \brief Creates default options. 
+	 * @param localhost //TODO: remove this switch
 	 */
 	public void setDefault(boolean localhost) {    	
     	
@@ -141,12 +158,17 @@ public class Config {
 	}
 
 	/**
-	 * @return the options
+	 * \brief Returns the options.
+	 * @return Returns the options.
 	 */
 	public Options getOptions() {
 		return options;
 	}
 	
+	/**
+	 * \brief Set options.
+	 * @param options The options to set.
+	 */
 	public void setOptions(Options options) {
 		this.options = options;
 		Main.refresh(options);
