@@ -18,7 +18,7 @@
 
 <!--Custom jS-->
 
-<script src="static/index.jsp"></script>
+<script src="static/index.js"></script>
 </head>
 <body>
 
