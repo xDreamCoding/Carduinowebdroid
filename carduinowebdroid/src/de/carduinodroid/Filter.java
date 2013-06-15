@@ -47,6 +47,7 @@ public class Filter implements javax.servlet.Filter {
 		boolean authorized = false;
 		boolean isAdmin = false;
 		boolean staticRequest = false;
+		boolean chatRequest = false;
 		String target = "index";
 		
 		//DBConnector db = (DBConnector)config.getServletContext().getAttribute("database");
@@ -129,6 +130,7 @@ public class Filter implements javax.servlet.Filter {
 //			}
 			
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
+			chatRequest = req.getRequestURI().startsWith(req.getContextPath() + "/chat");
 			
 			if(session.getAttribute("nickName") != null && ((String)session.getAttribute("nickName")) != "") {
 				authorized = true;
@@ -140,7 +142,7 @@ public class Filter implements javax.servlet.Filter {
 				}
 			}
 		}
-		if(staticRequest) 
+		if(staticRequest || chatRequest) 
 			chain.doFilter(request, res);
 		else {
 			if(!authorized) 
