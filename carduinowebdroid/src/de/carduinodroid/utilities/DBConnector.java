@@ -1,7 +1,10 @@
 package de.carduinodroid.utilities;
 
+import java.math.BigInteger;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,7 +21,7 @@ import de.carduinodroid.utilities.Config.Options;
 
 /**
  * \brief This Class implements all functions which interact the database
- * The contructor public DBConnector(LogNG logIN, Options opt) is needed for first time initialisation.
+ * The contructor DBConnector(LogNG logIN, Options opt) is needed for first time initialisation.
  * @author Michael Röding
  *
  */
@@ -98,7 +101,7 @@ public class DBConnector {
 	 * \brief Executs a given PreparedStatement.
 	 * Use this function for statements without a return value like INSERT, UPDATE or DELETE.
 	 * The PreparedStatement will be closed by this function.
-	 * @param stmt PreparedStatement to execute
+	 * @param stmt PreparedStatement to execute.
 	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
 	private boolean executeUpdate(PreparedStatement stmt) {
@@ -150,7 +153,8 @@ public class DBConnector {
 	
 	/**
 	 * \brief Closes a given PreparedStatement
-	 * Use this function to close 
+	 * Use this function to close a PreparedStatement. 
+	 * You will mostly need this function together with executeQuery(PreparedStatement stmt).
 	 * @param stmt
 	 */
 	private void closeStatement(PreparedStatement stmt) {
@@ -161,11 +165,33 @@ public class DBConnector {
 		}		
 	}
 	
+	/**
+	 * \brief Hashs password with MD5.
+	 * @param pw Password to hash.
+	 * @return Resulting hash.
+	 */
+	private String hashPassword(String pw) {
+	    byte[] hash;
+		try {
+			hash = MessageDigest.getInstance("MD5").digest((pw + "carDuinoWebDroid13").getBytes());
+		} catch (NoSuchAlgorithmException e) {
+			/** should never be executed*/
+			log.writelogfile(e.getMessage());
+			return null;
+		}
+	    BigInteger bi = new BigInteger(1, hash);
+	    String result = bi.toString(16);
+	    if (result.length() % 2 != 0) {
+	        return "0" + result;
+	    }
+	    return result;
+	}
+	
 	// --------------------- API ---------------------
 	// --- Chat ---
 	/**
-	 * \brief Saves a chat text to database
-	 * A timestamp is added by this function.
+	 * \brief Saves a chat text to database.
+	 * The current timestamp is added by this function.
 	 * @param userID The UserID of teh user who sad that.
 	 * @param sessionID	The associated SessionID.
 	 * @param text The actual chat text (max length is 256!)
@@ -191,6 +217,7 @@ public class DBConnector {
 			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
+			return false;
 		}
 
 		return true;
@@ -198,16 +225,20 @@ public class DBConnector {
 	
 	// --- Drive ---	
 	/**
-	 * create a new drive
-	 * @param userID of the driver
-	 * @return driveID 
+	 * \brief Creates a new drive.
+	 * Create a database entry for a given userID and sets the current timestamp.
+	 * @param userID UserID of the driver.
+	 * @return driveID DriverID assigned by the database or -1 if an error occurs.
 	 */
 	public int startDrive(String userID) {
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
 		int driveID = -1;
 		
-		// TODO: check if the userID exists
+		if(!isValidUserID(userID)) {
+			log.writelogfile("startDrive: invalid userID " + userID);
+			return driveID;
+		}
 
 		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
@@ -248,14 +279,18 @@ public class DBConnector {
 
 	
 	/**
-	 * add stop time to a given drive
-	 * @param driveID
-	 * @return true if successful
+	 * \brief Adds stop time timestamp.
+	 * End a drive by inserting the current timestamp in the database.
+	 * @param driveID DriverID of the current driver.
+	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
 	public boolean stopDrive(int driveID) {
 		PreparedStatement stmt = null;
 		
-		// TODO: check if the driveID exists
+		if(!isValidDriveID(driveID)) {
+			log.writelogfile("createSession: invalid userID " + driveID);
+			return false;
+		}
 
 		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
@@ -267,17 +302,48 @@ public class DBConnector {
 			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
+			return false;
 		}
 		return true;
 	}
 	
+	/**
+	 * \brief Checks if the given driveID exists.
+	 * @param driveID DriveID to check.
+	 * @return Returns "true" if the DriveID was found or "false" if not.
+	 */
+	private boolean isValidDriveID(int driveID) {
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		boolean found = false;
+		try {
+			stmt = dbConnection.prepareStatement("SELECT driveID FROM driver WHERE driveID = ?");
+			stmt.setInt(1, driveID);
+			
+			rset = executeQuery(stmt);
+			
+			if(!rset.isBeforeFirst()) {
+				// no drive found
+			} else {
+				found = true;
+			}			
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+
+		closeStatement(stmt);
+		
+		return found;
+	}
+	
 	// --- GPS ---
 	/**
-	 * logs gps coordinates
-	 * @param driveID
-	 * @param longitude
-	 * @param latitude
-	 * @return true is successful
+	 * \brief Logs GPS coordinates.
+	 * Save lat, long and the current timestamp in the database.
+	 * @param driveID DriveID to search GPS coordinates to.
+	 * @param longitude Longitude
+	 * @param latitude Latitude
+	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
 	protected boolean logGPS(int driveID, String latitude, String longitude) {
 		PreparedStatement stmt = null;
@@ -294,15 +360,16 @@ public class DBConnector {
 			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
+			return false;
 		}
 
 		return true;
 	}
 	
 	/**
-	 * get all GPS records for one drive
-	 * @param driveID
-	 * @return ArrayList with GPS records
+	 * \brief Gets all GPS records for one drive
+	 * @param driveID DriveID to look up GPS records for.
+	 * @return ArrayList with GPS records.
 	 */
 	public List<GPS> getGPSByDriveID(int driveID) {
 		PreparedStatement stmt = null;
@@ -345,10 +412,10 @@ public class DBConnector {
 	}
 	
 	/**
-	 * get all GPS records between a given time frame
-	 * @param begin
-	 * @param end
-	 * @return ArrayList with GPS records
+	 * \brief Gets all GPS records between a given time frame.
+	 * @param begin Time frame begin.
+	 * @param end Time frame end.
+	 * @return ArrayList with GPS records.
 	 */
 	public List<GPS> getGPSByTime(Timestamp begin, Timestamp end) {
 		PreparedStatement stmt = null;
@@ -395,17 +462,21 @@ public class DBConnector {
 	
 	// --- Session ---	
 	/**
-	 * create a new session
-	 * @param userID
-	 * @param ip address
-	 * @return sessionID
+	 * \brief Creates a new session.
+	 * Creates a database entry for the given userID and IP.
+	 * @param userID User who creates a new session.
+	 * @param ip address IP of the user.
+	 * @return sessionID SessionID assigned by the database.
 	 */
 	public int createSession(String userID, String ip) {
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
 		int sessionID = -1;
 		
-		// TODO: check if the userID exists
+		if(!isValidUserID(userID)) {
+			log.writelogfile("createSession: invalid userID " + userID);
+			return sessionID;
+		}
 
 		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
@@ -448,14 +519,17 @@ public class DBConnector {
 
 	
 	/**
-	 * add logout time to a given session
-	 * @param sessionID
-	 * @return true if successful
+	 * \brief Adds logout time to a given session.
+	 * @param sessionID Session to close.
+	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
 	public boolean closeSession(int sessionID) {
 		PreparedStatement stmt = null;
-		
-		// TODO: check if the sessionID exists
+				
+		if(!isValidSessionID(sessionID)) {
+			log.writelogfile("closeSession: invalid sessionID " + sessionID);
+			return false;
+		}
 
 		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
@@ -467,17 +541,47 @@ public class DBConnector {
 			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
+			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * \brief Checks if the given SessionID exists.
+	 * @param sessionID SessionID to check.
+	 * @return Returns "true" if the SessionID was found or "false" if not.
+	 */
+	private boolean isValidSessionID(int sessionID) {
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		boolean found = false;
+		try {
+			stmt = dbConnection.prepareStatement("SELECT sessionID FROM session WHERE sessionID = ?");
+			stmt.setInt(1, sessionID);
+			
+			rset = executeQuery(stmt);
+			
+			if(!rset.isBeforeFirst()) {
+				// no session found
+			} else {
+				found = true;
+			}			
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+
+		closeStatement(stmt);
+		
+		return found;
 	}
 	
 	
 	// --- User ---
 	/** 
-	 * try to login with a given userID and password
-	 * @param userID (login)
-	 * @param password
-	 * @return returns the user as a User object or null if the login was invalid 
+	 * \brief Tries to login with a given userID and password.
+	 * @param userID UserID to login with.
+	 * @param password Password to login with.
+	 * @return Returns the user as a User object or null if the login was invalid.
 	 */
 	public User loginUser(String userID, String pw) {
 		PreparedStatement stmt = null;
@@ -486,7 +590,7 @@ public class DBConnector {
 		try {
 			stmt = dbConnection.prepareStatement("SELECT nickname, rightFlag FROM user WHERE userID = ? AND password = ?");
 			stmt.setString(1, userID);
-			stmt.setString(2, pw); // TODO: pw hashen
+			stmt.setString(2, hashPassword(pw));
 			
 			rset = executeQuery(stmt);
 			
@@ -511,10 +615,10 @@ public class DBConnector {
 	}
 
 	/**
-	 * change the nicknam 
-	 * @param userID (login)
-	 * @param new nickname
-	 * @return true if successful
+	 * \brief Changes the nicknam of a user.
+	 * @param userID UserID to change the nickname of.
+	 * @param newNick new nickname.
+	 * @return Returns "true" if the SessionID was found or "false" if not.
 	 */
 	public boolean changeNickname(String userID, String newNick) {
 		PreparedStatement stmt = null;
@@ -527,18 +631,19 @@ public class DBConnector {
 			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
+			return false;
 		}
 
 		return true;
 	}
 	
 	/** 
-	 * create a new user
-	 * @param userID (login)
-	 * @param nickname
-	 * @param password
-	 * @param right
-	 * @return true if successful
+	 * \brief Creates a new user.
+	 * @param userID UserID to login with.
+	 * @param nickname Nickname to display. (can be null)
+	 * @param password Password for the new user.
+	 * @param right Right the new user has.
+	 * @return Returns "true" if the SessionID was found or "false" if not.
 	 */
 	public boolean createUser(String userID, String nick, String pw, Right r) {
 		PreparedStatement stmt = null;
@@ -547,21 +652,22 @@ public class DBConnector {
 			stmt = dbConnection.prepareStatement("INSERT INTO user (`userID`, `nickname`, `password`, `rightFlag`) VALUES (?, ?, ?, ?)");
 			stmt.setString(1, userID);
 			stmt.setString(2, nick);
-			stmt.setString(3, pw); 	//TODO: pw hashen
+			stmt.setString(3, hashPassword(pw)); 
 			stmt.setByte(4, (byte)r.ordinal());
 			
 			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
+			return false;
 		}
 
 		return true;
 	}
 	
 	/**
-	 * delete a user
-	 * @param userID to delete
-	 * @return true if successful
+	 * \brief Deletes a user.
+	 * @param userID UserID to delete.
+	 * @return Returns "true" if the SessionID was found or "false" if not.
 	 */
 	private boolean deleteUser(String userID) {
 		PreparedStatement stmt = null;
@@ -573,14 +679,15 @@ public class DBConnector {
 			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
+			return false;
 		}
 		
 		return true;
 	}
 
 	/**
-	 * get all user 
-	 * @return returns all users in the database in an ArrayList
+	 * \brief Gets all user from the database .
+	 * @return Returns all users in the database in an ArrayList.
 	 */
 	public List<User> getAllUser() {
 		// TODO: besondere filter?
@@ -625,8 +732,8 @@ public class DBConnector {
 	}
 	
 	/**
-	 * get the number of all user in the database
-	 * @return number of users
+	 * \brief Gets the number of all user in the database.
+	 * @return Number of users.
 	 */
 	public int getAllUserCount() {
 		PreparedStatement stmt = null;
@@ -655,9 +762,10 @@ public class DBConnector {
 	}
 	
 	/**
-	 * look up a userID by a given sessionID
-	 * @param sessionID 
-	 * @return userID or null if no session was found
+	 * \brief Looks up a userID by a given sessionID.
+	 * Similar to getUserBySession(int sessionID).
+	 * @param sessionID SessionID to search for.
+	 * @return UserID associated with the session or null if no session was found.
 	 */
 	public String getUserIdBySession(int sessionID) {
 		PreparedStatement stmt = null;
@@ -687,9 +795,10 @@ public class DBConnector {
 	}
 	
 	/**
-	 * get a user object based on an given session ID
-	 * @param sessionID
-	 * @return user or null
+	 * \brief Gets a user object based on an given session ID.
+	 * Similar to getUserIdBySession(int sessionID).
+	 * @param sessionID SessionID to search for.
+	 * @return Returns an User-object associated with the session or null if no session was found.
 	 */
 	public User getUserBySession(int sessionID) {
 		PreparedStatement stmt = null;
@@ -720,12 +829,41 @@ public class DBConnector {
 		return user;
 	}
 	
+	/**
+	 * \brief Checks if the given userID exists.
+	 * @param userID UserID to check.
+	 * @return Returns "true" if the UserID was found or "false" if not.
+	 */
+	private boolean isValidUserID(String userID) {
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		boolean found = false;
+		try {
+			stmt = dbConnection.prepareStatement("SELECT userID FROM user WHERE userID = ?");
+			stmt.setString(1, userID);
+			
+			rset = executeQuery(stmt);
+			
+			if(!rset.isBeforeFirst()) {
+				// no user found
+			} else {
+				found = true;
+			}			
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+
+		closeStatement(stmt);
+		
+		return found;
+	}
+	
 	// --- Queue ---
 	/**
-	 * log a user who enqueued himself
-	 * @param userID
-	 * @param sessionID
-	 * @return queueID
+	 * \bief Logs a user who enqueued himself.
+	 * @param userID UserID from the user who is enqueued.
+	 * @param sessionID SessionID from the current session.
+	 * @return queueID QueueID assinged by the database.
 	 */
 	protected int logQueue(String userID, int sessionID) {
 		PreparedStatement stmt = null;
@@ -773,7 +911,11 @@ public class DBConnector {
 
 	
 	// --------------------- self tests ---------------------
-	
+	/**
+	 * \brief Database self test.
+	 * Testing most function of this class. A test user is reuquired -> username: "test" password: "test456".
+	 * This functions adds database entries and do not delete all of them!
+	 */
 	public void dbTest() {
 		String userID = "test";
 		

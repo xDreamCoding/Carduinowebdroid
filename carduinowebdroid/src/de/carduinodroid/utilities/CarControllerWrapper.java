@@ -28,6 +28,15 @@ public class CarControllerWrapper {
 			throw new Exception("wrong contructor for first time instancing");
 		return ccw;
 	}
+	
+	public void setDirection(boolean up, boolean down, boolean right, boolean left) {
+		ccw.cc.car_controller.UpdateVariables(up, down, right, left);
+	}
+	
+	public void driveForward() { setDirection(true, false, false, false); }
+	public void driveBackward() { setDirection(false, true, false, false); }
+	public void driveRight() { setDirection(false, false, true, false); }
+	public void driveLeft() { setDirection(false, false, false, true); }
 
 	public void confirmButtonUp(boolean b) {
 		// TODO Auto-generated method stub
