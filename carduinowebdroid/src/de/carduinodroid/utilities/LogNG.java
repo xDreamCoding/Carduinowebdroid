@@ -17,7 +17,7 @@ import de.carduinodroid.utilities.Config.Options;
  * The log is instanced before everything else. Therefore it has no options in the beginning and doesn't know where to save the log file. 
  * The solution to this is to save everything in a list and copy the list to the log file as soon as the options are set. 
  * @author Michael Röding
- * //TODO: rename!
+ * ///TODO \todo: rename!
  */
 public class LogNG {
 	Options options = null;

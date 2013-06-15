@@ -119,10 +119,10 @@ public class Main extends HttpServlet {
 //			
 //				for(int i = 0; i < Sessions.length; i++){
 //					aliveSessions.add(Sessions[i]);
-//					//TODO sende Nachricht an user und versuche diese wieder zu Empfangen
+//					///TODO \todo sende Nachricht an user und versuche diese wieder zu Empfangen
 //				}
 //			
-//				//TODO wenn Nachrichten ankommen entferne User aus aliveSessions
+//				///TODO \todo wenn Nachrichten ankommen entferne User aus aliveSessions
 //			}
 //		};
 //    	
@@ -152,7 +152,7 @@ public class Main extends HttpServlet {
 					else{
 						String aktSessionID = waitingqueue.getNextUser();
 						driveID = db.startDrive(db.getUserIdBySession(activeSession.getSessionInt(aktSessionID)));
-						//TODO Fahrrechte;
+						///TODO \todo Fahrrechte;
 
 						}
 					}

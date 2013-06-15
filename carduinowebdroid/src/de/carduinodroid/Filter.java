@@ -64,7 +64,7 @@ public class Filter implements javax.servlet.Filter {
 			    String[] value = (String[])entry.getValue();
 			    System.out.println("Key = " + key + ", Value = " + value[0]);
 			}
-			//TODO Sessions sind wirklich Strings werden aber sp�ter nach int gecastet
+			///TODO \todo Sessions sind wirklich Strings werden aber später nach int gecastet
 			String SessionID = session.getId();
 			if(m.size() > 0 && m.containsKey("action")) {
 				
@@ -81,7 +81,7 @@ public class Filter implements javax.servlet.Filter {
 					if(u == null)
 						break;
 					
-					//TODO session attribute (Rechte der user)
+					///TODO \todo session attribute (Rechte der user)
 					session.setAttribute("isAdmin", u.isAdmin());
 					session.setAttribute("isUser", u.isUser());
 					session.setAttribute("name", u.getNickname());
@@ -103,7 +103,7 @@ public class Filter implements javax.servlet.Filter {
 					break;
 				case "NextUser":
 					//String nextUserID = waitingqueue.getNextUser();
-					//TODO wohin soll der �bergeben werden
+					///TODO \todo wohin soll der übergeben werden
 					break;
 				case "watchDriver":
 					userID = "guest" + System.currentTimeMillis();

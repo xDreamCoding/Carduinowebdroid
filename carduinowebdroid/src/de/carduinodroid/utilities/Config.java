@@ -130,7 +130,7 @@ public class Config {
 	
 	/**
 	 * \brief Creates default options. 
-	 * @param localhost //TODO: remove this switch
+	 * @param localhost ///TODO \todo: remove this switch
 	 */
 	public void setDefault(boolean localhost) {    	
     	
