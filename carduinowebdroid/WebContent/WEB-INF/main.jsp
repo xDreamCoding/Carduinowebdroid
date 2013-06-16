@@ -29,7 +29,7 @@
 	<tr>
     	<td id="main_table_sidebar_left">
         	<div id="main_chat_container">
-        		<div id="main_chat">Chat</div>
+        		<textarea type="text" id="main_chat" readonly></textarea>
           	  	<textarea type="text" name="chat" id="main_chat_textinput" maxlength="256"></textarea>
            		<div id="main_chat_chars">256</div>
             	<button id="main_chat_speak">Chat</button>

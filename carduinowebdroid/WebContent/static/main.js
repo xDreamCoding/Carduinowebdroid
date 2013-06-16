@@ -79,7 +79,7 @@ $(function() {
 });
 
 /**
- * jQuery Slider contructor.
+ * jQuery Slider constructor.
  */
 
 $(function() {
@@ -97,7 +97,7 @@ $(function() {
 });
 
 /**
- * jQuery Button contructor.
+ * jQuery Button constructor.
  */
 
 $(function() {
