@@ -1,7 +1,9 @@
 package de.carduinodroid.utilities;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -210,5 +212,19 @@ public class LogNG {
 	public void setDB(DBConnector database) {
 		this.db = database;
 	}
-		
+	
+	public LinkedList<String> getLog() {
+		LinkedList<String> l = new LinkedList<String>();
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(file));
+			String zeile = null;
+			while ((zeile = in.readLine()) != null) {
+				l.add(zeile);
+			}
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return l;
+	}
 }

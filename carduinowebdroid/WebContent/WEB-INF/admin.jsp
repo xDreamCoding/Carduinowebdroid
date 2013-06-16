@@ -65,6 +65,19 @@
 	
 	</c:forEach>
 </table>
+<br />
 
+<c:set var="logList">
+	<ct:getLog />
+</c:set>
+<c:set var="result" value="${result-1}" />
+<table>
+	<tr><th>Inhalt vom Log</th></tr>
+	<c:forEach items="${logList}" var="s"> 
+		<tr>
+			<td><c:out value="${s}" /></td>
+		</tr>	
+	</c:forEach>
+</table>
 </body>
 </html>

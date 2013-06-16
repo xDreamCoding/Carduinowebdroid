@@ -24,4 +24,9 @@
     	<tag-class>de.carduinodroid.web.SessionTag</tag-class>
     	<info>Asks if current User is an Admin or not</info>
     </tag>
+    <tag>
+    	<name>getLog</name>
+    	<tag-class>de.carduinodroid.web.LogTag</tag-class>
+    	<info>Gets current log</info>
+    </tag>
 </taglib>
