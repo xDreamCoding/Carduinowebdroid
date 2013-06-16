@@ -12,9 +12,17 @@ $(function() {
 	ws.onopen = function(){
 		$("#main_chat").append("Connected!" + "\n");
 	};
+	ws.onclose = function(){
+		$("#main_chat").append("Closed!" + "\n");
+	};
 	ws.onmessage = function(message){
 		$("#main_chat").append(message.data + "\n");
 	};
+	ws.onerror = function(){
+		$("#main_chat").append("Error!" + "\n");
+	};
+	
+	
 	
 	function postToServer(){
 		$("#main_chat").append("Sent!" + "\n");
