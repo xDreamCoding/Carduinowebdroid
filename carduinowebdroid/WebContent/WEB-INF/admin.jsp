@@ -54,7 +54,7 @@
 </c:set>
 <c:set var="result" value="${result-1}" />
 
-<c:if test="${param.menu = 1}">
+<c:if test="${param.menu == 1}">
 <div id="admin_usertb">
 <table>
 	<tr><th>UserID</th><th>Nickname</th><th>isAdmin</th></tr>
@@ -71,7 +71,7 @@
 </c:if>
 <br />
 
-<c:if test="${param.menu = 2}">
+<c:if test="${param.menu == 2}">
 <c:set var="logList">
 	<ct:getLog />
 </c:set>
@@ -86,7 +86,7 @@
 </table>
 </c:if>
 
-<c:if test="${param.menu = 3}">
+<c:if test="${param.menu == 3}">
 LOL
 </c:if>
 </body>
