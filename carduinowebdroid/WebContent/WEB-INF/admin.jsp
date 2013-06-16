@@ -54,17 +54,19 @@
 </c:set>
 <c:set var="result" value="${result-1}" />
 
+<div id="admin_usertb">
 <table>
 	<tr><th>UserID</th><th>Nickname</th><th>isAdmin</th></tr>
 	<c:forEach var="i" begin="0" end="${result}">
 		<tr>
-			<td><c:out value="${i}" /></td>
-			<td><ct:user par="1" num="${i}" /></td>
-			<td><ct:user par="2" num="${i}" /></td>
+			<td id="admin_userdt"><c:out value="${i}" /></td>
+			<td id="admin_userdt"><ct:user par="1" num="${i}" /></td>
+			<td id="admin_userdt"><ct:user par="2" num="${i}" /></td>
 		</tr>
 	
 	</c:forEach>
 </table>
+</div>
 <br />
 
 <c:set var="logList">
