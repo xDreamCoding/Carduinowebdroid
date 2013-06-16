@@ -99,7 +99,7 @@
                 </form>
                 <c:set var="isAdmin"><ct:isAdmin /></c:set>
                 <c:if test="${isAdmin == 1}">
-                	<a href="admin.jsp">
+                	<a href="admin.jsp?menu=1">
                 		<button id="main_admin">Admin</button>
                 	</a>
                 </c:if>

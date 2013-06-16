@@ -35,9 +35,9 @@
 <li>
 <a href="#"><span class="ui-icon ui-icon-person" id="admin_menuicons"></span>User</a>
 <ul>
-<li><a href="#"><span class="ui-icon ui-icon-plus" id="admin_menuicons"></span>Create</a></li>
-<li><a href="#"><span class="ui-icon ui-icon-pencil" id="admin_menuicons"></span>Manage</a></li>
-<li><a href="#"><span class="ui-icon ui-icon-minus" id="admin_menuicons"></span>Delete</a></li>
+<li><a href="admin.jsp?menu=1"><span class="ui-icon ui-icon-plus" id="admin_menuicons"></span>Create</a></li>
+<li><a href="admin.jsp?menu=2"><span class="ui-icon ui-icon-pencil" id="admin_menuicons"></span>Manage</a></li>
+<li><a href="admin.jsp?menu=3"><span class="ui-icon ui-icon-minus" id="admin_menuicons"></span>Delete</a></li>
 </ul>
 </li>
 <li><a href="#"><span class="ui-icon ui-icon-script" id="admin_menuicons"></span>Logging</a></li>
@@ -54,6 +54,7 @@
 </c:set>
 <c:set var="result" value="${result-1}" />
 
+<c:if test="${param.menu = 1}">
 <div id="admin_usertb">
 <table>
 	<tr><th>UserID</th><th>Nickname</th><th>isAdmin</th></tr>
@@ -67,8 +68,10 @@
 	</c:forEach>
 </table>
 </div>
+</c:if>
 <br />
 
+<c:if test="${param.menu = 2}">
 <c:set var="logList">
 	<ct:getLog />
 </c:set>
@@ -81,5 +84,10 @@
 		</tr>	
 	</c:forEach>
 </table>
+</c:if>
+
+<c:if test="${param.menu = 3}">
+LOL
+</c:if>
 </body>
 </html>
