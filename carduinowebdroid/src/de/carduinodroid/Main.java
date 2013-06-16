@@ -144,6 +144,10 @@ public class Main extends HttpServlet {
 				case "watchDriver":
 					userID = "guest" + System.currentTimeMillis();
 					activeSession.insertSession(SessionID, ipAdress, userID);
+					session.setAttribute("isAdmin", false);
+					session.setAttribute("isUser", false);
+					session.setAttribute("nickname", userID);
+					session.setAttribute("userId", userID);
 					///TODO \todo user objekt anlegen wie bei login
 					break;
 //				case "toMainPage":
@@ -182,7 +186,7 @@ public class Main extends HttpServlet {
 	
 	public static void shutDown(){
 		System.out.println("Shut-Down main");
-		Session.cancel();
+		//Session.cancel();
 		action.cancel();
 		GPSLogger.cancel();
 		GPSLog.cancel();
@@ -225,7 +229,7 @@ public class Main extends HttpServlet {
 				DBConnector db = new DBConnector();
 				public void run() {
 			    	if(flag){
-						caretaker.cancel();
+			    		caretaker.cancel();
 						caretaker = new Timer();
 			    		caretaker.schedule(new de.carduinodroid.Dummy(action), 60000*Fahrzeit, 60000*Fahrzeit);
 			    		flag = false;
