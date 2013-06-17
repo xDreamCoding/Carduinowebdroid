@@ -51,7 +51,7 @@
 <br>
 
 <div id="index_guestbox">
-    <form action="POST">
+    <form method="POST">
     	<input type="hidden" name="action" value="watchDriver" />
         <input type="submit" value="Watch a Driver" />       
     </form> 

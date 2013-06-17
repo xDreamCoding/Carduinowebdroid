@@ -146,11 +146,12 @@ public class Main extends HttpServlet {
 					///TODO \todo wohin soll der übergeben werden
 					break;
 				case "watchDriver":
-					userID = "guest" + System.currentTimeMillis();
+					userID = "gue" + System.currentTimeMillis();
+					db.loginGuest(userID);
 					ID = activeSession.insertSession(SessionID, ipAdress, userID);
 					session.setAttribute("isAdmin", false);
 					session.setAttribute("isUser", false);
-					session.setAttribute("nickname", userID);
+					session.setAttribute("nickName", userID);
 					session.setAttribute("userId", userID);
 					if (ID == 1){
 						break;
