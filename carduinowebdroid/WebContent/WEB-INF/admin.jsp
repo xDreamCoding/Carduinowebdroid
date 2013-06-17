@@ -90,7 +90,10 @@
 </c:if>
 
 <c:if test="${param.menu == 3}">
-LOL
+<form method="POST">
+	<input type="hidden" name="action" value="connect"/>
+	<input id="main_connect" type="submit" value="connect" />
+</form>
 </c:if>
 </body>
 </html>

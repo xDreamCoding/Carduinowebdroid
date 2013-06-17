@@ -44,7 +44,7 @@ public class Socket_Picture implements Runnable{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			/*
-			 * noch überlegen
+			 * noch Ã¼berlegen
 			 */
 			System.out.println("fehler beim connecten");
 		}
@@ -90,7 +90,7 @@ public class Socket_Picture implements Runnable{
 				i =picturestream.available();
 				if(i > 0){
 				network.receive_picture(readpicture());
-				System.out.println("was da zum lesen" + i + "      " + System.currentTimeMillis());
+				//System.out.println("was da zum lesen" + i + "      " + System.currentTimeMillis());
 				}
 					
 					else
@@ -123,14 +123,14 @@ public class Socket_Picture implements Runnable{
 				if(i >= 4){
 					lastBytes[0] = buffer[i - 2];
 					lastBytes[1] = buffer[i - 1];
-					System.out.println("daten holen" + new String(lastBytes));
+					//System.out.println("daten holen" + new String(lastBytes));
 				}else if(i == 1){
 					lastBytes[0] = lastBytes[1];
 					lastBytes[1] = buffer[0];
 				}
 				
 				if(lastBytes[0] == (byte)255 && lastBytes[1] ==  (byte)217){
-					System.out.println("komplettes bild");
+					//System.out.println("komplettes bild");
 					completeImage = true;
 				}
 				baos.write(buffer);

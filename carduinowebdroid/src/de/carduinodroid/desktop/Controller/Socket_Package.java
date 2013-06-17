@@ -48,7 +48,7 @@ public class Socket_Package implements Runnable{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			/*
-			 * noch überlegen
+			 * noch Ã¼berlegen
 			 */
 			System.out.println("fehler beim connecten");
 		}
@@ -72,7 +72,7 @@ public class Socket_Package implements Runnable{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			/*
-			 * noch überlegen
+			 * noch Ã¼berlegen
 			 */
 			e.printStackTrace();
 			}
@@ -99,7 +99,7 @@ public class Socket_Package implements Runnable{
 			try {
 				if(packagereader.ready()){
 				message = packagereader.readLine();
-				System.out.println(message);
+				//System.out.println(message);
 				//connection available
 				if(message.equals(ACKNOWLEDGE))
 				{
