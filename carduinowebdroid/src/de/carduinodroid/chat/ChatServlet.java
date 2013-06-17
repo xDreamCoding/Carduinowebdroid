@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import javax.servlet.annotation.WebServlet;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -16,13 +16,12 @@ import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
 
+import de.carduinodroid.utilities.DBConnector;
+import de.carduinodroid.utilities.LogNG;
+
 public class ChatServlet extends WebSocketServlet {
 
 	private static final long serialVersionUID = 4642341228711151433L;
-	
-	public ChatServlet() {
-		System.out.println("ChatServlet instanciated");
-	}
 
 	/**
 	 * Connected clients
@@ -31,10 +30,12 @@ public class ChatServlet extends WebSocketServlet {
 
 	@Override
 	protected StreamInbound createWebSocketInbound(String string,
-			HttpServletRequest hsr) {
-		System.out.println("createWebSocketInbound");
+			HttpServletRequest hsr) {		
 		
 		final HttpSession session = hsr.getSession();
+		final ServletContext context = hsr.getServletContext();
+
+		final LogNG log = (LogNG)context.getAttribute("log");
 
 		//anonymous inner class
 		MessageInbound inbound = new MessageInbound() {
@@ -57,10 +58,15 @@ public class ChatServlet extends WebSocketServlet {
 				String nickName = (String)session.getAttribute("nickName");
 				
 				System.out.println(nickName);
+				
+				String userId = (String)session.getAttribute("userId");
+				//int sessionId = Integer.parseInt(session.getId());
+				
+				///TODO \todo sessionid woher?
+				//log.logChat(userId, sessionId, cb.toString());
+				
 				// Send message to all clients connected
 				broadcast(nickName + ": " + cb.toString());
-				
-				///TODO \todo save to db
 			}
 
 			@Override

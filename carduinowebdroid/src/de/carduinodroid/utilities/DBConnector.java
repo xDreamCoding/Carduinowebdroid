@@ -192,7 +192,7 @@ public class DBConnector {
 	/**
 	 * \brief Saves a chat text to database.
 	 * \details The current timestamp is added by this function.
-	 * @param userID The UserID of the user who sad that.
+	 * @param userID The UserID of the user who said that.
 	 * @param sessionID	The associated SessionID.
 	 * @param text The actual chat text (max length is 256!).
 	 * @return Returns "true" if successful or "false" if an error occurs.
