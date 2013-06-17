@@ -24,7 +24,7 @@ import de.carduinodroid.utilities.CarControllerWrapper;
  
 /**
  * Dieses Package dient dem Senden von Bilddaten über das Internet von einem Server zu einem Client
- * @author Vincenz
+ * @author Vincenz Vogel
  * @version 15.06.2012
  */ 
  
@@ -41,9 +41,9 @@ class Util {
  
 class FrameProducer implements Runnable {
  
-    static final int W = 640;
-    static final int H = 480;
-    static final int D = 30;
+    static final int W = 640;	// width of the streaming picture
+    static final int H = 480;	// Height of the streaming picture
+    static final int D = 30;	// 
     //private final BufferedImage buffer = new BufferedImage(W, H, BufferedImage.TYPE_3BYTE_BGR);
     //private final BufferedImage buffer = new BufferedImage(W, H, BufferedImage.TYPE_4BYTE_ABGR);
     private final BufferedImage buffer = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
@@ -54,10 +54,10 @@ class FrameProducer implements Runnable {
     public FrameProducer() {
         Image img = null;
         ImageWriter wr = null;
-		// Bilddatei für Testzwecke mit Abma�en >= 640 x 480 pix
-        //Test File file = new File("H:\\Eclipse-Apps\\Sender\\GutscheinHinten.jpg");
+		// picture for testing >= 640 x 480 pixel
+        // Test File file = new File("H:\\Eclipse-Apps\\Sender\\GutscheinHinten.jpg");
         try {
-            //Hier jpg Bilder laden
+            //upload .jpg pic's here.
             
         	//Test img = ImageIO.read(file);
 			img = CarControllerWrapper.getImg();
@@ -65,7 +65,7 @@ class FrameProducer implements Runnable {
         } catch (Exception ex) {
             logger.severe(ex.getMessage());
         } finally {
-            background = img;
+            background = img; // Background filled with the image.
             imageWriter = wr;
         }
     }
@@ -90,15 +90,15 @@ class FrameProducer implements Runnable {
  
             synchronized (buffer) {
  
-                g.drawImage(background, 0, 0, W, H, ix, iy, ix + W, iy + H, null);
-                if (ix > backgroundW - W || ix < 0) {
+                g.drawImage(background, 0, 0, W, H, ix, iy, ix + W, iy + H, null); // Image will be created.
+                if (ix > backgroundW - W || ix < 0) {				
                     inc_ix *= -1;
                 }
                 if (iy > backgroundH - H || iy < 0) {
                     inc_iy *= -1;
                 }
-                ix += inc_ix;
-                iy += inc_iy;
+                ix += inc_ix; 
+                iy += inc_iy; 
                 g.setColor(Color.WHITE);
                 g.fillRect(x, y, D, D);
                 if (x > W - D || x < 0) {
@@ -107,21 +107,21 @@ class FrameProducer implements Runnable {
                 if (y > H - D || y < 0) {
                     inc_y *= -1;
                 }
-                x += inc_x;
-                y += inc_y;
-                g.setColor(Color.GREEN);
-                final String current = System.currentTimeMillis() + "";
+                x += inc_x; // just a test square, which moves. can be deleted.
+                y += inc_y; // just a test, can be deleted if the image works.
+                g.setColor(Color.GREEN);			// Background will be green at beginning before Image is created.
+                final String current = System.currentTimeMillis() + "";		// Interval between Imageuploads.
                 g.drawString(current, 20, 20);
             }
  
-            Util.sleep(10);
+            Util.sleep(10);												// 10ms before re-asking.
  
             nFrames++;
-            final long now = System.currentTimeMillis();
-            final long delta = now - start;
+            final long now = System.currentTimeMillis();				// current time of the communication
+            final long delta = now - start;								// 
             if (delta > 2000L) {
-                float fps = ((float) nFrames) / delta * 1000.0f;
-                logger.info(String.format("%1$2.3fFPS", fps));
+                float fps = ((float) nFrames) / delta * 1000.0f;		// Amount of frames per second
+                logger.info(String.format("%1$2.3fFPS", fps));			// how its shown on the website
  
                 start = System.currentTimeMillis();
                 nFrames = 0;
@@ -132,28 +132,28 @@ class FrameProducer implements Runnable {
     public RenderedImage grabFrame() {
         final BufferedImage frame;
         synchronized (buffer) {
-            frame = new BufferedImage(buffer.getWidth(),
-                    buffer.getHeight(), buffer.getType());
+            frame = new BufferedImage(buffer.getWidth(),		// get the correct resolution
+                    buffer.getHeight(), buffer.getType());		// 
             frame.setData(buffer.getData());
         }
         return frame;
     }
  
     public byte[] grabJPEGFrame() throws IOException {
-        final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ImageIO.write(grabFrame(), "jpeg", bos);
+        final ByteArrayOutputStream bos = new ByteArrayOutputStream();	// output of the Image
+        ImageIO.write(grabFrame(), "jpeg", bos);						// as jpeg
         return bos.toByteArray();
     }
 }
  
 abstract class Server implements Runnable {
  
-    private final int port;
+    private final int port;												// create int to check the port
     private static final ExecutorService EXS = Executors.newCachedThreadPool();
     private static final Logger logger = Logger.getLogger(Server.class.getName());
  
     public Server(int port) {
-        this.port = port;
+        this.port = port;												// port of the server
     }
  
     abstract Object doServe(final Socket socket) throws Exception;
@@ -166,7 +166,7 @@ abstract class Server implements Runnable {
  
                 for (;;) {
                     final Socket sock = ssock.accept();
-                    // Lauscht auf Port und verschickt Pakete an die anfragende Adresse
+                    // listen to the port, send packages on the requested IP
                     logger.info("accept: " + sock.getInetAddress());
                     EXS.submit(new Callable<Object>() {
  
@@ -266,12 +266,12 @@ class RawFrameServer extends Server {
  * @version 15.06.2012
  */
     private static final Logger logger = Logger.getLogger(ImageTransferSender.class.getName());
-    // FrameProducer stellt die Bilder, die Gesendet werden zur Verf�gung --> Testzwecke
+    // FrameProducer stellt die Bilder, die Gesendet werden zur Verfuegung --> Testzwecke
     static final FrameProducer frameProducer = new FrameProducer();
     // MJPGServer Sendet die Bilder von FrameProducer an Port 8889
     // kann in Firefox direkt aufgerufen werden
     static final MJPGServer MJPGServer = new MJPGServer(frameProducer, 8889);
-    // RawFrameServer sorgt daf�r, da� der Buffer mit dem richtigen Frame gef�llt wird
+    // RawFrameServer sorgt dafuer, dass der Buffer mit dem richtigen Frame gefuellt wird
     // Kontrollieren kann man den Datenstrom an Port 8888
     static final RawFrameServer rawFrameServer = new RawFrameServer(frameProducer, 8888);
     // EXS ist die Javainterne Threadverwaltung

@@ -14,9 +14,12 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-// Empfänger
+/**
+ * author: Vincenz Vogel
+ */
 public class ImageTransferReceiver extends JFrame implements Runnable {
-
+	// Broadcast and shows the image in the client browser.
+	
     final JPanel picPanel = new JPanel();
     private static final Logger logger = Logger.getLogger(ImageTransferReceiver.class.getName());
  
@@ -24,8 +27,8 @@ public class ImageTransferReceiver extends JFrame implements Runnable {
         final Container cnt = getContentPane();
         cnt.setLayout(new BorderLayout());
  
-        picPanel.setBackground(Color.GREEN);
-        cnt.add(picPanel, BorderLayout.CENTER);
+        picPanel.setBackground(Color.GREEN); 	// Background settings green
+        cnt.add(picPanel, BorderLayout.CENTER);	// Image in the center
     }
  
     public void readBytes(final InputStream is, final byte[] buffer, int l) throws IOException {
@@ -41,14 +44,14 @@ public class ImageTransferReceiver extends JFrame implements Runnable {
  
     public void run() {
         try {
-        	// Server IP und Port angeben
+        	// Server IP and Port here
             final Socket sock = new Socket("192.168.26.23", 8888);
-            final InputStream is = sock.getInputStream();
+            final InputStream is = sock.getInputStream(); // get the pictures, if IP+Port accepted
             final byte[] buffer = new byte[4];
  
             int nFrames = 0;
             int readBytes = 0;
-            long start = System.currentTimeMillis();
+            long start = System.currentTimeMillis();		// current time of the communication
  
             for (;;) {
                 readBytes(is, buffer, 4);
@@ -87,7 +90,7 @@ public class ImageTransferReceiver extends JFrame implements Runnable {
     }
  
     public static void main(final String[] args) {
-		// Aufbau des Frames in der Website
+		// build up the frame on the website
         final ImageTransferReceiver c = new ImageTransferReceiver();
         c.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  
