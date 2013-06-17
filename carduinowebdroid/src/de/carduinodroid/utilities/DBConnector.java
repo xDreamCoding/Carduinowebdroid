@@ -288,7 +288,7 @@ public class DBConnector {
 		PreparedStatement stmt = null;
 		
 		if(!isValidDriveID(driveID)) {
-			log.writelogfile("createSession: invalid userID " + driveID);
+			log.writelogfile("stopDrive: invalid userID " + driveID);
 			return false;
 		}
 
@@ -612,6 +612,17 @@ public class DBConnector {
 		closeStatement(stmt);
 		
 		return user;
+	}
+	
+	/**
+	 * \brief Creates a database entry for a guest.
+	 * @param userID UserID for the guest.
+	 * @return Returns the user as a User object.
+	 */
+	public User loginGuest(String userID) {
+		if(!createUser(userID, null, userID, Right.GUEST))
+			log.writelogfile("error creating guest user");
+		return loginUser(userID, userID);		
 	}
 
 	/**
