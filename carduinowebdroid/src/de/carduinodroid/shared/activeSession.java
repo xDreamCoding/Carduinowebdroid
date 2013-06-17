@@ -76,7 +76,7 @@ public class activeSession {
 	public static void deleteSession(String SessionID){
 		int index = activeSessions.indexOf(SessionID);
 		if (index == -1){
-			System.out.println("Session bereits gel�scht");
+			System.out.println("Session bereits gelöscht");
 			return;
 		}
 		db.closeSession(getSessionInt(SessionID));

@@ -166,6 +166,22 @@ public class Main extends HttpServlet {
 					session.removeAttribute("nickName");
 					///TODO \todo logout = ich lösche ein paar sachen und das wars? session? rechte? zurück zum index?
 					break;
+				case "connect":
+					String ip = ((Options)request.getServletContext().getAttribute("options")).carduinodroidIP;
+					if(ip == "") {
+						log.writelogfile("unable to connect to carduinodroid because ip is not set");
+						break;
+					}
+					try {
+						CarControllerWrapper ccw = CarControllerWrapper.getCarController();
+						ccw.connect(ip);
+					} catch (Exception e) {
+						log.writelogfile(e.getMessage());
+					}
+					break;
+				default:
+					//HOW COULD DIS HAPPEN?
+					break;
 				}
 			}
 		}

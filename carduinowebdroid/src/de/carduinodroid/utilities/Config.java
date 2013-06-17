@@ -33,6 +33,7 @@ public class Config {
 		public int logGPSInterval; /** in seconds */
 		public boolean logQueue; /** should queue events be logged */
 		public boolean logQueueToFile; /** should queue events be logged to file */
+		public String carduinodroidIP; /** IP address of the carduinodroid */
 	}
 	
 	private LogNG log;
@@ -96,6 +97,7 @@ public class Config {
 			options.logGPSInterval = Integer.parseInt(p.getProperty("logGPSInterval"));
 			options.logQueue = Boolean.valueOf(p.getProperty("logQueue"));
 			options.logQueueToFile = Boolean.valueOf(p.getProperty("logQueueToFile"));
+			options.carduinodroidIP = p.getProperty("carduinodroidIP");
 		}
 		catch (Exception e) {
 			  System.out.println(e);
@@ -121,6 +123,7 @@ public class Config {
 			p.setProperty("logGPSInterval", String.valueOf(options.logGPSInterval));
 			p.setProperty("logQueue", String.valueOf(options.logQueue));
 			p.setProperty("logQueueToFile", String.valueOf(options.logQueueToFile));
+			p.setProperty("carduinodroidIP", options.carduinodroidIP);
 			p.store(new FileOutputStream(optionsPath), null);
 		}
 		catch (Exception e) {
@@ -153,6 +156,7 @@ public class Config {
 		options.logGPSToFile = false;
 		options.logQueue = true;
 		options.logQueueToFile = false;
+		options.carduinodroidIP = "";
     	saveOptions();
     	Main.refresh(options);
 	}

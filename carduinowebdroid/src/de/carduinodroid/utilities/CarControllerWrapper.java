@@ -1,6 +1,7 @@
 package de.carduinodroid.utilities;
 
 import java.awt.image.BufferedImage;
+import java.net.UnknownHostException;
 
 import de.carduinodroid.desktop.Controller.Controller_Computer;
 
@@ -46,6 +47,15 @@ public class CarControllerWrapper {
 		if(ccw == null)
 			throw new Exception("wrong constructor for first time instancing");
 		return ccw;
+	}
+	
+	/**
+	 * \brief Connects the server with the carduinodroid.
+	 * @param ip IP address to connect to.
+	 * @throws UnknownHostException In case the ip address is invalid or the carduinodroid is unreachable.
+	 */
+	public void connect(String ip) throws UnknownHostException {
+		ccw.cc.network.connect(ip);
 	}
 	
 	/**
