@@ -118,16 +118,17 @@ public class Main extends HttpServlet {
 					if(u == null)
 						break;
 					
+					int ID = activeSession.insertSession(SessionID, ipAdress, userID);
+					if (ID == -1)
+						break;
+					
 					session.setAttribute("isAdmin", u.isAdmin());
 					session.setAttribute("isUser", u.isUser());
 					session.setAttribute("nickName", u.getNickname());
 					session.setAttribute("userId", u.getUserID());
-					System.out.println("user " + u.getNickname() + " has logged in");
-					int ID = activeSession.insertSession(SessionID, ipAdress, userID);
-					if (ID == -1){
-						break;
-					}
 					session.setAttribute("dbSessionID", ID);
+					
+					//System.out.println("user " + u.getNickname() + " has logged in");
 					break;
 				case "enqueue":					
 					User user = db.getUserBySession(activeSession.getSessionInt(SessionID));
