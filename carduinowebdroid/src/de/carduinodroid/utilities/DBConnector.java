@@ -560,12 +560,9 @@ public class DBConnector {
 			stmt.setInt(1, sessionID);
 			
 			rset = executeQuery(stmt);
-			
-			if(!rset.isBeforeFirst()) {
-				// no session found
-			} else {
+			if(rset != null && rset.isBeforeFirst()) {
 				found = true;
-			}			
+			}		
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
 		}
@@ -681,6 +678,7 @@ public class DBConnector {
 	 * @return Returns "true" if the SessionID was found or "false" if not.
 	 */
 	private boolean deleteUser(String userID) {
+		///TODO \todo delete all other entries with a reference on this userID
 		PreparedStatement stmt = null;
 		
 		try {
@@ -701,8 +699,6 @@ public class DBConnector {
 	 * @return Returns all users in the database in an ArrayList.
 	 */
 	public List<User> getAllUser() {
-		// TODO: besondere filter?
-		
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
 		User user = null;
