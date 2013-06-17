@@ -57,15 +57,19 @@ public class ControllerServlet extends WebSocketServlet {
 				key = buff.get();
 				switch (key) {
 				case 'a':
+					System.out.println("driveLeft");
 					CarControllerWrapper.driveLeft();
 					break;
 				case 'd':
+					System.out.println("driveRight");
 					CarControllerWrapper.driveRight();
 					break;
 				case 'w':
+					System.out.println("driveForward");
 					CarControllerWrapper.driveForward();
 					break;
 				case 's':
+					System.out.println("driveBackward");
 					CarControllerWrapper.driveBackward();
 					break;
 

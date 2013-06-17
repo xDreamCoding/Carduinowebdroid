@@ -19,9 +19,17 @@
 
 <!--Custom jS-->
 
-<script src="static/controls.js"></script>
 <script src="static/main.js"></script>
+<script src="static/websocket.js"></script>
 <script src="static/chat.js"></script>
+<script src="static/controls.js"></script>
+<script type="text/javascript">
+	$(function() {
+		initializeWebsocket();
+		registerChat();
+		registerControls();
+	});
+</script>
 
 </head>
 <body>

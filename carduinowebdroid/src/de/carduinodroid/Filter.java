@@ -40,7 +40,7 @@ public class Filter implements javax.servlet.Filter {
 		
 		boolean authorized = false;
 		boolean staticRequest = false;
-		boolean chatRequest = false;
+		boolean websocketRequest = false;
 		String target = "index";
 
 		if(request instanceof HttpServletRequest) {
@@ -51,7 +51,7 @@ public class Filter implements javax.servlet.Filter {
 			if(DEBUG) System.out.println("-> " + req.getRequestURI());
 
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
-			chatRequest = req.getRequestURI().startsWith(req.getContextPath() + "/chat");
+			websocketRequest = req.getRequestURI().startsWith(req.getContextPath() + "/websocket");
 
 			if(session.getAttribute("nickName") != null && ((String)session.getAttribute("nickName")) != "") {
 				authorized = true;
@@ -60,7 +60,7 @@ public class Filter implements javax.servlet.Filter {
 					target = "admin";				
 			}
 		}
-		if(staticRequest || chatRequest) 
+		if(staticRequest || websocketRequest) 
 			chain.doFilter(request, res);
 		else {
 			if(!authorized) 

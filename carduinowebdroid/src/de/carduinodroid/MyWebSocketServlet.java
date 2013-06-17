@@ -16,15 +16,18 @@ import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
 
+import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.utilities.LogNG;
 
 /**
- * \brief This class is used to receive chatmessages from clients and broadcast them to the rest.
+ * \brief This class is used to handle websocket connection.
+ *  Handle messages from clients and broadcast them to the rest.
+ *  Receive control commands.
  * @author Sven-Leonhard Weiler
  */
 
-public class ChatServlet extends WebSocketServlet {
+public class MyWebSocketServlet extends WebSocketServlet {
 
 	private static final long serialVersionUID = 4642341228711151433L;
 
@@ -65,19 +68,60 @@ public class ChatServlet extends WebSocketServlet {
 			}
 
 			@Override
-			protected void onTextMessage(CharBuffer cb) throws IOException {
-				System.out.println("onTextMessage");
+			protected void onTextMessage(CharBuffer cb) throws IOException {			
+				String msg = cb.toString();
 				
-				String nickName = (String)session.getAttribute("nickName");
-				
-				System.out.println(nickName);
-				
-				String userId = (String)session.getAttribute("userId");
-				int sessionId = (int)session.getAttribute("dbSessionID");
-				log.logChat(userId, sessionId, cb.toString());
-				
-				// Send message to all clients connected
-				broadcast(nickName + ": " + cb.toString());
+				System.out.println("onTextMessage: " + msg);
+				/**
+				 * Controllerpart
+				 */
+				if(msg.startsWith("C%:")) {
+					char key = msg.charAt(msg.indexOf(":") + 1);
+					{
+						switch (key) {
+						case 'a':
+							System.out.println("driveLeft");
+							CarControllerWrapper.driveLeft();
+							break;
+						case 'd':
+							System.out.println("driveRight");
+							CarControllerWrapper.driveRight();
+							break;
+						case 'w':
+							System.out.println("driveForward");
+							CarControllerWrapper.driveForward();
+							break;
+						case 's':
+							System.out.println("driveBackward");
+							CarControllerWrapper.driveBackward();
+							break;
+						case 'h':
+							System.out.println("honk");
+							///TODO \todo honk
+							break;
+						case 'l':
+							System.out.println("light");
+							///TODO \todo light
+							break;
+	
+						}
+					}
+				}
+				/**
+				 * Chatpart
+				 */
+				else {					
+					String nickName = (String)session.getAttribute("nickName");
+					
+					System.out.println(nickName);
+					
+					String userId = (String)session.getAttribute("userId");
+//					int sessionId = (int)session.getAttribute("dbSessionID");
+//					log.logChat(userId, sessionId, cb.toString());
+					
+					// Send message to all clients connected
+					broadcast(nickName + ": " + msg);
+				}
 			}
 		};
 
