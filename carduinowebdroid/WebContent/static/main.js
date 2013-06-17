@@ -35,7 +35,7 @@
 /**
  * Limiter call.
  */
-$(document).ready(function() {
+$(function() {
 	var elem = $("#main_chat_chars");
 	$("#main_chat_textinput").limiter(256, elem);
 });
@@ -179,6 +179,7 @@ $(document).keyup(function(e) {
 	}
 	if(e.keyCode == 13) {
 		$("#main_chat_speak").removeClass("ui-state-active");
+		$("#main_chat_textinput").val('');
 		return false;
 	}
 });

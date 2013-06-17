@@ -32,16 +32,9 @@
 <body>
 
 <ul id="admin_menu">
-<li>
-<a href="#"><span class="ui-icon ui-icon-person" id="admin_menuicons"></span>User</a>
-<ul>
-<li><a href="admin.jsp?menu=1"><span class="ui-icon ui-icon-plus" id="admin_menuicons"></span>Create</a></li>
-<li><a href="admin.jsp?menu=2"><span class="ui-icon ui-icon-pencil" id="admin_menuicons"></span>Manage</a></li>
-<li><a href="admin.jsp?menu=3"><span class="ui-icon ui-icon-minus" id="admin_menuicons"></span>Delete</a></li>
-</ul>
-</li>
-<li><a href="#"><span class="ui-icon ui-icon-script" id="admin_menuicons"></span>Logging</a></li>
-<li><a href="#"><span class="ui-icon ui-icon-wrench" id="admin_menuicons"></span>Settings</a></li>
+<li><a href="admin.jsp?menu=1"><span class="ui-icon ui-icon-person" id="admin_menuicons"></span>User</a></li>
+<li><a href="admin.jsp?menu=2"><span class="ui-icon ui-icon-script" id="admin_menuicons"></span>Logging</a></li>
+<li><a href="admin.jsp?menu=3"><span class="ui-icon ui-icon-wrench" id="admin_menuicons"></span>Settings</a></li>
 </ul>
 
 <table>
