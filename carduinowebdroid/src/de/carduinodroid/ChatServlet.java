@@ -73,10 +73,8 @@ public class ChatServlet extends WebSocketServlet {
 				System.out.println(nickName);
 				
 				String userId = (String)session.getAttribute("userId");
-				//int sessionId = Integer.parseInt(session.getId());
-				
-				///TODO \todo sessionid woher?
-				//log.logChat(userId, sessionId, cb.toString());
+				int sessionId = (int)session.getAttribute("dbSessionID");
+				log.logChat(userId, sessionId, cb.toString());
 				
 				// Send message to all clients connected
 				broadcast(nickName + ": " + cb.toString());
