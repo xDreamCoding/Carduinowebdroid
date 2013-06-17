@@ -45,6 +45,7 @@
 <li><a href="admin.jsp?menu=1"><span class="ui-icon ui-icon-person" id="admin_menuicons"></span>User</a></li>
 <li><a href="admin.jsp?menu=2"><span class="ui-icon ui-icon-script" id="admin_menuicons"></span>Logging</a></li>
 <li><a href="admin.jsp?menu=3"><span class="ui-icon ui-icon-wrench" id="admin_menuicons"></span>Settings</a></li>
+<li><a href="main.jsp"><span class="ui-icon ui-icon-wrench" id="admin_menuicons"></span>Back to Main</a></li>
 </ul>
 
 <c:set var="result">

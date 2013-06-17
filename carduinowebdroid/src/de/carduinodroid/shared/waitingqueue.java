@@ -81,7 +81,7 @@ public class waitingqueue {
 	public static void deleteTicket(String SessionID){
 		int index = Warteschlange.indexOf(SessionID);
 		if (index == -1){
-			System.out.println("Wurde bereits gel�scht");
+			System.out.println("Wurde bereits gelöscht");
 			return;
 		}
 		Warteschlange.remove(index);

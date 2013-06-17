@@ -179,7 +179,14 @@ $(document).keyup(function(e) {
 	}
 	if(e.keyCode == 13) {
 		$("#main_chat_speak").removeClass("ui-state-active");
-		$("#main_chat_textinput").val('');
+		if($("#main_chat_textinput").is(":focus"))
+			$("#main_chat_textinput").val('');
 		return false;
 	}
 });
+
+/*
+ * 
+ */
+
+

@@ -29,4 +29,9 @@
     	<tag-class>de.carduinodroid.web.LogTag</tag-class>
     	<info>Gets current log</info>
     </tag>
+    <tag>
+    	<name>getQ</name>
+    	<tag-class>de.carduinodroid.web.QueueTag</tag-class>
+    	<info>Get current Queue</info>
+    </tag>
 </taglib>

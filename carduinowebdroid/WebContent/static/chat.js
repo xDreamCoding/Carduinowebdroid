@@ -31,6 +31,7 @@ function registerChat() {
  */
 function chatHandleMessage(message) {
 	$("#main_chat").append(message.data + "\n");
+    $('#main_chat').scrollTop($('#main_chat')[0].scrollHeight);
 }
 
 /**
