@@ -114,32 +114,32 @@ $(document).keydown(function(e) {
 	if (!$("#main_chat_textinput").is(":focus")) {
 		if (e.keyCode == 72) {
 			$('#main_gadget_button_horn').mousedown();
-			$('#main_gadget_button_horn').click("h");
+			controlToServer("h");
 			return false;
 		}
 		if (e.keyCode == 76) {
 			$('#main_gadget_button_light').mousedown();
-			$('#main_gadget_button_light').click("l");
+			controlToServer("l");
 			return false;
 		}
 		if (e.keyCode == 37) {
 			$('#main_steering_button_left').mousedown();
-			$('#main_steering_button_left').click("a");
+			controlToServer("a");
 			return false;
 		}
 		if (e.keyCode == 38) {
 			$('#main_steering_button_up').mousedown();
-			$('#main_steering_button_up').click("w");
+			controlToServer("w");
 			return false;
 		}
 		if (e.keyCode == 39) {
 			$('#main_steering_button_right').mousedown();
-			$('#main_steering_button_right').click("d");
+			controlToServer("d");
 			return false;
 		}
 		if (e.keyCode == 40) {
 			$('#main_steering_button_down').mousedown();
-			$('#main_steering_button_down').click("s");
+			controlToServer("s");
 			return false;
 		}
 	} else {
