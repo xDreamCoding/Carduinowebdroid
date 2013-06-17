@@ -37,7 +37,6 @@ $(function() {
 	 */
 	function postToServer(){
 		wschat.send($("#main_chat_textinput").val());
-		$("#main_chat_textinput").val("");
 	};
 	
 	/**
