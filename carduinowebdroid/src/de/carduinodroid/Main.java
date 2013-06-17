@@ -122,7 +122,11 @@ public class Main extends HttpServlet {
 					session.setAttribute("nickName", u.getNickname());
 					session.setAttribute("userId", u.getUserID());
 					System.out.println("user " + u.getNickname() + " has logged in");
-					activeSession.insertSession(SessionID, ipAdress, userID);
+					int ID = activeSession.insertSession(SessionID, ipAdress, userID);
+					if (ID == -1){
+						break;
+					}
+					session.setAttribute("dbSessionID", ID);
 					break;
 				case "enqueue":					
 					User user = db.getUserBySession(activeSession.getSessionInt(SessionID));
@@ -143,11 +147,15 @@ public class Main extends HttpServlet {
 					break;
 				case "watchDriver":
 					userID = "guest" + System.currentTimeMillis();
-					activeSession.insertSession(SessionID, ipAdress, userID);
+					ID = activeSession.insertSession(SessionID, ipAdress, userID);
 					session.setAttribute("isAdmin", false);
 					session.setAttribute("isUser", false);
 					session.setAttribute("nickname", userID);
 					session.setAttribute("userId", userID);
+					if (ID == 1){
+						break;
+					}
+					session.setAttribute("dbSessionID", ID);
 					///TODO \todo user objekt anlegen wie bei login
 					break;
 //				case "toMainPage":
@@ -235,6 +243,8 @@ public class Main extends HttpServlet {
 			    		flag = false;
 			    	}
 					
+			    	activeSession.resetDriver();
+			    	
 					if (waitingqueue.isEmpty() == true){
 						caretaker.cancel();
 						caretaker = new Timer();
@@ -244,6 +254,7 @@ public class Main extends HttpServlet {
 					else{
 						String aktSessionID = waitingqueue.getNextUser();
 						driveID = db.startDrive(db.getUserIdBySession(activeSession.getSessionInt(aktSessionID)));
+						activeSession.setDriver(aktSessionID);
 						///TODO \todo Fahrrechte;
 
 						}

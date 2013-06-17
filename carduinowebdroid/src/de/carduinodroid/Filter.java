@@ -128,7 +128,7 @@ public class Filter implements javax.servlet.Filter {
 
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
 			chatRequest = req.getRequestURI().startsWith(req.getContextPath() + "/chat");
-			
+
 			if(session.getAttribute("nickName") != null && ((String)session.getAttribute("nickName")) != "") {
 				authorized = true;
 				target = "main";

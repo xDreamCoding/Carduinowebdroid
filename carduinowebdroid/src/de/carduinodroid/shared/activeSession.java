@@ -42,16 +42,18 @@ public class activeSession {
 	 * @param userid of the user
 	 */
 	
-	public static void insertSession(String SessionID,String ipadress,String userid){
+	public static int insertSession(String SessionID,String ipadress,String userid){
 		int ID = -1;		
 		ID = db.createSession(userid, ipadress);
 		if (ID == -1){
 			System.out.println("konnte Session nicht erstellen");
-			return;
+			return -1;
 		}
 		activeSessions.add(SessionID);
 		activeInt.add(ID);
 		activeSocket.add(null);
+		
+		return ID;
 	}
 	
 	/** 
@@ -147,5 +149,9 @@ public class activeSession {
 	public static void setDriver(String SessionID){
 		int index = activeSessions.indexOf(SessionID);
 		Driver = index;
+	}
+
+	public static void resetDriver(){
+		Driver = -1;
 	}
 }
