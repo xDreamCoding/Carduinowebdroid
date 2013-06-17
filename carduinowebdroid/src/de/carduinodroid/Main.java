@@ -45,13 +45,14 @@ public class Main extends HttpServlet {
 	static boolean flag;
 	static String aktSessionID;
 	
+	final static boolean DEBUG = false;
+	
     /**
      * @see HttpServlet#HttpServlet()
      */
     public Main() {
         super();
         // TODO Auto-generated constructor stub
-        System.out.println("Main");
     }
     
     /*
@@ -74,30 +75,31 @@ public class Main extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("doGet");
-		
+		// nothing to do here
+		if(DEBUG) System.out.println("doGet");		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		System.out.println("doPost");
+		if(DEBUG) System.out.println("doPost");
 		
 		if(request instanceof HttpServletRequest) {			
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();			
 
 			Map<String, String[]> m = req.getParameterMap();
-//			Iterator<Entry<String, String[]>> entries = m.entrySet().iterator();
-//			while (entries.hasNext()) {
-//			    Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) entries.next();
-//			    String key = (String)entry.getKey();
-//			    String[] value = (String[])entry.getValue();
-//			    System.out.println("Key = " + key + ", Value = " + value[0]);
-//			}
-			///TODO \todo Sessions sind wirklich Strings werden aber später nach int gecastet
+			if(DEBUG) {
+				Iterator<Entry<String, String[]>> entries = m.entrySet().iterator();
+				while (entries.hasNext()) {
+				    Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) entries.next();
+				    String key = (String)entry.getKey();
+				    String[] value = (String[])entry.getValue();
+				    System.out.println("Key = " + key + ", Value = " + value[0]);
+				}
+			}
+			
 			if(m.size() > 0 && m.containsKey("action")) {
 				String SessionID = session.getId();
 				String ipAdress = req.getRemoteAddr();
@@ -116,7 +118,6 @@ public class Main extends HttpServlet {
 					if(u == null)
 						break;
 					
-					///TODO \todo session attribute (Rechte der user)
 					session.setAttribute("isAdmin", u.isAdmin());
 					session.setAttribute("isUser", u.isUser());
 					session.setAttribute("nickName", u.getNickname());
@@ -149,24 +150,16 @@ public class Main extends HttpServlet {
 					userID = "gue" + System.currentTimeMillis();
 					db.loginGuest(userID);
 					ID = activeSession.insertSession(SessionID, ipAdress, userID);
+					if (ID == -1){
+						log.writelogfile("error creating session for guest " + userID);
+						break;
+					}
 					session.setAttribute("isAdmin", false);
 					session.setAttribute("isUser", false);
 					session.setAttribute("nickName", userID);
 					session.setAttribute("userId", userID);
-					if (ID == 1){
-						break;
-					}
 					session.setAttribute("dbSessionID", ID);
-					///TODO \todo user objekt anlegen wie bei login
 					break;
-//				case "toMainPage":
-//					//request.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, response);
-//					break;
-//				case "toAdminPage":
-//					if ((boolean)session.getAttribute("isAdmin"))
-//						request.getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, response);					
-//					break;
-//					break;
 				case "logout":
 					activeSession.deleteSession(SessionID);
 					waitingqueue.deleteTicket(SessionID);
@@ -194,7 +187,7 @@ public class Main extends HttpServlet {
 	 */
 	
 	public static void shutDown(){
-		System.out.println("Shut-Down main");
+		if(DEBUG) System.out.println("Shut-Down main");
 		//Session.cancel();
 		action.cancel();
 		GPSLogger.cancel();
@@ -231,7 +224,7 @@ public class Main extends HttpServlet {
 //		Sessionhandle.schedule(Session, 10, 5000);
 		Fahrzeit = opt.fahrZeit;
 		gpsLogInterval = opt.logGPSInterval;
-		System.out.println("Main-function");
+		if(DEBUG) System.out.println("Main-function");
 		
 		try {
 			action = new TimerTask() {
@@ -278,7 +271,7 @@ public class Main extends HttpServlet {
 					String longitude = CarControllerWrapper.getLongitude();
 					String latitude = CarControllerWrapper.getLatitude();
 					if (longitude == null || latitude == null){
-						//System.out.println("GPS: N/A");
+						if(DEBUG) System.out.println("GPS: N/A");
 					} else
 						log.logGPS(driveID, longitude, latitude);
 				}

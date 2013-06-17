@@ -28,12 +28,13 @@ public class Filter implements javax.servlet.Filter {
 	
 	FilterConfig config;
 	LogNG log;
+	final boolean DEBUG = false;
 	
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
 	public void doFilter(ServletRequest request, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		System.out.println("filter");		
+		if(DEBUG) System.out.println("filter");		
 		
 		config.getServletContext().getRequestDispatcher("/main").include(request, res);
 		
@@ -47,84 +48,7 @@ public class Filter implements javax.servlet.Filter {
 			HttpSession session = req.getSession();
 			//String ipAdress = req.getRemoteAddr();
 			//System.out.println(ipAdress);
-			System.out.println("-> " + req.getRequestURI());
-			
-//			Map<String, String[]> m = req.getParameterMap();
-//			Iterator<Entry<String, String[]>> entries = m.entrySet().iterator();
-//			while (entries.hasNext()) {
-//			    Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) entries.next();
-//			    String key = (String)entry.getKey();
-//			    String[] value = (String[])entry.getValue();
-//			    System.out.println("Key = " + key + ", Value = " + value[0]);
-//			}
-//			///TODO \todo Sessions sind wirklich Strings werden aber später nach int gecastet
-//			String SessionID = session.getId();
-//			if(m.size() > 0 && m.containsKey("action")) {
-//				
-//				switch((String)m.get("action")[0])  {
-//				case "login":
-//					if(!m.containsKey("loginName") || !m.containsKey("password"))
-//						break;
-//					
-//					String userID, pw;
-//					userID = (String)m.get("loginName")[0];
-//					pw = (String)m.get("password")[0];
-//					User u = db.loginUser(userID, pw);
-//					
-//					if(u == null)
-//						break;
-//					
-//					///TODO \todo session attribute (Rechte der user)
-//					session.setAttribute("isAdmin", u.isAdmin());
-//					session.setAttribute("isUser", u.isUser());
-//					session.setAttribute("name", u.getNickname());
-//					System.out.println("user " + u.getNickname() + " has logged in");
-//					activeSession.insertSession(SessionID,ipAdress,userID);
-//					break;
-//				case "enqueue":					
-//					User user = db.getUserBySession(activeSession.getSessionInt(SessionID));
-//					if (user == null){
-//						System.out.println("User nicht gefunden");
-//						break;
-//					}
-//					if (user.isGuest() == true) return;
-//					waitingqueue.insertUser(SessionID);
-//					log.logQueue(user.getUserID(), activeSession.getSessionInt(SessionID));
-//					break;
-//				case "dequeue":
-//					waitingqueue.deleteTicket(SessionID);
-//					break;
-//				case "NextUser":
-//					//String nextUserID = waitingqueue.getNextUser();
-//					///TODO \todo wohin soll der übergeben werden
-//					break;
-//				case "watchDriver":
-//					userID = "guest" + System.currentTimeMillis();
-//					activeSession.insertSession(SessionID, ipAdress, userID);
-//					config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);
-//					break;
-//				case "toMainPage":
-//					config.getServletContext().getRequestDispatcher("/WEB-INF/main.jsp").forward(request, res);
-//					break;
-//				case "toAdminPage":
-//					User user2 = db.getUserBySession(activeSession.getSessionInt(SessionID));
-//					if (user2.isAdmin() == true){
-//						config.getServletContext().getRequestDispatcher("/WEB-INF/admin.jsp").forward(request, res);
-//					}
-//					break;
-//				case "logout":
-//					activeSession.deleteSession(SessionID);
-//					waitingqueue.deleteTicket(SessionID);
-//					break;
-//				}
-//			}
-			
-//			Enumeration<String> sessionKeys = session.getAttributeNames();
-//		    while(sessionKeys.hasMoreElements())
-//		    {
-//		        String value=(String) sessionKeys.nextElement();
-//		        System.out.println(value + " -> " + session.getAttribute(value));
-//		    }
+			if(DEBUG) System.out.println("-> " + req.getRequestURI());
 
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
 			chatRequest = req.getRequestURI().startsWith(req.getContextPath() + "/chat");
