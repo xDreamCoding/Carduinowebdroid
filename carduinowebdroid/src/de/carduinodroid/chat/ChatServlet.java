@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.websocket.MessageInbound;
 import org.apache.catalina.websocket.StreamInbound;
@@ -30,6 +32,10 @@ public class ChatServlet extends WebSocketServlet {
 	@Override
 	protected StreamInbound createWebSocketInbound(String string,
 			HttpServletRequest hsr) {
+		System.out.println("createWebSocketInbound");
+		
+		final HttpSession session = hsr.getSession();
+
 		//anonymous inner class
 		MessageInbound inbound = new MessageInbound() {
 
@@ -47,13 +53,14 @@ public class ChatServlet extends WebSocketServlet {
 			@Override
 			protected void onTextMessage(CharBuffer cb) throws IOException {
 				System.out.println("onTextMessage");
-
-				CharBuffer msg = CharBuffer.wrap(cb);
-				WsOutbound outbound = getWsOutbound();
-				// Send message to client connected
-				outbound.writeTextMessage(msg);
+				
+				String nickName = (String)session.getAttribute("nickName");
+				
+				System.out.println(nickName);
 				// Send message to all clients connected
-				broadcast("Broadcast");
+				broadcast(nickName + ": " + cb.toString());
+				
+				///TODO \todo save to db
 			}
 
 			@Override

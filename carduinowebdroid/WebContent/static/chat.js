@@ -7,7 +7,7 @@ $(function() {
 	
 	$("#main_chat").append("Chat Script loaded!" + "\n");
  
-	var ws = new WebSocket("ws://localhost:8080/carduinodroid/chat");
+	var ws = new WebSocket("ws://localhost:8080/carduinowebdroid/chat");
 	
 	ws.onopen = function(){
 		$("#main_chat").append("Connected!" + "\n");
