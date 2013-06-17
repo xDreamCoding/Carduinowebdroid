@@ -19,8 +19,9 @@ import de.carduinodroid.utilities.LogNG;
 
 /**
  * \brief This Class is used to catch ServletRequest e.g. Login,Logout or enqueue into the waiting queue
- * @author Alexander Rose, wer noch?
- *
+ * @author Alexander Rose
+ * @author Sven-Leonhard Weiler
+ * @author Michael Röding
  */
 
 public class Filter implements javax.servlet.Filter {
