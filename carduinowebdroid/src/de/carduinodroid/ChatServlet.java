@@ -1,4 +1,4 @@
-package de.carduinodroid.chat;
+package de.carduinodroid;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -19,6 +19,11 @@ import org.apache.catalina.websocket.WsOutbound;
 import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.utilities.LogNG;
 
+/**
+ * \brief This class is used to receive chatmessages from clients and broadcast them to the rest.
+ * @author Sven-Leonhard Weiler
+ */
+
 public class ChatServlet extends WebSocketServlet {
 
 	private static final long serialVersionUID = 4642341228711151433L;
@@ -37,8 +42,16 @@ public class ChatServlet extends WebSocketServlet {
 
 		final LogNG log = (LogNG)context.getAttribute("log");
 
-		//anonymous inner class
+		/**
+		 * Anonymous inner class to create and define MessageInbound object.
+		 */
 		MessageInbound inbound = new MessageInbound() {
+
+			@Override
+			protected void onOpen(WsOutbound outbound) {
+				int connSize = clients.size();
+				System.out.println("onOpen - connections: " + connSize);
+			}
 
 			@Override
 			protected void onClose(int status) {
@@ -67,12 +80,6 @@ public class ChatServlet extends WebSocketServlet {
 				
 				// Send message to all clients connected
 				broadcast(nickName + ": " + cb.toString());
-			}
-
-			@Override
-			protected void onOpen(WsOutbound outbound) {
-				int connSize = clients.size();
-				System.out.println("onOpen - connections: " + connSize);
 			}
 		};
 

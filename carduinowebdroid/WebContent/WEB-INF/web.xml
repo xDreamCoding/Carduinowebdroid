@@ -4,10 +4,18 @@
 	<display-name>Carduinowebdroid</display-name>
 	<servlet>
 		<servlet-name>ChatServlet</servlet-name>
-		<servlet-class>de.carduinodroid.chat.ChatServlet</servlet-class>
+		<servlet-class>de.carduinodroid.ChatServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>ChatServlet</servlet-name>
 		<url-pattern>/chat</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>ControllerServlet</servlet-name>
+		<servlet-class>de.carduinodroid.ControllerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ControllerServlet</servlet-name>
+		<url-pattern>/controller</url-pattern>
 	</servlet-mapping>
 </web-app>

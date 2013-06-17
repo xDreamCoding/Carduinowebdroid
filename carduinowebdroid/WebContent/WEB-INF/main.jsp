@@ -19,6 +19,7 @@
 
 <!--Custom jS-->
 
+<script src="static/controls.js"></script>
 <script src="static/main.js"></script>
 <script src="static/chat.js"></script>
 

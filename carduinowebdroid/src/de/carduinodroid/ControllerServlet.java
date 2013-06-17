@@ -15,49 +15,47 @@ import de.carduinodroid.shared.activeSession;
 
 /**
  * \brief This Class is used to reveive Car-Control-Messages from the User
+ * 
  * @author Alexander Rose
- *
  */
 
-public class ControllerServlet extends WebSocketServlet{
+public class ControllerServlet extends WebSocketServlet {
 
 	private static final long serialVersionUID = 1L;
 	static String SessionID = null;
-	
-	public StreamInbound createWebSocketInbound(String protocol) {
-		return new ControllMessageInbound();		 
-		}
-	
-	private class ControllMessageInbound extends MessageInbound{
-		
-		public void onOpen(WsOutbound outbound){
-			//TODO wie geht das?
-			activeSession.insertSocket(SessionID, outbound);
-			
 
+	public StreamInbound createWebSocketInbound(String protocol) {
+		return new ControllMessageInbound();
+	}
+
+	private class ControllMessageInbound extends MessageInbound {
+
+		public void onOpen(WsOutbound outbound) {
+			// TODO wie geht das?
+			activeSession.insertSocket(SessionID, outbound);
 		}
-		
+
 		@Override
-		public void onClose(int status){
+		public void onClose(int status) {
 			activeSession.deleteSocket(SessionID);
 		}
-	
-		protected void onTextMessage(CharBuffer buff) throws IOException{
+
+		protected void onTextMessage(CharBuffer buff) throws IOException {
 			char key;
 			String buffer = buff.toString();
 			int index = buffer.indexOf(';');
 			String SessionID = null;
-			for (int i = 0; i < index; i++){
+			for (int i = 0; i < index; i++) {
 				SessionID = SessionID + buff.get();
 			}
 
-			if (activeSession.isDriver(SessionID) == false){
+			if (activeSession.isDriver(SessionID) == false) {
 				return;
 			}
-			
-			for (int i = index; i < buff.length(); i++){
+
+			for (int i = index; i < buff.length(); i++) {
 				key = buff.get();
-				switch (key){
+				switch (key) {
 				case 'a':
 					CarControllerWrapper.driveLeft();
 					break;
@@ -70,17 +68,18 @@ public class ControllerServlet extends WebSocketServlet{
 				case 's':
 					CarControllerWrapper.driveBackward();
 					break;
-				
+
 				}
 			}
 		}
-	
-		protected void onBinaryMessage (ByteBuffer buff) throws IOException{
-			
+
+		protected void onBinaryMessage(ByteBuffer buff) throws IOException {
+
 		}
 	}
 
-	protected StreamInbound createWebSocketInbound(String arg0, HttpServletRequest arg1){
+	protected StreamInbound createWebSocketInbound(String arg0,
+			HttpServletRequest arg1) {
 		return null;
 	}
 }
