@@ -1,7 +1,5 @@
 package de.carduinodroid.desktop.Controller;
 
-import de.carduinodroid.desktop.Model.GPSTrack;
-
 /**
  * Methods receive the data strings from the Android and send them to the GUI.
  * @version 18.06.2012
@@ -13,7 +11,6 @@ public class Packagedata {
 			
 	Controller_Computer controller_computer;
 	String [] tokens;
-	GPSTrack gpstrack;
 	
 	public Packagedata(Controller_Computer ControllerComputer){
 		controller_computer = ControllerComputer;

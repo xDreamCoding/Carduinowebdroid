@@ -1,14 +1,14 @@
 package de.carduinodroid.desktop.Controller;
 
 import de.carduinodroid.utilities.CarControllerWrapper;
-import de.carduinodroid.utilities.LogNG;
+import de.carduinodroid.utilities.Log;
 /** Class to include the controller classes. 
 * 
 * @author Felix L
 * @version 17.06.2012.
 */
 public class Controller_Computer {
-	public LogNG log;
+	public Log log;
 	public Sound_Output sound_output;
 	public Camera_Settings camera_settings;
 	public Camera_Picture camera_picture;
@@ -25,7 +25,7 @@ public class Controller_Computer {
 	 * @param GUI_computer		includes an instance of GUI_computer
 	 * @param log2 				includes an instance of LOG
 	 */
-	public Controller_Computer(LogNG log2, CarControllerWrapper p) {
+	public Controller_Computer(Log log2, CarControllerWrapper p) {
 		parent = p;
 		log = log2;
 		camera_picture=new Camera_Picture(this);

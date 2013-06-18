@@ -19,9 +19,8 @@ import de.carduinodroid.utilities.Config.Options;
  * The log is instanced before everything else. Therefore it has no options in the beginning and doesn't know where to save the log file. 
  * The solution to this is to save everything in a list and copy the list to the log file as soon as the options are set. 
  * @author Michael Röding
- * ///TODO \todo: rename!
  */
-public class LogNG {
+public class Log {
 	Options options = null;
 	DBConnector db;
 	LinkedList<String> tmpLog;
@@ -32,7 +31,7 @@ public class LogNG {
 	File file;
 	File path;
 	
-	public LogNG() {
+	public Log() {
 		file = null;
 		tmpLog = new LinkedList<String>();
 	}

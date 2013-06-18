@@ -8,8 +8,6 @@ import java.io.OutputStreamWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import de.carduinodroid.desktop.Model.Log;
-
 /**
  * This class is used to receive Information from the Android-Application
  * @author Robin
@@ -23,7 +21,6 @@ public class Socket_Package implements Runnable{
 	BufferedReader packagereader;
 	BufferedWriter  packagewriter;
 	InetSocketAddress port_package;
-	Log log;
 	
 	
 	
@@ -31,7 +28,6 @@ public class Socket_Package implements Runnable{
 	{
 		socket_package = new Socket();
 		network = n_network;
-		//log = new Log();
 		System.out.println(ACKNOWLEDGE);
 	}
 

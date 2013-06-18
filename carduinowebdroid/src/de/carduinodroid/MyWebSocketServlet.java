@@ -18,7 +18,7 @@ import org.apache.catalina.websocket.WsOutbound;
 
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.DBConnector;
-import de.carduinodroid.utilities.LogNG;
+import de.carduinodroid.utilities.Log;
 
 /**
  * \brief This class is used to handle websocket connection.
@@ -43,7 +43,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 		final HttpSession session = hsr.getSession();
 		final ServletContext context = hsr.getServletContext();
 
-		final LogNG log = (LogNG)context.getAttribute("log");
+		final Log log = (Log)context.getAttribute("log");
 
 		/**
 		 * Anonymous inner class to create and define MessageInbound object.

@@ -9,7 +9,7 @@ import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.Config;
 import de.carduinodroid.utilities.Config.Options;
 import de.carduinodroid.utilities.DBConnector;
-import de.carduinodroid.utilities.LogNG;
+import de.carduinodroid.utilities.Log;
 import de.carduinodroid.shared.activeSession;
 import de.carduinodroid.shared.waitingqueue;
 
@@ -17,7 +17,7 @@ import de.carduinodroid.shared.waitingqueue;
 public class MyServletContextListener implements ServletContextListener {
 
 	private ServletContext context;
-	private LogNG log;
+	private Log log;
 
 	/*This method is invoked when the Web Application has been removed 
 	and is no longer able to accept requests
@@ -43,7 +43,7 @@ public class MyServletContextListener implements ServletContextListener {
 		
 		// initialize everything		
 		// new log
-		log = new LogNG();
+		log = new Log();
 		log.writelogfile("logNG instanciated.");
 		context.setAttribute("log", log);
 		

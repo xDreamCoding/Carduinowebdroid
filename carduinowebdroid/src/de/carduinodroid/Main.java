@@ -38,7 +38,7 @@ public class Main extends HttpServlet {
 	private static TimerTask Session;
 	private static TimerTask action;
 	private static ArrayList<String> aliveSessions;
-	static LogNG log;
+	static Log log;
 	static int driveID;
 	static int Fahrzeit, gpsLogInterval;
 	static Options opt;
@@ -212,7 +212,7 @@ public class Main extends HttpServlet {
 		activeSession.deleteAll();
 	}
     
-    public static void main(Options opt, DBConnector db, LogNG logng){
+    public static void main(Options opt, DBConnector db, Log logng){
     	
     	log = logng;
     	aliveSessions = new ArrayList<String>();

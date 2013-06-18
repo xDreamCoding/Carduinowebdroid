@@ -10,7 +10,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import de.carduinodroid.utilities.LogNG;
+import de.carduinodroid.utilities.Log;
 
 /**
  * Servlet Filter implementation class Filter
@@ -27,7 +27,7 @@ import de.carduinodroid.utilities.LogNG;
 public class Filter implements javax.servlet.Filter {
 	
 	FilterConfig config;
-	LogNG log;
+	Log log;
 	final boolean DEBUG = false;
 	
 	/**
@@ -77,7 +77,7 @@ public class Filter implements javax.servlet.Filter {
 		config = fConfig;
 		System.out.println("init filter");
 		
-		log = (LogNG)config.getServletContext().getAttribute("log");
+		log = (Log)config.getServletContext().getAttribute("log");
 	}
 	
 	/**

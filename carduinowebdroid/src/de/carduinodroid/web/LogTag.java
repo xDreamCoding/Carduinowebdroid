@@ -6,13 +6,13 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import de.carduinodroid.utilities.LogNG;
+import de.carduinodroid.utilities.Log;
 
 public class LogTag extends TagSupport {
 	private static final long serialVersionUID = 1L;
 
 	public int doStartTag() throws JspException {
-		LogNG log = (LogNG)pageContext.getServletContext().getAttribute("log");
+		Log log = (Log)pageContext.getServletContext().getAttribute("log");
 		JspWriter out = pageContext.getOut();
 		LinkedList<String> logList = new LinkedList<String>();
 		logList = log.getLog();

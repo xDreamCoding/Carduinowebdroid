@@ -36,7 +36,7 @@ public class Config {
 		public String carduinodroidIP; /** IP address of the carduinodroid */
 	}
 	
-	private LogNG log;
+	private Log log;
 	private Options options;
 	private String filePath;
 	private String optionsPath;
@@ -46,7 +46,7 @@ public class Config {
 	 * @param logIN Log to use for logging
 	 * @param filePath_in File path which should be used as root folder for everything else
 	 */
-	public Config(LogNG logIN, String filePath_in) {
+	public Config(Log logIN, String filePath_in) {
 		this.log = logIN;
 		filePath = filePath_in;
 		optionsPath = filePath + "/config/config.properties";

@@ -21,7 +21,7 @@ public class CarControllerWrapper {
 	String[] resolutions;
 	String latitude, longitude;
 
-	private CarControllerWrapper(LogNG log) {
+	private CarControllerWrapper(Log log) {
 		cc = new Controller_Computer(log, this);		
 	}
 	
@@ -32,7 +32,7 @@ public class CarControllerWrapper {
 	 * @param log Log for logging.
 	 * @return Returns the static CarControllerWrapper object.
 	 */
-	public static CarControllerWrapper getCarController(LogNG log) {
+	public static CarControllerWrapper getCarController(Log log) {
 		if(ccw == null)
 			ccw = new CarControllerWrapper(log);
 		return ccw;

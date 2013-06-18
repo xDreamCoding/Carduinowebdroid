@@ -28,7 +28,7 @@ import de.carduinodroid.utilities.Config.Options;
 public class DBConnector {
 
 	static Connection dbConnection = null;
-	static LogNG log;
+	static Log log;
 	static Options options;
 	
 	/**
@@ -37,7 +37,7 @@ public class DBConnector {
 	 * @param logIN Log which should be used for logging.
 	 * @param opt Options which contains database connection parameters (server address, username and password).
 	 */
-	public DBConnector(LogNG logIN, Options opt) {
+	public DBConnector(Log logIN, Options opt) {
 		log = logIN;
 		options = opt;
 		
@@ -593,7 +593,7 @@ public class DBConnector {
 			
 			if(!rset.isBeforeFirst()) {
 				//throw new IllegalArgumentException("Login invalid.");
-				// TODO: log invalid login attempts?
+				///TODO \todo log invalid login attempts?
 				//log.writelogfile("invalid login attempt! user: " + userID + " pw: " + pw);
 			} else {
 				rset.next();
