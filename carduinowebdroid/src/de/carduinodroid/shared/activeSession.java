@@ -130,27 +130,53 @@ public class activeSession {
 		return debug;
 	}
 
+	/** 
+	 * \brief saves a Socket for a specific User
+	 * @param SessionID of the User
+	 * @param sock Socket
+	 */
+	
 	public static void insertSocket(String SessionID, WsOutbound sock){
 		int index = activeSessions.indexOf(SessionID);
 		activeSocket.set(index, sock);
 	}
 
+	/** 
+	 * \brief delete a Socket from a specific User
+	 * @param SessionID of the User
+	 */
+	
 	public static void deleteSocket(String SessionID){
 		int index = activeSessions.indexOf(SessionID);
 		activeSocket.set(index, null);
 	}
 
+	/** 
+	 * \brief find out if the SessionID belongs to the current Driver
+	 * @param SessionID of the User
+	 * @return true if its the Driver else false
+	 */
+	
 	public static boolean isDriver(String SessionID){
 		int index = activeSessions.indexOf(SessionID);
 		boolean isDriver = (index == Driver);
 		return isDriver;
 	}
 
+	/** 
+	 * \brief mark the given User as Driver (if someone else was Diver before, he is no longer the Driver)
+	 * @param SessionID of the User
+	 */
+	
 	public static void setDriver(String SessionID){
 		int index = activeSessions.indexOf(SessionID);
 		Driver = index;
 	}
 
+	/** 
+	 * \brief nobody is Driver after u call this function
+	 */
+	
 	public static void resetDriver(){
 		Driver = -1;
 	}

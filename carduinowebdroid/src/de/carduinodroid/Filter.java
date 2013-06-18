@@ -18,7 +18,7 @@ import de.carduinodroid.utilities.Log;
 @WebFilter("/*")
 
 /**
- * \brief This Class is used to catch ServletRequest e.g. Login,Logout or enqueue into the waiting queue
+ * \brief This Class is used to redirect after a Servlet-Request
  * @author Alexander Rose
  * @author Sven-Leonhard Weiler
  * @author Michael Röding
