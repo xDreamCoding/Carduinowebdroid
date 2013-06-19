@@ -44,8 +44,10 @@
 		Wir hoffen, dass euch somit einen kleinen einblick in unser Projekt geben konnten. nun wünschen wir euch viel Spaß 
 		mit dem CarDiunoDroid.
 		
-		<center><button value="Home" type="button" id="about_home">Home</button></center>		
-		
+		<center>
+		<form action="index.jsp">
+			<button value="Home" type="button" id="about_home">Home</button></center>		
+		</form>
 	</div>
 </center>
 
