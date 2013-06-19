@@ -57,16 +57,17 @@ public class Filter implements javax.servlet.Filter {
 				authorized = true;
 				target = "main";
 				if(req.getRequestURI().endsWith("admin.jsp") && (boolean)session.getAttribute("isAdmin")) 
-					target = "admin";				
+					target = "admin";
 			}
+			if(req.getRequestURI().endsWith("about.jsp"))
+				target = "about";
+			else if(req.getRequestURI().endsWith("impress.jsp"))
+				target = "impress";
 		}
 		if(staticRequest || websocketRequest) 
 			chain.doFilter(request, res);
 		else {
-			if(!authorized) 
-				config.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, res);
-			else 
-				config.getServletContext().getRequestDispatcher("/WEB-INF/" + target + ".jsp").forward(request, res);			
+			config.getServletContext().getRequestDispatcher("/WEB-INF/" + target + ".jsp").forward(request, res);			
 		}
 	}
 
