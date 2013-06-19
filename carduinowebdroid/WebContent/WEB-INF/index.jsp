@@ -64,7 +64,7 @@
 </div>
 <br>
 <div id="index_footer">
-<a href="impress.jsp">Impress</a> | <a href="about.jsp">About</a>
+<a href="impress.jsp">Impress</a> | <a href="about.jsp" >About</a>
 </div>
 
 </body>
