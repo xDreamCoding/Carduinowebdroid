@@ -354,6 +354,28 @@ width:100%;
 	float:left;
 }
 
+#about_frame{
+	border:1px solid #ECD6BF;
+	padding: 3px;
+	width:50%;
+	border-radius: 4px;
+	box-shadow:
+        0 2px 2px rgba(0,0,0,0.2),
+        0 1px 5px rgba(0,0,0,0.2),
+        0 0 0 12px rgba(255,255,255,0.4);
+}
+
+#about_home{
+	margin-top:10px;
+	margin-bottom:10px;
+	width:15%;	
+}
+
+#about_logo {
+	margin-top:10px;
+	text-align:center;	
+}
+
 .ui-icon-carat-1-e{
 	margin-top:4px !important;
 }
