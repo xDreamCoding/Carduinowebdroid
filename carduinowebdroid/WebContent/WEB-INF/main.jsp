@@ -130,9 +130,9 @@ $(document).ready(function()
                 <form method="post">
                     <input id="main_qsubmit" type="submit" value="Enqueue" />
                 </form>
-                <form>
+                <form method="POST">
                 	<input type="hidden" name="action" value="logout"/>
-                	<input type="submit" id="main_logout">Logout</button>
+                	<input id="main_logout" type="submit" value="Logout" />
 				</form>
                 <c:set var="isAdmin"><ct:isAdmin /></c:set>
                 <c:if test="${isAdmin == 1}">
