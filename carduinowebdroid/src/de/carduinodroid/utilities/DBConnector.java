@@ -681,30 +681,28 @@ public class DBConnector {
 		///TODO \todo delete all other entries with a reference on this userID
 		PreparedStatement stmt = null;
 		
-		System.out.println("Y U NO WORK?");
-		return false;
-		/*
 		try {
-			stmt = dbConnection.prepareStatement(
-					//"SET SQL_SAFE_UPDATES=0;DELETE FROM chat WHERE `userID`=?;DELETE FROM gps WHERE `driveID` IN (SELECT driveID FROM driver WHERE userID=?);DELETE FROM driver WHERE `userID`=?;DELETE FROM waitingQueue WHERE `userID`=?;DELETE FROM session WHERE `userID`=?;DELETE FROM user WHERE `userID`=?;SET SQL_SAFE_UPDATES=1;");
-					"SET SQL_SAFE_UPDATES=0;" +
-					"DELETE FROM chat WHERE `userID`=?;" +
-					"DELETE FROM gps WHERE `driveID` IN (" +
-						"SELECT driveID FROM driver WHERE userID=?" +
-					");" +
-					"DELETE FROM driver WHERE `userID`=?;" +
-					"DELETE FROM waitingQueue WHERE `userID`=?;" +
-					"DELETE FROM session WHERE `userID`=?;" +
-					"DELETE FROM user WHERE `userID`=?;" +
-					"SET SQL_SAFE_UPDATES=1;"
-					);
+			stmt = dbConnection.prepareStatement("SET SQL_SAFE_UPDATES=0;");
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM chat WHERE `userID`=?;");
 			stmt.setString(1, userID); // chat
-			stmt.setString(2, userID); // GPS
-			stmt.setString(3, userID); // drive
-			stmt.setString(4, userID); // waitingQueue
-			stmt.setString(5, userID); // session
-			stmt.setString(6, userID); // user
-			
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM gps WHERE `driveID` IN ( SELECT driveID FROM driver WHERE userID=?)");
+			stmt.setString(1, userID); // GPS
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM driver WHERE `userID`=?;");
+			stmt.setString(1, userID); // drive
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM waitingQueue WHERE `userID`=?;");
+			stmt.setString(1, userID); // waitingQueue
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM session WHERE `userID`=?;");
+			stmt.setString(1, userID); // session
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM user WHERE `userID`=?;");
+			stmt.setString(1, userID); // user
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("SET SQL_SAFE_UPDATES=1;");			
 			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
@@ -712,7 +710,6 @@ public class DBConnector {
 		}
 		
 		return true;
-		*/
 	}
 
 	/**
