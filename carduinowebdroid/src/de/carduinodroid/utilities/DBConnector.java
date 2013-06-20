@@ -681,9 +681,29 @@ public class DBConnector {
 		///TODO \todo delete all other entries with a reference on this userID
 		PreparedStatement stmt = null;
 		
+		System.out.println("Y U NO WORK?");
+		return false;
+		/*
 		try {
-			stmt = dbConnection.prepareStatement("DELETE FROM user WHERE `userID`=?");
-			stmt.setString(1, userID);
+			stmt = dbConnection.prepareStatement(
+					//"SET SQL_SAFE_UPDATES=0;DELETE FROM chat WHERE `userID`=?;DELETE FROM gps WHERE `driveID` IN (SELECT driveID FROM driver WHERE userID=?);DELETE FROM driver WHERE `userID`=?;DELETE FROM waitingQueue WHERE `userID`=?;DELETE FROM session WHERE `userID`=?;DELETE FROM user WHERE `userID`=?;SET SQL_SAFE_UPDATES=1;");
+					"SET SQL_SAFE_UPDATES=0;" +
+					"DELETE FROM chat WHERE `userID`=?;" +
+					"DELETE FROM gps WHERE `driveID` IN (" +
+						"SELECT driveID FROM driver WHERE userID=?" +
+					");" +
+					"DELETE FROM driver WHERE `userID`=?;" +
+					"DELETE FROM waitingQueue WHERE `userID`=?;" +
+					"DELETE FROM session WHERE `userID`=?;" +
+					"DELETE FROM user WHERE `userID`=?;" +
+					"SET SQL_SAFE_UPDATES=1;"
+					);
+			stmt.setString(1, userID); // chat
+			stmt.setString(2, userID); // GPS
+			stmt.setString(3, userID); // drive
+			stmt.setString(4, userID); // waitingQueue
+			stmt.setString(5, userID); // session
+			stmt.setString(6, userID); // user
 			
 			executeUpdate(stmt);
 		} catch (SQLException e) {
@@ -692,13 +712,15 @@ public class DBConnector {
 		}
 		
 		return true;
+		*/
 	}
 
 	/**
-	 * \brief Gets all user from the database .
+	 * \brief Gets all user from the database.
+	 * @param ignoreGuests "True" is guests should be excluded.
 	 * @return Returns all users in the database in an ArrayList.
 	 */
-	public List<User> getAllUser() {
+	public List<User> getAllUser(boolean ignoreGuests) {
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
 		User user = null;
@@ -718,12 +740,16 @@ public class DBConnector {
 			} else {
 				rset.next();
 				while(!rset.isAfterLast()){
+					right = rset.getByte("rightFlag");
+					if(Right.values()[right] == Right.GUEST && ignoreGuests)
+						continue;
+					
 					userID = rset.getString("userID");
 					nickname = rset.getString("nickname");
 					if(nickname == null) nickname = userID;
-					right = rset.getByte("rightFlag");
-					user = new User(userID, nickname, Right.values()[right]);
 					
+					user = new User(userID, nickname, Right.values()[right]);
+						
 					list.add(user);
 					user = null;
 					rset.next();
@@ -736,6 +762,14 @@ public class DBConnector {
 		closeStatement(stmt);
 		
 		return list;	
+	}
+	
+	/**
+	 * \brief Gets all user from the database.
+	 * @return Returns all users in the database in an ArrayList.
+	 */
+	public List<User> getAllUser() {
+		return getAllUser(false);
 	}
 	
 	/**
@@ -924,8 +958,6 @@ public class DBConnector {
 	 * This functions adds database entries and do not delete all of them!
 	 */
 	public void dbTest() {
-		String userID = "test";
-		
 		System.out.println("starting DB test!");
 		
 		/**
@@ -946,7 +978,12 @@ public class DBConnector {
 		}
 		System.out.println("");
 		
-		dbUserTest();
+		String userID = dbUserTest1();
+		if(userID == null) {		
+			System.out.println("user test has failed! exiting...");
+			return;
+		}
+		
 		int sessionID = dbSessionTest(userID);
 		if(sessionID < 0)
 		{
@@ -964,6 +1001,8 @@ public class DBConnector {
 		dbGPSTest(driveID, "51°03'09.5\"", "001°07'54.9\"");
 		
 		dbQueueTest(userID, sessionID);
+		
+		dbUserTest2(userID);
 		
 		System.out.println("test done!");
 	}
@@ -1154,13 +1193,13 @@ public class DBConnector {
 		return sessionID;
 	}
 	
-	private void dbUserTest() {
+	private String dbUserTest1() {
 		String pw = String.valueOf((int)(Math.random() * 100));
 		String user = "u" + pw;
 		String nick = "n" + pw;
 		User u;
 		
-		System.out.println("starting user test!");
+		System.out.println("starting user test part 1!");
 		
 		/**
 		 * Versucht sich mit einem ungültigen User einzuloggen 
@@ -1182,7 +1221,7 @@ public class DBConnector {
 			System.out.print("OK\n");
 		} else {
 			System.out.print("BAD - error while creating user " + user + ". exiting ...\n");
-			return;
+			return null;
 		}
 		
 		/**
@@ -1201,7 +1240,7 @@ public class DBConnector {
 				System.out.print("--> nickname (" + u.getNickname() + ") != user (" + user + ") - BAD! continuing ...\n");
 		} else {
 			System.out.print("BAD - error! exiting ...\n");
-			return;
+			return null;
 		}
 		
 		/**
@@ -1213,7 +1252,7 @@ public class DBConnector {
 			System.out.print("OK\n");
 		} else {
 			System.out.print("BAD - error while changing nickname! exiting ...\n");
-			return;
+			return null;
 		}
 
 		/**
@@ -1231,7 +1270,7 @@ public class DBConnector {
 				System.out.print("--> nickname (" + u.getNickname() + ") != nick (" + nick + ") - BAD! continuing ...\n");
 		} else {
 			System.out.print("error! exiting ...");
-			return;
+			return null;
 		}
 		
 		/**
@@ -1263,6 +1302,16 @@ public class DBConnector {
 			}
 		}
 		
+		System.out.println("user test part 1 done!");
+		System.out.println("");
+		
+		return user;
+	}
+	
+	private void dbUserTest2(String user) {
+		String pw = user.substring(1, user.length());
+		System.out.println("starting user test part 2!");
+		
 		/**
 		 * Löscht den Test-User
 		 * Erwartung: geht
@@ -1286,7 +1335,7 @@ public class DBConnector {
 			System.out.print("BAD - user seems to exist ... continuing\n");
 		}
 		
-		System.out.println("user test done!");
+		System.out.println("user test part 2 done!");
 		System.out.println("");
 	}
 }
