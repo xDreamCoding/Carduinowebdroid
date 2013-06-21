@@ -20,6 +20,7 @@ public class CarControllerWrapper {
 	BufferedImage img;
 	String[] resolutions;
 	String latitude, longitude;
+	static boolean up, down, right, left;
 
 	private CarControllerWrapper(Log log) {
 		cc = new Controller_Computer(log, this);		
@@ -69,30 +70,14 @@ public class CarControllerWrapper {
 		ccw.cc.car_controller.UpdateVariables(up, down, right, left);
 	}
 	
-	public static void driveForward() { setDirection(true, false, false, false); }
-	public static void driveBackward() { setDirection(false, true, false, false); }
-	public static void driveRight() { setDirection(false, false, true, false); }
-	public static void driveLeft() { setDirection(false, false, false, true); }
-
-	public void confirmButtonUp(boolean b) {
-		// TODO Auto-generated method stub
-		
+	public static void updateDirection() {
+		ccw.cc.car_controller.UpdateVariables(up, down, right, left);
 	}
-
-	public void confirmButtonDown(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void confirmButtonRight(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void confirmButtonLeft(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	public static void setUp(boolean bool) { up = bool; updateDirection(); }
+	public static void setDown(boolean bool) { down = bool; updateDirection(); }
+	public static void setRight(boolean bool) { right = bool; updateDirection(); }
+	public static void setLeft(boolean bool) { left = bool; updateDirection(); }
 
 	/**
 	 * \brief Returns the current max speed of the car.

@@ -13,7 +13,7 @@
  * @tparam int limit Defines how many chars are accepted.
  * @tparam string elem Element to control.
  */
-(function($) {
+$(function() {
 	$.fn.extend({
 		limiter : function(limit, elem) {
 			$(this).on("keyup focus", function() {
@@ -30,7 +30,7 @@
 			setCount($(this)[0], elem);
 		}
 	});
-})(jQuery);
+});
 
 /**
  * Limiter call.
@@ -109,84 +109,92 @@ $(function() {
  * Handles keystrokes which made on the clients keyboard. Will only work if the
  * chat is not in focus.
  */
-$(document).keydown(function(e) {
+function registerKeys() {
+	
+	$(document).keydown(function(e) {
 
-	if (!$("#main_chat_textinput").is(":focus")) {
-		if (e.keyCode == 72) {
-			$('#main_gadget_button_horn').mousedown();
-			controlToServer("h");
-			return false;
+		if (!$("#main_chat_textinput").is(":focus")) {
+			//h
+			if (e.keyCode == 72) {
+				$('#main_gadget_button_horn').mousedown();
+				return;
+			}
+			//l
+			if (e.keyCode == 76) {
+				$('#main_gadget_button_light').mousedown();
+				return;
+			}
+			//up arrow
+			if (e.keyCode == 38) {
+				$('#main_steering_button_up').mousedown();
+				return;
+			}
+			//down arrow
+			if (e.keyCode == 40) {
+				$('#main_steering_button_down').mousedown();
+				return;
+			}
+			//left arrow
+			if (e.keyCode == 37) {
+				$('#main_steering_button_left').mousedown();
+				return;
+			}
+			//right arrow
+			if (e.keyCode == 39) {
+				$('#main_steering_button_right').mousedown();
+				return;
+			}
+		} else {
+			//enter
+			if(e.keyCode == 13) {
+				$("#main_chat_speak").click;
+				return ;
+			}
 		}
-		if (e.keyCode == 76) {
-			$('#main_gadget_button_light').mousedown();
-			controlToServer("l");
-			return false;
+	
+	});
+	
+	$(document).keyup(function(e) {
+		
+		if (!$("#main_chat_textinput").is(":focus")) {
+			//h
+			if (e.keyCode == 72) {
+				$('#main_gadget_button_horn').removeClass("ui-state-active").mouseup();
+				return;
+			}
+			//l
+			if (e.keyCode == 76) {
+				$('#main_gadget_button_light').removeClass("ui-state-active").mouseup();
+				return;
+			}
+			//arrow up
+			if (e.keyCode == 38) {
+				$('#main_steering_button_up').removeClass("ui-state-active").mouseup();
+				return;
+			}
+			//arrow down
+			if (e.keyCode == 40) {
+				$('#main_steering_button_down').removeClass("ui-state-active").mouseup();
+				return;
+			}
+			//arrow left
+			if (e.keyCode == 37) {
+				$('#main_steering_button_left').removeClass("ui-state-active").mouseup();
+				return;
+			}
+			//arrow right
+			if (e.keyCode == 39) {
+				$('#main_steering_button_right').removeClass("ui-state-active").mouseup();
+				return;
+			}
+		} else {
+			//enter
+			if(e.keyCode == 13) {
+				$("#main_chat_speak").removeClass("ui-state-active");
+				return;
+			}
 		}
-		if (e.keyCode == 37) {
-			$('#main_steering_button_left').mousedown();
-			controlToServer("a");
-			return false;
-		}
-		if (e.keyCode == 38) {
-			$('#main_steering_button_up').mousedown();
-			controlToServer("w");
-			return false;
-		}
-		if (e.keyCode == 39) {
-			$('#main_steering_button_right').mousedown();
-			controlToServer("d");
-			return false;
-		}
-		if (e.keyCode == 40) {
-			$('#main_steering_button_down').mousedown();
-			controlToServer("s");
-			return false;
-		}
-	} else {
-		if(e.keyCode == 13) {
-			$("#main_chat_speak").mousedown();
-			$("#main_chat_speak").click();
-			return false;
-		}
-	}
-
-});
-
-$(document).keyup(function(e) {
-	if (e.keyCode == 37) {
-		$('#main_steering_button_left').removeClass("ui-state-active");
-		return false;
-	}
-	if (e.keyCode == 38) {
-		$('#main_steering_button_up').removeClass("ui-state-active");
-		return false;
-	}
-	if (e.keyCode == 39) {
-		$('#main_steering_button_right').removeClass("ui-state-active");
-		return false;
-	}
-	if (e.keyCode == 40) {
-		$('#main_steering_button_down').removeClass("ui-state-active");
-		return false;
-	}
-	if (e.keyCode == 72) {
-		$('#main_gadget_button_horn').removeClass("ui-state-active");
-		return false;
-	}
-	if (e.keyCode == 76) {
-		$('#main_gadget_button_light').removeClass("ui-state-active");
-		return false;
-	}
-	if(e.keyCode == 13) {
-		$("#main_chat_speak").removeClass("ui-state-active");
-		if($("#main_chat_textinput").is(":focus"))
-			$("#main_chat_textinput").val('');
-		return false;
-	}
-});
-
-/*
- * 
- */
+	});
+}
 
 

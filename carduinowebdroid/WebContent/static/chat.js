@@ -3,18 +3,20 @@
  * @author Sven-Leonhard Weiler
  * 
  */
-
+identifierChat = "Ch%:";
 /**
  * Register .append(newPart) function to be able to add text to the chat
  * textarea.
  */
 $(function() {
 
-	$.fn.append = function(newPart) {
-		return this.each(function() {
-			$(this).val($(this).val() + newPart);
-		});
-	};
+	$.fn.extend({
+		append : function(newPart) {
+			return this.each(function() {
+				$(this).val($(this).val() + newPart);
+			});
+		}
+	});
 
 });
 
@@ -23,7 +25,8 @@ $(function() {
  */
 function registerChat() {
 	$("#main_chat_speak").click(postToServer);
-
+	if($("#main_chat_textinput").is(":focus"))
+		$("#main_chat_textinput").val('');
 }
 
 /**
@@ -38,5 +41,5 @@ function chatHandleMessage(message) {
  * Send chat_input to server.
  */
 function postToServer() {
-	ws.send($("#main_chat_textinput").val());
+	ws.send(identifierChat + $("#main_chat_textinput").val());
 }

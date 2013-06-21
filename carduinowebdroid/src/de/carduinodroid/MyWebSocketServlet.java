@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -17,7 +18,6 @@ import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
 
 import de.carduinodroid.utilities.CarControllerWrapper;
-import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.utilities.Log;
 
 /**
@@ -30,6 +30,7 @@ import de.carduinodroid.utilities.Log;
 public class MyWebSocketServlet extends WebSocketServlet {
 
 	private static final long serialVersionUID = 4642341228711151433L;
+	private static long lastHb;
 
 	/**
 	 * Connected clients
@@ -73,27 +74,34 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				
 				System.out.println("onTextMessage: " + msg);
 				/**
+				 * Heartbeatpart
+				 */
+				if(msg.startsWith("Hb%:")) {
+					///TODO \todo heartbeatstuff
+				}
+				/**
 				 * Controllerpart
 				 */
-				if(msg.startsWith("C%:")) {
-					char key = msg.charAt(msg.indexOf(":") + 1);
+				else if(msg.startsWith("Co%:")) {
+					char directionKey = msg.charAt(msg.indexOf(":") + 1);
+					char stateKey = msg.charAt(msg.indexOf(":") + 2);
 					{
-						switch (key) {
+						switch (directionKey) {
 						case 'a':
-							System.out.println("driveLeft");
-							CarControllerWrapper.driveLeft();
+							if(stateKey == 's') CarControllerWrapper.setLeft(true);
+							if(stateKey == 'e') CarControllerWrapper.setLeft(false);
 							break;
 						case 'd':
-							System.out.println("driveRight");
-							CarControllerWrapper.driveRight();
+							if(stateKey == 's') CarControllerWrapper.setRight(true);
+							if(stateKey == 'e') CarControllerWrapper.setRight(false);
 							break;
 						case 'w':
-							System.out.println("driveForward");
-							CarControllerWrapper.driveForward();
+							if(stateKey == 's') CarControllerWrapper.setUp(true);
+							if(stateKey == 'e') CarControllerWrapper.setUp(false);
 							break;
 						case 's':
-							System.out.println("driveBackward");
-							CarControllerWrapper.driveBackward();
+							if(stateKey == 's') CarControllerWrapper.setDown(true);
+							if(stateKey == 'e') CarControllerWrapper.setDown(false);
 							break;
 						case 'h':
 							System.out.println("honk");
@@ -110,7 +118,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				/**
 				 * Chatpart
 				 */
-				else {					
+				else if(msg.startsWith("Ch%:")){					
 					String nickName = (String)session.getAttribute("nickName");
 					
 					System.out.println(nickName);

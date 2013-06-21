@@ -3,7 +3,7 @@
  * @author Sven-Leonhard Weiler
  * 
  */
-
+identifierHeartbeat = "Hb%:";
 /**
  * Initialize and define Websocket.
  */
@@ -31,3 +31,11 @@ function initializeWebsocket() {
 function closeConnect(){
 	ws.close();
 }
+
+/**
+ * Heartbeat
+ */
+function heartbeat() {
+	ws.send(identifierHeartbeat);
+}
+

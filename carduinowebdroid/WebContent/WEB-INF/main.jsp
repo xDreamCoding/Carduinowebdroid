@@ -28,6 +28,8 @@
 		initializeWebsocket();
 		registerChat();
 		registerControls();
+		registerKeys();
+		window.setInterval(heartbeat,10000);
 	});
 </script>
 
