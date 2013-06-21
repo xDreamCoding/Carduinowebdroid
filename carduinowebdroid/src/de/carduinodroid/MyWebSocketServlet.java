@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Timer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +30,6 @@ import de.carduinodroid.utilities.Log;
 public class MyWebSocketServlet extends WebSocketServlet {
 
 	private static final long serialVersionUID = 4642341228711151433L;
-	private static long lastHb;
 
 	/**
 	 * Connected clients
@@ -120,15 +119,17 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				 */
 				else if(msg.startsWith("Ch%:")){					
 					String nickName = (String)session.getAttribute("nickName");
+
+					String msgBody = msg.replaceFirst("Ch%:", "");
 					
-					System.out.println(nickName);
+					System.out.println(nickName + ": " + msgBody);
 					
 					String userId = (String)session.getAttribute("userId");
 					int sessionId = (int)session.getAttribute("dbSessionID");
-					log.logChat(userId, sessionId, cb.toString());
+					log.logChat(userId, sessionId, msgBody);
 					
 					// Send message to all clients connected
-					broadcast(nickName + ": " + msg);
+					broadcast(nickName + ": " + msgBody);
 				}
 			}
 		};

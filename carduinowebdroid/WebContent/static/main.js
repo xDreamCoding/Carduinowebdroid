@@ -114,83 +114,96 @@ function registerKeys() {
 	$(document).keydown(function(e) {
 
 		if (!$("#main_chat_textinput").is(":focus")) {
-			//h
+			// h
 			if (e.keyCode == 72) {
 				$('#main_gadget_button_horn').mousedown();
 				return;
 			}
-			//l
+			// l
 			if (e.keyCode == 76) {
 				$('#main_gadget_button_light').mousedown();
 				return;
 			}
-			//up arrow
+			// up arrow
 			if (e.keyCode == 38) {
 				$('#main_steering_button_up').mousedown();
 				return;
 			}
-			//down arrow
+			// down arrow
 			if (e.keyCode == 40) {
 				$('#main_steering_button_down').mousedown();
 				return;
 			}
-			//left arrow
+			// left arrow
 			if (e.keyCode == 37) {
 				$('#main_steering_button_left').mousedown();
 				return;
 			}
-			//right arrow
+			// right arrow
 			if (e.keyCode == 39) {
 				$('#main_steering_button_right').mousedown();
 				return;
 			}
 		} else {
-			//enter
+			// enter
 			if(e.keyCode == 13) {
-				$("#main_chat_speak").click;
-				return ;
+				$("#main_chat_speak").mousedown();
+				return;
 			}
-		}
-	
+		}	
 	});
 	
 	$(document).keyup(function(e) {
 		
 		if (!$("#main_chat_textinput").is(":focus")) {
-			//h
+			// h
 			if (e.keyCode == 72) {
-				$('#main_gadget_button_horn').removeClass("ui-state-active").mouseup();
+				$('#main_gadget_button_horn')
+					.removeClass("ui-state-active")
+					.mouseup();
 				return;
 			}
-			//l
+			// l
 			if (e.keyCode == 76) {
-				$('#main_gadget_button_light').removeClass("ui-state-active").mouseup();
+				$('#main_gadget_button_light')
+					.removeClass("ui-state-active")
+					.mouseup();
 				return;
 			}
-			//arrow up
+			// arrow up
 			if (e.keyCode == 38) {
-				$('#main_steering_button_up').removeClass("ui-state-active").mouseup();
+				$('#main_steering_button_up')
+					.removeClass("ui-state-active")
+					.mouseup();
 				return;
 			}
-			//arrow down
+			// arrow down
 			if (e.keyCode == 40) {
-				$('#main_steering_button_down').removeClass("ui-state-active").mouseup();
+				$('#main_steering_button_down')
+					.removeClass("ui-state-active")
+					.mouseup();
 				return;
 			}
-			//arrow left
+			// arrow left
 			if (e.keyCode == 37) {
-				$('#main_steering_button_left').removeClass("ui-state-active").mouseup();
+				$('#main_steering_button_left')
+					.removeClass("ui-state-active")
+					.mouseup();
 				return;
 			}
-			//arrow right
+			// arrow right
 			if (e.keyCode == 39) {
-				$('#main_steering_button_right').removeClass("ui-state-active").mouseup();
+				$('#main_steering_button_right')
+					.removeClass("ui-state-active")
+					.mouseup();
 				return;
 			}
 		} else {
-			//enter
+			// enter
 			if(e.keyCode == 13) {
-				$("#main_chat_speak").removeClass("ui-state-active");
+				$("#main_chat_speak")
+					.removeClass("ui-state-active")
+					.mouseup();
 				return;
 			}
 		}
