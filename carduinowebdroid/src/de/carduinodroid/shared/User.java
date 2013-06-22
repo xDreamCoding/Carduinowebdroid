@@ -24,7 +24,7 @@ public class User {
 		right = r;
 	}
 
-	
+	public Right getRight() { return right; }
 	public boolean isAdmin() { return right == Right.ADMIN; }
 	public boolean isUser() { return right == Right.USER; }
 	public boolean isGuest() { return right == Right.GUEST; }

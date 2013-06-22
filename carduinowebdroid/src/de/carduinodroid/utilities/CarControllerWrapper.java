@@ -79,6 +79,7 @@ public class CarControllerWrapper {
 	public static void driveRight() { setDirection(false, false, true, false); }
 	public static void driveLeft() { setDirection(false, false, false, true); }
 
+	/*
 	public void confirmButtonUp(boolean b) {
 		// TODO Auto-generated method stub
 		
@@ -96,6 +97,22 @@ public class CarControllerWrapper {
 
 	public void confirmButtonLeft(boolean b) {
 		// TODO Auto-generated method stub
+	}
+	*/
+	
+	/**
+	 * \brief Turns the light on or off.
+	 * @param on Whether ligth is turned on or no.
+	 */
+	public static void setLight(boolean on) {
+		ccw.cc.camera_settings.send_switch_light(on ? "1" : "0");
+	}
+	
+	/**
+	 * \brief Sends an audio signal
+	 */
+	public static void sendSignal() {
+		ccw.cc.sound_output.send_output_soundsignal("1");
 	}
 	
 	public static void setUp(boolean bool) { up = bool; updateDirection(); }

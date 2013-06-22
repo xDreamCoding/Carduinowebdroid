@@ -623,17 +623,42 @@ public class DBConnector {
 	}
 
 	/**
-	 * \brief Changes the nickname of a user.
-	 * @param userID UserID to change the nickname of.
+	 * \brief Edits a user.
+	 * @param userID UserID to change.
 	 * @param newNick new nickname.
-	 * @return Returns "true" if the SessionID was found or "false" if not.
+	 * @param r new rightsflag.
+	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
-	public boolean changeNickname(String userID, String newNick) {
+	public boolean editUser(String userID, String newNick, Right r) {
 		PreparedStatement stmt = null;
 		
 		try {
-			stmt = dbConnection.prepareStatement("UPDATE user SET `nickname`=? WHERE `userID`=?");
+			stmt = dbConnection.prepareStatement("UPDATE user SET `nickname`=?, `rightFlag`=? WHERE `userID`=?");
 			stmt.setString(1, newNick);
+			stmt.setByte(2, (byte) r.ordinal());
+			stmt.setString(3, userID);			
+			
+			executeUpdate(stmt);
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+			return false;
+		}
+
+		return true;
+	}
+	
+	/**
+	 * \brief Changes the password of a user
+	 * @param userID UserID to change.
+	 * @param password new password
+	 * @return Returns "true" if successful or "false" if an error occurs.
+	 */
+	public boolean changePassword(String userID, String password) {
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = dbConnection.prepareStatement("UPDATE user SET `password`=? WHERE `userID`=?");
+			stmt.setString(1, hashPassword(password));
 			stmt.setString(2, userID);			
 			
 			executeUpdate(stmt);
@@ -651,7 +676,7 @@ public class DBConnector {
 	 * @param nickname Nickname to display. (can be null)
 	 * @param password Password for the new user.
 	 * @param right Right the new user has.
-	 * @return Returns "true" if the SessionID was found or "false" if not.
+	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
 	public boolean createUser(String userID, String nick, String pw, Right r) {
 		PreparedStatement stmt = null;
@@ -1245,7 +1270,7 @@ public class DBConnector {
 		 * Erwartung: geht
 		 */
 		System.out.print("changing nickname to " + nick + "... ");
-		if(changeNickname(user, nick)) {
+		if(editUser(user, nick, u.getRight())) {
 			System.out.print("OK\n");
 		} else {
 			System.out.print("BAD - error while changing nickname! exiting ...\n");

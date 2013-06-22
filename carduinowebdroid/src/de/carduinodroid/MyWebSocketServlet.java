@@ -104,13 +104,13 @@ public class MyWebSocketServlet extends WebSocketServlet {
 							break;
 						case 'h':
 							System.out.println("honk");
-							///TODO \todo honk
+							CarControllerWrapper.sendSignal();
 							break;
 						case 'l':
 							System.out.println("light");
 							///TODO \todo light
-							break;
-	
+							//CarControllerWrapper.setLight(on/off);
+							break;	
 						}
 					}
 				}
