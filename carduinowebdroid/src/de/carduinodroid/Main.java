@@ -212,7 +212,13 @@ public class Main extends HttpServlet {
 		activeSession.deleteAll();
 	}
     
-    public static void main(Options opt, DBConnector db, Log logng){
+    public static void restartTimer(){
+    	caretaker.cancel();
+    	caretaker = new Timer();
+    	caretaker.schedule(new de.carduinodroid.Dummy(action), 1000, 60000*Fahrzeit);		
+    }
+	
+	public static void main(Options opt, DBConnector db, Log logng){
     	
     	log = logng;
     	aliveSessions = new ArrayList<String>();

@@ -1,6 +1,8 @@
 package de.carduinodroid.shared;
 
 import java.util.ArrayList;
+
+import de.carduinodroid.Main;
 import de.carduinodroid.utilities.DBConnector;
 import org.apache.catalina.websocket.WsOutbound;
 
@@ -89,6 +91,7 @@ public class activeSession {
 		}
 		if (index == Driver){
 			Driver = -1;
+			Main.restartTimer();
 		}
 	
 		if (activeSessions.size() == 0){
