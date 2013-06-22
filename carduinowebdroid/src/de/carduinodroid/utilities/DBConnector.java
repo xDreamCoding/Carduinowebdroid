@@ -260,6 +260,8 @@ public class DBConnector {
 			stmt.setTimestamp(2, datetime);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return driveID; 	// -> return -1;
 			
 			if(!rset.isBeforeFirst()) {
 				log.writelogfile("unable to create new session");
@@ -320,7 +322,9 @@ public class DBConnector {
 			stmt = dbConnection.prepareStatement("SELECT driveID FROM driver WHERE driveID = ?");
 			stmt.setInt(1, driveID);
 			
-			rset = executeQuery(stmt);
+			rset = executeQuery(stmt);			
+			if(rset == null)
+				return false;
 			
 			if(!rset.isBeforeFirst()) {
 				// no drive found
@@ -385,6 +389,8 @@ public class DBConnector {
 			stmt.setInt(1, driveID);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				// kein gps infos gefunden
@@ -433,6 +439,8 @@ public class DBConnector {
 			stmt.setTimestamp(2, end);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				// kein gps infos gefunden
@@ -500,6 +508,8 @@ public class DBConnector {
 			stmt.setTimestamp(3, datetime);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return sessionID;
 			
 			if(!rset.isBeforeFirst()) {
 				log.writelogfile("unable to create new session");
@@ -560,6 +570,9 @@ public class DBConnector {
 			stmt.setInt(1, sessionID);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return false;
+			
 			if(rset != null && rset.isBeforeFirst()) {
 				found = true;
 			}		
@@ -590,6 +603,8 @@ public class DBConnector {
 			stmt.setString(2, hashPassword(pw));
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				//throw new IllegalArgumentException("Login invalid.");
@@ -755,6 +770,8 @@ public class DBConnector {
 			stmt = dbConnection.prepareStatement("SELECT userID, nickname, rightFlag FROM user");
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				// kein user?
@@ -807,6 +824,8 @@ public class DBConnector {
 			stmt = dbConnection.prepareStatement("SELECT Count(userID) from user");
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return 0;
 			
 			if(!rset.isBeforeFirst()) {
 				// kein user?
@@ -840,6 +859,8 @@ public class DBConnector {
 			stmt.setInt(1, sessionID);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				// kein eintrag?
@@ -872,6 +893,8 @@ public class DBConnector {
 			stmt.setInt(1, sessionID);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				// no user found
@@ -906,6 +929,8 @@ public class DBConnector {
 			stmt.setString(1, userID);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return false;
 			
 			if(!rset.isBeforeFirst()) {
 				// no user found
@@ -955,6 +980,8 @@ public class DBConnector {
 			stmt.setObject(3, datetime);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return queueID;
 			
 			if(!rset.isBeforeFirst()) {
 				log.writelogfile("unable to create new queue entry");
