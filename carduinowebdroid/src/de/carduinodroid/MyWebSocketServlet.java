@@ -17,6 +17,7 @@ import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
 
+import de.carduinodroid.shared.activeSession;
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.Log;
 
@@ -85,6 +86,16 @@ public class MyWebSocketServlet extends WebSocketServlet {
 					char directionKey = msg.charAt(msg.indexOf(":") + 1);
 					char stateKey = msg.charAt(msg.indexOf(":") + 2);
 					{
+						String SessionID = null;
+						
+						for (int i = msg.indexOf(":"+3); i < msg.length(); i++) {
+							SessionID = SessionID + msg.charAt(i);
+						}
+						
+						if (activeSession.isDriver(SessionID) == false) {
+							return;
+						}
+						
 						switch (directionKey) {
 						case 'a':
 							if(stateKey == 's') CarControllerWrapper.setLeft(true);
