@@ -260,6 +260,8 @@ public class DBConnector {
 			stmt.setTimestamp(2, datetime);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return driveID; 	// -> return -1;
 			
 			if(!rset.isBeforeFirst()) {
 				log.writelogfile("unable to create new session");
@@ -320,7 +322,9 @@ public class DBConnector {
 			stmt = dbConnection.prepareStatement("SELECT driveID FROM driver WHERE driveID = ?");
 			stmt.setInt(1, driveID);
 			
-			rset = executeQuery(stmt);
+			rset = executeQuery(stmt);			
+			if(rset == null)
+				return false;
 			
 			if(!rset.isBeforeFirst()) {
 				// no drive found
@@ -385,6 +389,8 @@ public class DBConnector {
 			stmt.setInt(1, driveID);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				// kein gps infos gefunden
@@ -433,6 +439,8 @@ public class DBConnector {
 			stmt.setTimestamp(2, end);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				// kein gps infos gefunden
@@ -500,6 +508,8 @@ public class DBConnector {
 			stmt.setTimestamp(3, datetime);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return sessionID;
 			
 			if(!rset.isBeforeFirst()) {
 				log.writelogfile("unable to create new session");
@@ -560,6 +570,9 @@ public class DBConnector {
 			stmt.setInt(1, sessionID);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return false;
+			
 			if(rset != null && rset.isBeforeFirst()) {
 				found = true;
 			}		
@@ -590,6 +603,8 @@ public class DBConnector {
 			stmt.setString(2, hashPassword(pw));
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				//throw new IllegalArgumentException("Login invalid.");
@@ -623,17 +638,42 @@ public class DBConnector {
 	}
 
 	/**
-	 * \brief Changes the nickname of a user.
-	 * @param userID UserID to change the nickname of.
+	 * \brief Edits a user.
+	 * @param userID UserID to change.
 	 * @param newNick new nickname.
-	 * @return Returns "true" if the SessionID was found or "false" if not.
+	 * @param r new rightsflag.
+	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
-	public boolean changeNickname(String userID, String newNick) {
+	public boolean editUser(String userID, String newNick, Right r) {
 		PreparedStatement stmt = null;
 		
 		try {
-			stmt = dbConnection.prepareStatement("UPDATE user SET `nickname`=? WHERE `userID`=?");
+			stmt = dbConnection.prepareStatement("UPDATE user SET `nickname`=?, `rightFlag`=? WHERE `userID`=?");
 			stmt.setString(1, newNick);
+			stmt.setByte(2, (byte) r.ordinal());
+			stmt.setString(3, userID);			
+			
+			executeUpdate(stmt);
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+			return false;
+		}
+
+		return true;
+	}
+	
+	/**
+	 * \brief Changes the password of a user
+	 * @param userID UserID to change.
+	 * @param password new password
+	 * @return Returns "true" if successful or "false" if an error occurs.
+	 */
+	public boolean changePassword(String userID, String password) {
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = dbConnection.prepareStatement("UPDATE user SET `password`=? WHERE `userID`=?");
+			stmt.setString(1, hashPassword(password));
 			stmt.setString(2, userID);			
 			
 			executeUpdate(stmt);
@@ -651,7 +691,7 @@ public class DBConnector {
 	 * @param nickname Nickname to display. (can be null)
 	 * @param password Password for the new user.
 	 * @param right Right the new user has.
-	 * @return Returns "true" if the SessionID was found or "false" if not.
+	 * @return Returns "true" if successful or "false" if an error occurs.
 	 */
 	public boolean createUser(String userID, String nick, String pw, Right r) {
 		PreparedStatement stmt = null;
@@ -682,9 +722,27 @@ public class DBConnector {
 		PreparedStatement stmt = null;
 		
 		try {
-			stmt = dbConnection.prepareStatement("DELETE FROM user WHERE `userID`=?");
-			stmt.setString(1, userID);
-			
+			stmt = dbConnection.prepareStatement("SET SQL_SAFE_UPDATES=0;");
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM chat WHERE `userID`=?;");
+			stmt.setString(1, userID); // chat
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM gps WHERE `driveID` IN ( SELECT driveID FROM driver WHERE userID=?)");
+			stmt.setString(1, userID); // GPS
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM driver WHERE `userID`=?;");
+			stmt.setString(1, userID); // drive
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM waitingQueue WHERE `userID`=?;");
+			stmt.setString(1, userID); // waitingQueue
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM session WHERE `userID`=?;");
+			stmt.setString(1, userID); // session
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("DELETE FROM user WHERE `userID`=?;");
+			stmt.setString(1, userID); // user
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("SET SQL_SAFE_UPDATES=1;");			
 			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
@@ -695,10 +753,11 @@ public class DBConnector {
 	}
 
 	/**
-	 * \brief Gets all user from the database .
+	 * \brief Gets all user from the database.
+	 * @param ignoreGuests "True" is guests should be excluded.
 	 * @return Returns all users in the database in an ArrayList.
 	 */
-	public List<User> getAllUser() {
+	public List<User> getAllUser(boolean ignoreGuests) {
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
 		User user = null;
@@ -711,6 +770,8 @@ public class DBConnector {
 			stmt = dbConnection.prepareStatement("SELECT userID, nickname, rightFlag FROM user");
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				// kein user?
@@ -718,12 +779,16 @@ public class DBConnector {
 			} else {
 				rset.next();
 				while(!rset.isAfterLast()){
+					right = rset.getByte("rightFlag");
+					if(Right.values()[right] == Right.GUEST && ignoreGuests)
+						continue;
+					
 					userID = rset.getString("userID");
 					nickname = rset.getString("nickname");
 					if(nickname == null) nickname = userID;
-					right = rset.getByte("rightFlag");
-					user = new User(userID, nickname, Right.values()[right]);
 					
+					user = new User(userID, nickname, Right.values()[right]);
+						
 					list.add(user);
 					user = null;
 					rset.next();
@@ -739,6 +804,14 @@ public class DBConnector {
 	}
 	
 	/**
+	 * \brief Gets all user from the database.
+	 * @return Returns all users in the database in an ArrayList.
+	 */
+	public List<User> getAllUser() {
+		return getAllUser(false);
+	}
+	
+	/**
 	 * \brief Gets the number of all user in the database.
 	 * @return Number of users.
 	 */
@@ -751,6 +824,8 @@ public class DBConnector {
 			stmt = dbConnection.prepareStatement("SELECT Count(userID) from user");
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return 0;
 			
 			if(!rset.isBeforeFirst()) {
 				// kein user?
@@ -784,6 +859,8 @@ public class DBConnector {
 			stmt.setInt(1, sessionID);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				// kein eintrag?
@@ -816,6 +893,8 @@ public class DBConnector {
 			stmt.setInt(1, sessionID);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return null;
 			
 			if(!rset.isBeforeFirst()) {
 				// no user found
@@ -850,6 +929,8 @@ public class DBConnector {
 			stmt.setString(1, userID);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return false;
 			
 			if(!rset.isBeforeFirst()) {
 				// no user found
@@ -899,6 +980,8 @@ public class DBConnector {
 			stmt.setObject(3, datetime);
 			
 			rset = executeQuery(stmt);
+			if(rset == null)
+				return queueID;
 			
 			if(!rset.isBeforeFirst()) {
 				log.writelogfile("unable to create new queue entry");
@@ -924,8 +1007,6 @@ public class DBConnector {
 	 * This functions adds database entries and do not delete all of them!
 	 */
 	public void dbTest() {
-		String userID = "test";
-		
 		System.out.println("starting DB test!");
 		
 		/**
@@ -946,7 +1027,12 @@ public class DBConnector {
 		}
 		System.out.println("");
 		
-		dbUserTest();
+		String userID = dbUserTest1();
+		if(userID == null) {		
+			System.out.println("user test has failed! exiting...");
+			return;
+		}
+		
 		int sessionID = dbSessionTest(userID);
 		if(sessionID < 0)
 		{
@@ -964,6 +1050,8 @@ public class DBConnector {
 		dbGPSTest(driveID, "51°03'09.5\"", "001°07'54.9\"");
 		
 		dbQueueTest(userID, sessionID);
+		
+		dbUserTest2(userID);
 		
 		System.out.println("test done!");
 	}
@@ -1154,13 +1242,13 @@ public class DBConnector {
 		return sessionID;
 	}
 	
-	private void dbUserTest() {
+	private String dbUserTest1() {
 		String pw = String.valueOf((int)(Math.random() * 100));
 		String user = "u" + pw;
 		String nick = "n" + pw;
 		User u;
 		
-		System.out.println("starting user test!");
+		System.out.println("starting user test part 1!");
 		
 		/**
 		 * Versucht sich mit einem ungültigen User einzuloggen 
@@ -1182,7 +1270,7 @@ public class DBConnector {
 			System.out.print("OK\n");
 		} else {
 			System.out.print("BAD - error while creating user " + user + ". exiting ...\n");
-			return;
+			return null;
 		}
 		
 		/**
@@ -1201,7 +1289,7 @@ public class DBConnector {
 				System.out.print("--> nickname (" + u.getNickname() + ") != user (" + user + ") - BAD! continuing ...\n");
 		} else {
 			System.out.print("BAD - error! exiting ...\n");
-			return;
+			return null;
 		}
 		
 		/**
@@ -1209,11 +1297,11 @@ public class DBConnector {
 		 * Erwartung: geht
 		 */
 		System.out.print("changing nickname to " + nick + "... ");
-		if(changeNickname(user, nick)) {
+		if(editUser(user, nick, u.getRight())) {
 			System.out.print("OK\n");
 		} else {
 			System.out.print("BAD - error while changing nickname! exiting ...\n");
-			return;
+			return null;
 		}
 
 		/**
@@ -1231,7 +1319,7 @@ public class DBConnector {
 				System.out.print("--> nickname (" + u.getNickname() + ") != nick (" + nick + ") - BAD! continuing ...\n");
 		} else {
 			System.out.print("error! exiting ...");
-			return;
+			return null;
 		}
 		
 		/**
@@ -1263,6 +1351,16 @@ public class DBConnector {
 			}
 		}
 		
+		System.out.println("user test part 1 done!");
+		System.out.println("");
+		
+		return user;
+	}
+	
+	private void dbUserTest2(String user) {
+		String pw = user.substring(1, user.length());
+		System.out.println("starting user test part 2!");
+		
 		/**
 		 * Löscht den Test-User
 		 * Erwartung: geht
@@ -1286,7 +1384,7 @@ public class DBConnector {
 			System.out.print("BAD - user seems to exist ... continuing\n");
 		}
 		
-		System.out.println("user test done!");
+		System.out.println("user test part 2 done!");
 		System.out.println("");
 	}
 }

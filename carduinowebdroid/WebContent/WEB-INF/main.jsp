@@ -28,7 +28,38 @@
 		initializeWebsocket();
 		registerChat();
 		registerControls();
+		registerKeys();
+		window.setInterval(heartbeat,10000);
 	});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$.ajaxSetup({ cache: false }); // This part addresses an IE bug.  without it, IE will only load the first number and will never refresh
+	setInterval(function() {
+	$('#main_q').load('queue.jsp');
+	}, 3000); // the "3000" here refers to the time to refresh the div.  it is in milliseconds. 
+	});
+</script>
+
+<script>
+/* ausführen, wenn html-seite geladen wurde */
+$(document).ready(function()
+{
+    $("#main_qsubmit").click(function() {
+        $.ajax({
+            type: "POST",
+            url: "main.jsp",
+            data: "action=enqueue",
+            success: function(msg)
+            {
+                $("main_q").load("queue.jsp")
+            }
+        });
+        return false;
+    });
+ 
+});
 </script>
 
 </head>
@@ -100,15 +131,14 @@
         <td><button id="main_close_right" class="ui-icon ui-icon-triangle-1-e"></button> <button id="main_open_right" class="ui-icon ui-icon-triangle-1-w"></button></td>
         <td id="main_table_sidebar_right">
         	<div id="main_q_container">	
-               	<div id="main_q">Q </div>
-                <form method="POST">
-                    <input type="hidden" name="action" value="enqueue"/>
+               	<div id="main_q">Loading Queue</div>
+                <form method="post">
                     <input id="main_qsubmit" type="submit" value="Enqueue" />
                 </form>
                 <form method="POST">
                 	<input type="hidden" name="action" value="logout"/>
                 	<input id="main_logout" type="submit" value="Logout" />
-                </form>
+				</form>
                 <c:set var="isAdmin"><ct:isAdmin /></c:set>
                 <c:if test="${isAdmin == 1}">
                 	<a href="admin.jsp?menu=1">

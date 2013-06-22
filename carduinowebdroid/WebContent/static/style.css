@@ -354,6 +354,11 @@ width:100%;
 	float:left;
 }
 
+#admin_edit{
+	margin-top:45px;
+	margin-left:10px;
+}
+
 #about_frame{
 	border:1px solid #ECD6BF;
 	padding: 3px;

@@ -63,6 +63,8 @@ public class Filter implements javax.servlet.Filter {
 				target = "about";
 			else if(req.getRequestURI().endsWith("impress.jsp"))
 				target = "impress";
+			else if(req.getRequestURI().endsWith("queue.jsp"))  
+				target = "queue";  
 		}
 		if(staticRequest || websocketRequest) 
 			chain.doFilter(request, res);

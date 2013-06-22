@@ -6,6 +6,7 @@ import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Timer;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,6 @@ import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
 
 import de.carduinodroid.utilities.CarControllerWrapper;
-import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.utilities.Log;
 
 /**
@@ -73,54 +73,63 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				
 				System.out.println("onTextMessage: " + msg);
 				/**
+				 * Heartbeatpart
+				 */
+				if(msg.startsWith("Hb%:")) {
+					///TODO \todo heartbeatstuff
+				}
+				/**
 				 * Controllerpart
 				 */
-				if(msg.startsWith("C%:")) {
-					char key = msg.charAt(msg.indexOf(":") + 1);
+				else if(msg.startsWith("Co%:")) {
+					char directionKey = msg.charAt(msg.indexOf(":") + 1);
+					char stateKey = msg.charAt(msg.indexOf(":") + 2);
 					{
-						switch (key) {
+						switch (directionKey) {
 						case 'a':
-							System.out.println("driveLeft");
-							CarControllerWrapper.driveLeft();
+							if(stateKey == 's') CarControllerWrapper.setLeft(true);
+							if(stateKey == 'e') CarControllerWrapper.setLeft(false);
 							break;
 						case 'd':
-							System.out.println("driveRight");
-							CarControllerWrapper.driveRight();
+							if(stateKey == 's') CarControllerWrapper.setRight(true);
+							if(stateKey == 'e') CarControllerWrapper.setRight(false);
 							break;
 						case 'w':
-							System.out.println("driveForward");
-							CarControllerWrapper.driveForward();
+							if(stateKey == 's') CarControllerWrapper.setUp(true);
+							if(stateKey == 'e') CarControllerWrapper.setUp(false);
 							break;
 						case 's':
-							System.out.println("driveBackward");
-							CarControllerWrapper.driveBackward();
+							if(stateKey == 's') CarControllerWrapper.setDown(true);
+							if(stateKey == 'e') CarControllerWrapper.setDown(false);
 							break;
 						case 'h':
 							System.out.println("honk");
-							///TODO \todo honk
+							CarControllerWrapper.sendSignal();
 							break;
 						case 'l':
 							System.out.println("light");
 							///TODO \todo light
-							break;
-	
+							//CarControllerWrapper.setLight(on/off);
+							break;	
 						}
 					}
 				}
 				/**
 				 * Chatpart
 				 */
-				else {					
+				else if(msg.startsWith("Ch%:")){					
 					String nickName = (String)session.getAttribute("nickName");
+
+					String msgBody = msg.replaceFirst("Ch%:", "");
 					
-					System.out.println(nickName);
+					System.out.println(nickName + ": " + msgBody);
 					
 					String userId = (String)session.getAttribute("userId");
 					int sessionId = (int)session.getAttribute("dbSessionID");
-					log.logChat(userId, sessionId, cb.toString());
+					log.logChat(userId, sessionId, msgBody);
 					
 					// Send message to all clients connected
-					broadcast(nickName + ": " + msg);
+					broadcast(nickName + ": " + msgBody);
 				}
 			}
 		};
