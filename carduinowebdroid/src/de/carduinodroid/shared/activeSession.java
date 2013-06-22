@@ -3,6 +3,7 @@ package de.carduinodroid.shared;
 import java.util.ArrayList;
 
 import de.carduinodroid.Main;
+import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.DBConnector;
 import org.apache.catalina.websocket.WsOutbound;
 
@@ -92,6 +93,10 @@ public class activeSession {
 		if (index == Driver){
 			Driver = -1;
 			Main.restartTimer();
+			CarControllerWrapper.setDown(false);
+			CarControllerWrapper.setLeft(false);
+			CarControllerWrapper.setRight(false);
+			CarControllerWrapper.setUp(false);
 		}
 	
 		if (activeSessions.size() == 0){
@@ -182,5 +187,14 @@ public class activeSession {
 	
 	public static void resetDriver(){
 		Driver = -1;
+	}
+
+	/** 
+	 * \brief returns true if the activeSessions-queue contains the given SessionID
+	 * @param SessionID of the User 
+	 */
+	
+	public static boolean isActive(String SessionID){
+		return activeSessions.contains(SessionID);
 	}
 }

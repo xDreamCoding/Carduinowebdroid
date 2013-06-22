@@ -131,6 +131,10 @@ public class Main extends HttpServlet {
 					//System.out.println("user " + u.getNickname() + " has logged in");
 					break;
 				case "enqueue":					
+					if (activeSession.isActive(SessionID) == false){
+						session.removeAttribute("nickName");
+						break;
+					}
 					User user = db.getUserBySession(activeSession.getSessionInt(SessionID));
 					if (user == null){
 						System.out.println("User nicht gefunden");
@@ -141,6 +145,10 @@ public class Main extends HttpServlet {
 					log.logQueue(user.getUserID(), activeSession.getSessionInt(SessionID));
 					break;
 				case "dequeue":
+					if (activeSession.isActive(SessionID) == false){
+						session.removeAttribute("nickName");
+						break;
+					}
 					waitingqueue.deleteTicket(SessionID);
 					break;
 				case "NextUser":
@@ -168,6 +176,10 @@ public class Main extends HttpServlet {
 					///TODO \todo logout = ich lösche ein paar sachen und das wars? session? rechte? zurück zum index?
 					break;
 				case "connect":
+					if (activeSession.isActive(SessionID) == false){
+						session.removeAttribute("nickName");
+						break;
+					}
 					String ip = ((Options)request.getServletContext().getAttribute("options")).carduinodroidIP;
 					if(ip == "") {
 						log.writelogfile("unable to connect to carduinodroid because ip is not set");
@@ -205,7 +217,7 @@ public class Main extends HttpServlet {
 	
 	public static void shutDown(){
 		if(DEBUG) System.out.println("Shut-Down main");
-		//Session.cancel();
+		Session.cancel();
 		action.cancel();
 		GPSLogger.cancel();
 		GPSLog.cancel();
@@ -218,33 +230,36 @@ public class Main extends HttpServlet {
     	caretaker.schedule(new de.carduinodroid.Dummy(action), 1000, 60000*Fahrzeit);		
     }
 	
-	public static void main(Options opt, DBConnector db, Log logng){
+	public static void receivedPing(String SessionID){
+		int index = aliveSessions.indexOf(SessionID);
+		aliveSessions.remove(index);
+	}
+    
+    public static void main(Options opt, DBConnector db, Log logng){
     	
     	log = logng;
     	aliveSessions = new ArrayList<String>();
     	
-//    	Session = new TimerTask(){
-//			public void run(){
-//							
-//				for (int i = 0; i < aliveSessions.size(); i++){
-//					activeSession.deleteSession(aliveSessions.get(i));
-//					waitingqueue.deleteTicket(aliveSessions.get(i));
-//				}
-//				
-//				String[] Sessions = new String[activeSession.getAllSessions().length];
-//				Sessions = activeSession.getAllSessions();
-//			
-//				for(int i = 0; i < Sessions.length; i++){
-//					aliveSessions.add(Sessions[i]);
-//					///TODO \todo sende Nachricht an user und versuche diese wieder zu Empfangen
-//				}
-//			
-//				///TODO \todo wenn Nachrichten ankommen entferne User aus aliveSessions
-//			}
-//		};
-//    	
-//		Timer Sessionhandle = new Timer();
-//		Sessionhandle.schedule(Session, 10, 5000);
+    	Session = new TimerTask(){
+			public void run(){
+							
+				for (int i = 0; i < aliveSessions.size(); i++){
+					activeSession.deleteSession(aliveSessions.get(i));
+					waitingqueue.deleteTicket(aliveSessions.get(i));
+				}
+				
+				String[] Sessions = new String[activeSession.getAllSessions().length];
+				Sessions = activeSession.getAllSessions();
+			
+				for(int i = 0; i < Sessions.length; i++){
+					aliveSessions.add(Sessions[i]);
+				}
+			   			
+			}
+		};
+    	
+		Timer Sessionhandle = new Timer();
+		Sessionhandle.schedule(Session, 10, 5000);
 		Fahrzeit = opt.fahrZeit;
 		gpsLogInterval = opt.logGPSInterval;
 		if(DEBUG) System.out.println("Main-function");

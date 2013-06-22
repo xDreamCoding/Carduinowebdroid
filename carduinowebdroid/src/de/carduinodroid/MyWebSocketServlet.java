@@ -78,6 +78,13 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				 */
 				if(msg.startsWith("Hb%:")) {
 					///TODO \todo heartbeatstuff
+					String SessionID = null;
+					
+					for (int i = msg.indexOf(":"+1); i < msg.length(); i++) {
+						SessionID = SessionID + msg.charAt(i);
+					}
+					
+					Main.receivedPing(SessionID);
 				}
 				/**
 				 * Controllerpart
