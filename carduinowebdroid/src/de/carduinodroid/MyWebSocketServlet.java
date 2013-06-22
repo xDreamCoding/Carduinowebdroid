@@ -77,14 +77,8 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				 * Heartbeatpart
 				 */
 				if(msg.startsWith("Hb%:")) {
-					///TODO \todo heartbeatstuff
-					String SessionID = null;
-					
-					for (int i = msg.indexOf(":"+1); i < msg.length(); i++) {
-						SessionID = SessionID + msg.charAt(i);
-					}
-					
-					Main.receivedPing(SessionID);
+					///TODO \todo heartbeatstuff					
+					Main.receivedPing(session.getId());
 				}
 				/**
 				 * Controllerpart
@@ -93,13 +87,8 @@ public class MyWebSocketServlet extends WebSocketServlet {
 					char directionKey = msg.charAt(msg.indexOf(":") + 1);
 					char stateKey = msg.charAt(msg.indexOf(":") + 2);
 					{
-						String SessionID = null;
-						
-						for (int i = msg.indexOf(":"+3); i < msg.length(); i++) {
-							SessionID = SessionID + msg.charAt(i);
-						}
-						
-						if (activeSession.isDriver(SessionID) == false) {
+												
+						if (activeSession.isDriver(session.getId()) == false) {
 							return;
 						}
 						
