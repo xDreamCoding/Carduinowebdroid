@@ -34,4 +34,14 @@
     	<tag-class>de.carduinodroid.web.QueueTag</tag-class>
     	<info>Get current Queue</info>
     </tag>
+        <tag>
+    	<name>getConf</name>
+    	<tag-class>de.carduinodroid.web.ConfigTag</tag-class>
+    	<info>Get current Settings</info>
+    	<attribute>
+        	<name>par</name>
+            <required>true</required>
+            <description>Parameter which to output</description>
+        </attribute>
+    </tag>
 </taglib>

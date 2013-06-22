@@ -1,7 +1,13 @@
 package de.carduinodroid.web;
 
+import java.io.IOException;
+import java.util.LinkedList;
+
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
+import de.carduinodroid.utilities.Config;
+import de.carduinodroid.utilities.Config.Options;
 
 public class ConfigTag extends TagSupport {
 
@@ -13,6 +19,104 @@ public class ConfigTag extends TagSupport {
 	}
 	
 	public int doStartTag() throws JspException {
+		Config config = (Config)pageContext.getServletContext().getAttribute("options");
+		JspWriter out = pageContext.getOut();
+		Options option = config.getOptions();
+		
+		switch(parameter){
+		case 0: 
+			try {
+				out.print(option.carduinodroidIP);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			} 
+			break;
+		case 1:
+			try {
+				out.print(option.dbAddress);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 2:
+			try {
+				out.print(option.dbPW);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 3:
+			try {
+				out.print(option.dbUser);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 4:
+			try {
+				out.print(option.fahrZeit);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 5:
+			try {
+				out.print(option.filePath);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 6:
+			try {
+				out.print(option.logChat);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 7:
+			try {
+				out.print(option.logChatToFile);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 8:
+			try {
+				out.print(option.logGPS);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 9:
+			try {
+				out.print(option.logGPSInterval);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 10:
+			try {
+				out.print(option.logGPSToFile);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 11:
+			try {
+				out.print(option.logQueue);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 12:
+			try {
+				out.print(option.logQueueToFile);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		}
+						
 		return EVAL_PAGE;
 	}
 	
