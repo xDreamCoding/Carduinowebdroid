@@ -64,13 +64,14 @@
 		<td>
 			<div id="admin_usercontainer">
 			<table id="admin_usertbl" class="display">
-				<thead><tr><th>UserID</th><th>Nickname</th><th>isAdmin</th></tr></thead>
+				<thead><tr><th>UserID</th><th>Nickname</th><th>isAdmin</th><th>Edit User</th></tr></thead>
 				<tbody>
 				<c:forEach var="i" begin="0" end="${result}">
 					<tr>
 						<td><c:out value="${i}" /></td>
 						<td><ct:user par="1" num="${i}" /></td>
 						<td><ct:user par="2" num="${i}" /></td>
+						<td><a href="admin.jsp?menu=1&user=" + ${i}">Edit</a></td> 
 					</tr>
 				</c:forEach>
 				</tbody>
@@ -131,6 +132,11 @@
 </c:if>
 
 <c:if test="${param.menu == 3}">
+
+<form method="POST">
+	<input type="hidden" name="action" value="config" />
+</form>
+
 <form method="POST">
 	<input type="hidden" name="action" value="connect"/>
 	<input id="main_connect" type="submit" value="connect" />

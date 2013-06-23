@@ -15,7 +15,7 @@ public class QueueTag extends TagSupport {
 		
 		JspWriter out = pageContext.getOut();
 		String[] List = new  String [waitingqueue.getLength()];
-	    List = waitingqueue.getAllSessions();
+	    List = waitingqueue.getNickname();
 		
 	    try {
 	    	for(String s : List)	

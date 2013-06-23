@@ -17,6 +17,7 @@ h = false;
  */
 function controlToServer(msg) {
 	$("#main_chat").append("Controller: " + msg + "\n");
+	//TODO SessionID der Tomcat Session mit übergeben (am besten einfach dahinter)
 	ws.send(identifierControl + msg);
 }
 
