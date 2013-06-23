@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.carduinodroid.shared.*;
+import de.carduinodroid.shared.User.Right;
 import de.carduinodroid.utilities.*;
 import de.carduinodroid.utilities.Config.Options;
 
@@ -212,15 +213,25 @@ public class Main extends HttpServlet {
 						log.writelogfile(e.getMessage());
 					}
 					break;
-				case "config":
+				case "edituser":
 					if (session.getAttribute("isAdmin").equals(false)){
 						System.out.println("Admin-Rechte werden für diese Operation benötigt");
 						break;
 					}
-					//db.changePassword(userID, password);
-					//db.editUser(userID, newNick, r);
-					//db.createUser(userID, nick, pw, r);
-					//TODO stoph fragen
+					userID = session.getAttribute("userid").toString(); 
+					String Nickname = session.getAttribute("nickname").toString();
+					boolean isAdmin = (session.getAttribute("rights").equals(true));
+					if (userID == db.getUserIdBySession(activeSession.getSessionInt(session.getId())) && (!isAdmin)){
+						System.out.println("Man kann sich nicht selbst das Admin recht entziehen");
+						break;
+					}
+					if (isAdmin){
+						db.editUser(userID, Nickname, Right.ADMIN);
+					}
+					else{
+						db.editUser(userID, Nickname, Right.GUEST);
+					}
+					
 					break;
 				default:
 					//HOW COULD DIS HAPPEN?

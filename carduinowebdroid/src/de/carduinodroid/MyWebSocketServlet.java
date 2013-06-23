@@ -53,12 +53,14 @@ public class MyWebSocketServlet extends WebSocketServlet {
 
 			@Override
 			protected void onOpen(WsOutbound outbound) {
+				activeSession.insertSocket(session.getId(), this.getWsOutbound());
 				int connSize = clients.size();
 				System.out.println("onOpen - connections: " + connSize);
 			}
 
 			@Override
 			protected void onClose(int status) {
+				activeSession.deleteSocket(session.getId());
 				System.out.println("onClose - status code: " + status);
 				clients.remove(this);
 			}
