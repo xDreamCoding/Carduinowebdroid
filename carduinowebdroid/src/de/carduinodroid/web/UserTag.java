@@ -53,7 +53,7 @@ public class UserTag extends TagSupport{
 		DBConnector db = (DBConnector)pageContext.getServletContext().getAttribute("database");
 		JspWriter out = pageContext.getOut();
 		List<User> UserList = new ArrayList<User>();
-		UserList = db.getAllUser();
+		UserList = db.getAllUser(true);
 		
 		switch(param) {
 		case 0:
