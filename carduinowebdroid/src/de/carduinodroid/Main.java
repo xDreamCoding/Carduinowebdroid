@@ -76,7 +76,20 @@ public class Main extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// nothing to do here
-		if(DEBUG) System.out.println("doGet");		
+		
+		if(DEBUG) System.out.println("doGet");
+		
+			String[] args1 = null;							// new
+		
+  	  		if ( !BildSender.Runner) {						// new
+  	  		System.out.println("Starte CarStream ");
+  	  		try {
+  	  			BildSender.main(args1);
+  	  			System.out.println("CarStream gestartet");
+  	  		} catch  (final Exception ex) {
+  	  		System.out.println("Fehler beim Starten des CarStreams");
+  	  		}
+  	  	}													// new
 	}
 
 	/**
@@ -173,7 +186,14 @@ public class Main extends HttpServlet {
 					activeSession.deleteSession(SessionID);
 					waitingqueue.deleteTicket(SessionID);
 					session.removeAttribute("nickName");
-					///TODO \todo logout = ich lösche ein paar sachen und das wars? session? rechte? zurück zum index?
+					///TODO \todo logout = ich lösche ein paar sachen und das wars? session? rechte? zurück zum index?				
+
+					if ( BildSender.Runner) {							// new
+			  	  		System.out.println("Stoppe CarStream ");		// new
+			  	  		BildSender.Stop();								// new
+			  	  		System.out.println("CarStream beendet");		// new
+			  	  	}													// new
+					
 					break;
 				case "connect":
 					if (activeSession.isActive(SessionID) == false){
