@@ -29,6 +29,7 @@ public class Filter implements javax.servlet.Filter {
 	FilterConfig config;
 	Log log;
 	final boolean DEBUG = false;
+	final boolean ENABLE_GENERIC_MODE = false; /** redirect to target - allways */
 	
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
@@ -65,6 +66,12 @@ public class Filter implements javax.servlet.Filter {
 				target = "impress";
 			else if(req.getRequestURI().endsWith("queue.jsp"))  
 				target = "queue";  
+			
+			if(ENABLE_GENERIC_MODE && !(staticRequest || websocketRequest)) {
+				int length = req.getRequestURI().length();
+				if(length > 22) 
+					target = req.getRequestURI().substring(18, length - 4);
+			}
 		}
 		if(staticRequest || websocketRequest) 
 			chain.doFilter(request, res);
