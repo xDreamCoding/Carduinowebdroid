@@ -29,7 +29,7 @@ public class Filter implements javax.servlet.Filter {
 	FilterConfig config;
 	Log log;
 	final boolean DEBUG = false;
-	final boolean ENABLE_GENERIC_MODE = false; /** redirect to target - allways */
+	final boolean ENABLE_GENERIC_MODE = false; /** redirect to target - allways - made for JSPs, use for debugging only*/
 	
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
@@ -68,9 +68,11 @@ public class Filter implements javax.servlet.Filter {
 				target = "queue";  
 			
 			if(ENABLE_GENERIC_MODE && !(staticRequest || websocketRequest)) {
-				int length = req.getRequestURI().length();
-				if(length > 22) 
-					target = req.getRequestURI().substring(18, length - 4);
+				if( req.getRequestURI().length() > 22) { // 22 = /carduinowebdroid/.jsp
+					int posPoint =  req.getRequestURI().indexOf(".", 0); 
+					int posSlash =  req.getRequestURI().indexOf("/", 1); // skip first
+					target = req.getRequestURI().substring(posSlash + 1, posPoint);
+				}
 			}
 		}
 		if(staticRequest || websocketRequest) 
