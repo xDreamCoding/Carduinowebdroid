@@ -197,4 +197,13 @@ public class activeSession {
 	public static boolean isActive(String SessionID){
 		return activeSessions.contains(SessionID);
 	}
+
+	public static WsOutbound getSocket(String SessionID){
+		int index = activeSessions.indexOf(SessionID);
+		return activeSocket.get(index);
+	}
+
+	public static String getDriver(){
+		return activeSessions.get(Driver);
+	}
 }
