@@ -19,9 +19,8 @@ public class ConfigTag extends TagSupport {
 	}
 	
 	public int doStartTag() throws JspException {
-		Config config = (Config)pageContext.getServletContext().getAttribute("options");
+		Options option = (Options)pageContext.getServletContext().getAttribute("options");
 		JspWriter out = pageContext.getOut();
-		Options option = config.getOptions();
 		
 		switch(parameter){
 		case 0: 

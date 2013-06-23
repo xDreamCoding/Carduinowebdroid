@@ -15,6 +15,7 @@
 
  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
  <%@ taglib uri="/WEB-INF/lib/tags/customTag.tld" prefix="ct" %>
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!--Custom Stylesheet-->
 
@@ -27,7 +28,7 @@
 	$(function() { $( "#admin_menu" ).menu();});
 	
 	$(function() {
-		$("input[type=button], button,#admin_edit").button();
+		$("input[type=button],input[type=submit], button,#admin_edit").button();
 	});
 </script>
 
@@ -67,11 +68,12 @@
 				<thead><tr><th>UserID</th><th>Nickname</th><th>isAdmin</th><th>Edit User</th></tr></thead>
 				<tbody>
 				<c:forEach var="i" begin="0" end="${result}">
+				<c:set var="string1"><a href="admin.jsp?menu=1&user=${i}">Edit</a></c:set>
 					<tr>
 						<td><c:out value="${i}" /></td>
 						<td><ct:user par="1" num="${i}" /></td>
 						<td><ct:user par="2" num="${i}" /></td>
-						<td><a href="admin.jsp?menu=1&user=" + ${i}">Edit</a></td> 
+						<td>${string1}</td> 
 					</tr>
 				</c:forEach>
 				</tbody>
@@ -79,31 +81,31 @@
 			</div>
 		</td>
 		<td>
-			<a href="#admin_dialog" name="modal">
-				<button name="modal" value="Edit User" id="admin_edit" type="button">Edit User</button>
-			</a>
-			
+				<c:if test="${not empty param.user }">
+					<c:set scope="page" var="nickname"><ct:user num="${param.user}" par="1"/></c:set>
+					<c:set scope="page" var="isAdmin"><ct:user par="2" num="${param.user}" /></c:set>
+					<c:if test="${isAdmin}"><c:set var="isAdmincb">checked="checked"</c:set></c:if>
+				</c:if>
 			<div id="admin_boxes">
 				<div id="admin_dialog" class="window">
-					<form action="">
+					<form action="POST">
+						<input type="hidden" name="action" value="edituser" />
+						<input type="hidden" name="userid" value="${param.user}" />
 						<table>
 							<tr>
-								<td id="admin_mask_left">Which User? (UserID):</td>
-								<td><input id="admin_edit_text" type="text" name="userid" placeholder="UserID" /></td>
+								<td id="admin_mask_left">Editing UserID: ${param.user}</td>
 							</tr>
 							<tr>
 								<td id="admin_mask_left">Nickname:</td>
-								<td><input id="admin_edit_text" type="text" name="nickname" placeholder="Nickname" /></td>
+								<td><input id="admin_edit_text" type="text" name="nickname" value="${nickname}"/></td>
 							</tr>
 							<tr>
-								<td id="admin_mask_left">Rights:</td>
-								<td><input id="admin_edit_text" type="text" name="rights" placeholder="Rights" /></td>
+								<td id="admin_mask_left">isAdmin:</td>
+								<td><input id="admin_edit_text" type="checkbox" name="rights" ${isAdmincb} /></td>
 							</tr>
 						</table>
+						<input type="submit" value="Edit" />
 					</form> 
-					<a href="#"class="close"/>
-						<button name="modal" value="Edit" id="admin_mask_edit" type="button">Edit</button>
-					</a>
 				</div>
 				<div id="admin_mask"></div>
 			</div>
@@ -134,13 +136,44 @@
 <c:if test="${param.menu == 3}">
 
 <form method="POST">
-	<input type="hidden" name="action" value="config" />
-</form>
-
-<form method="POST">
 	<input type="hidden" name="action" value="connect"/>
-	<input id="main_connect" type="submit" value="connect" />
+	<input id="main_connect" type="submit" value="Connect to Car" />
 </form>
+<br>
+
+<c:set scope="page" var="carIP"><ct:getConf par="0" /></c:set>
+<c:set scope="page" var="dbadress"><ct:getConf par="1" /></c:set>
+<c:set scope="page" var="dbpw"><ct:getConf par="2" /></c:set>
+<c:set scope="page" var="dbuser"><ct:getConf par="3" /></c:set>
+<c:set scope="page" var="drivetime"><ct:getConf par="4" /></c:set>
+<c:set scope="page" var="filepath"><ct:getConf par="5" /></c:set>
+<c:set scope="page" var="logchat"><ct:getConf par="6" /></c:set>
+<c:set scope="page" var="logchattofile"><ct:getConf par="7" /></c:set>
+<c:set scope="page" var="loggps"><ct:getConf par="8" /></c:set>
+<c:set scope="page" var="loggpsinterval"><ct:getConf par="9" /></c:set>
+<c:set scope="page" var="loggpstofile"><ct:getConf par="10" /></c:set>
+<c:set scope="page" var="logq"><ct:getConf par="11" /></c:set>
+<c:set scope="page" var="logqtofile"><ct:getConf par="12" /></c:set>
+
+
+<div id="admin_settingscontainer">
+<form method="POST">
+	<input type="hidden" name="action" value="config" />
+	<p><input type="text" name="IP" value="${carIP}"/></p>
+	<p><input type="text" name="DBAdress" value="${dbadress}" /></p>
+	<p><input type="text" name="DBUser" value="${dbuser}" /></p>
+	<p><input type="text" name="DBPw" value="${dbpw}" /></p>
+	<p><input type="text" name="drivetime" value="${drivetime}" /></p>
+	<p><input type="text" name="filepath" value="${filepath}" /></p>
+	<p><input type="text" name="logchat" value="${logchat}" /></p>	
+	<p><input type="text" name="logchattofile" value="${logchattofile}" /></p>	
+	<p><input type="text" name="loggps" value="${loggps}" /></p>
+	<p><input type="text" name="loggps" value="${loggpsinterval}" /></p>
+	<p><input type="text" name="loggps" value="${loggpstofile}" /></p>
+	<p><input type="text" name="loggps" value="${logq}" /></p>
+	<p><input type="text" name="loggps" value="${logqtofile}" /></p>
+</form>
+</div>
 </c:if>
 </body>
 </html>
