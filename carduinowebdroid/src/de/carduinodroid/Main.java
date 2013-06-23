@@ -229,7 +229,7 @@ public class Main extends HttpServlet {
 						db.editUser(userID, Nickname, Right.ADMIN);
 					}
 					else{
-						db.editUser(userID, Nickname, Right.GUEST);
+						db.editUser(userID, Nickname, Right.USER);
 					}
 					
 					break;
