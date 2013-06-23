@@ -212,6 +212,16 @@ public class Main extends HttpServlet {
 						log.writelogfile(e.getMessage());
 					}
 					break;
+				case "config":
+					if (session.getAttribute("isAdmin").equals(false)){
+						System.out.println("Admin-Rechte werden für diese Operation benötigt");
+						break;
+					}
+					//db.changePassword(userID, password);
+					//db.editUser(userID, newNick, r);
+					//db.createUser(userID, nick, pw, r);
+					//TODO stoph fragen
+					break;
 				default:
 					//HOW COULD DIS HAPPEN?
 					break;
