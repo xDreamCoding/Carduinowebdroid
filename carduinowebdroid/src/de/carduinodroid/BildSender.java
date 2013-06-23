@@ -1,13 +1,11 @@
-package de.carduinodroid.utilities;
+package de.carduinodroid;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ServerSocket;
@@ -20,6 +18,8 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriter;
+
+import de.carduinodroid.utilities.CarControllerWrapper;
 
 class Util {
 	 
@@ -49,7 +49,7 @@ class FrameProducer implements Runnable {
         try {
             //Hier jpg Bilder laden
             //Test img = ImageIO.read(file);
-        	img = CarControllerWrapper.getImg();
+        	img = CarControllerWrapper.getImg(); //das auskommentieren bei test
             wr = ImageIO.getImageWritersByFormatName("JPEG").next();
         } catch (Exception ex) {
             logger.severe(ex.getMessage());
@@ -222,52 +222,26 @@ class MJPGServer extends Server {
     }
 }
  
-class RawFrameServer extends Server {
- 
-    private final FrameProducer frameProducer;
- 
-    public RawFrameServer(final FrameProducer frameProducer, int port) {
-        super(port);
-        this.frameProducer = frameProducer;
-    }
- 
-    @Override
-    Object doServe(Socket socket) throws Exception {
-        final OutputStream os = socket.getOutputStream();
-        final byte buffer [] = new byte [4];
-        for(;;) {
-            final byte [] frame = frameProducer.grabJPEGFrame();
- 
-            final int l = frame.length;
-            buffer[0] = (byte) (l & 0xff);
-            buffer[1] = (byte) ((l >> 8) & 0xff);
-            buffer[2] = (byte) ((l >> 16) & 0xff);
-            buffer[3] = (byte) ((l >> 24) & 0xff);
- 
-            os.write(buffer ,0 ,4);
-            os.write(frame);
-            os.flush();
-        }
-    }
-}
- 
 public class BildSender {
-	private static final Logger logger = Logger.getLogger(BildSender.class.getName());
+	
     // FrameProducer stellt die Bilder, die Gesendet werden zur Verfügung
     static final FrameProducer frameProducer = new FrameProducer();
     // MJPGServer Sendet die Bilder von FrameProducer an Port 8889
     // kann in Firefox direkt aufgerufen werden
     static final MJPGServer MJPGServer = new MJPGServer(frameProducer, 8889);
-    // RawFrameServer sorgt dafür, daß der Buffer mit dem richtigen Frame gefüllt wird
-    // Kontrollieren kann man den Datenstrom an Port 8888
-    static final RawFrameServer rawFrameServer = new RawFrameServer(frameProducer, 8888);
+    
     // EXS ist die Javainterne Threadverwaltung
     static final ExecutorService EXS = Executors.newCachedThreadPool();
- 
+    public static boolean Runner = false;
+    
     public static void main(String[] args) throws IOException, InterruptedException {
- 
         EXS.submit(frameProducer);
         EXS.submit(MJPGServer);
-        EXS.submit(rawFrameServer);
+        Runner = true;
+    }
+    
+    public static void Stop() {
+        EXS.shutdown();
+        Runner = false;
     }
 }
