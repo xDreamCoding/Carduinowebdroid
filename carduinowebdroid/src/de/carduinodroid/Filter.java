@@ -37,9 +37,8 @@ public class Filter implements javax.servlet.Filter {
 	public void doFilter(ServletRequest request, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		if(DEBUG) System.out.println("filter");		
 		
-		config.getServletContext().getRequestDispatcher("/main").include(request, res);
+		config.getServletContext().getRequestDispatcher("/filterPass2").include(request, res);
 		
-		boolean authorized = false;
 		boolean staticRequest = false;
 		boolean websocketRequest = false;
 		String target = "index";
@@ -55,7 +54,6 @@ public class Filter implements javax.servlet.Filter {
 			websocketRequest = req.getRequestURI().startsWith(req.getContextPath() + "/websocket");
 
 			if(session.getAttribute("nickName") != null && ((String)session.getAttribute("nickName")) != "") {
-				authorized = true;
 				target = "main";
 				if(req.getRequestURI().endsWith("admin.jsp") && (boolean)session.getAttribute("isAdmin")) 
 					target = "admin";
@@ -68,14 +66,14 @@ public class Filter implements javax.servlet.Filter {
 				target = "queue";  
 			
 			if(ENABLE_GENERIC_MODE && !(staticRequest || websocketRequest)) {
-				if( req.getRequestURI().length() > 22) { // 22 = /carduinowebdroid/.jsp
+				if( req.getRequestURI().length() > 22) { 					// 22 = /carduinowebdroid/.jsp
 					int posPoint =  req.getRequestURI().indexOf(".", 0); 
-					int posSlash =  req.getRequestURI().indexOf("/", 1); // skip first
+					int posSlash =  req.getRequestURI().indexOf("/", 1); 	// skip first
 					target = req.getRequestURI().substring(posSlash + 1, posPoint);
 				}
 			}
 		}
-		if(staticRequest || websocketRequest) 
+		if(staticRequest || websocketRequest)
 			chain.doFilter(request, res);
 		else {
 			config.getServletContext().getRequestDispatcher("/WEB-INF/" + target + ".jsp").forward(request, res);			
