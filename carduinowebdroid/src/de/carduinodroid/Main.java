@@ -117,7 +117,7 @@ public class Main /* extends HttpServlet */ {
 			action = new TimerTask() {
 				DBConnector db = new DBConnector();
 				public void run() {
-			    	if(flag){
+					if(flag){
 			    		caretaker.cancel();
 						caretaker = new Timer();
 			    		caretaker.schedule(new de.carduinodroid.Dummy(action), 60000*Fahrzeit, 60000*Fahrzeit);

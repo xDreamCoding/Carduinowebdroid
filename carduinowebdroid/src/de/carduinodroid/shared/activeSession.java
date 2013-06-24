@@ -156,6 +156,10 @@ public class activeSession {
 	
 	public static void deleteSocket(String SessionID){
 		int index = activeSessions.indexOf(SessionID);
+		if (index == -1){
+			System.out.println("Zugehörige Session bereits gelöscht");
+			return;
+		}
 		activeSocket.set(index, null);
 	}
 
