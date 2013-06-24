@@ -70,7 +70,7 @@
 				<c:forEach var="i" begin="0" end="${result}">
 				<c:set var="string1"><a href="admin.jsp?menu=1&user=${i}">Edit</a></c:set>
 					<tr>
-						<td><c:out value="${i}" /></td>
+						<td><ct:user par="3" num="${i}" /></td>
 						<td><ct:user par="1" num="${i}" /></td>
 						<td><ct:user par="2" num="${i}" /></td>
 						<td>${string1}</td> 
@@ -91,7 +91,7 @@
 						<input type="hidden" name="action" value="edituser" />
 						<input type="hidden" name="userid" value="${param.user}" />
 						<table>
-							<tr><u>Edit User</u></tr>
+							<tr><b>Edit User</b></tr>
 							<tr>
 								<td>UserID:</td>
 								<td>${param.user}</td>
@@ -110,22 +110,27 @@
 			</div>
 			<div id="admin_box">
 				<form action="POST">
+					<input type="hidden" name="action" value="adduser" />
 					<table>
-						<tr><u>Add User</u></tr>
+						<tr><b>Add User</b></tr>
 						<tr>
 							<td>UserID:</td>
 							<td><input type="text" placeholder="UserID"></td>
 						</tr>
 						<tr>
 							<td>Nickname:</td>
-							<td><input type="text" placeholder="Nickname"></td>
+							<td><input type="text" placeholder="Nickname" /></td>
 						</tr>
 						<tr>
 							<td>Password:</td>
-							<td><input type="text" placeholder="Password"></td>
+							<td><input type="text" placeholder="Password" /></td>
+						</tr>
+						<tr>
+							<td>isAdmin:</td>
+							<td><input type="checkbox" name="rights" /></td>
 						</tr>
 					</table>
-					<input type="submit" value="Add" />			
+					<input type="submit" name="action" value="Add user" />			
 				</form>
 			</div>
 		</td>
@@ -174,6 +179,12 @@
 	<c:set scope="page" var="loggpstofile"><ct:getConf par="10" /></c:set>
 	<c:set scope="page" var="logq"><ct:getConf par="11" /></c:set>
 	<c:set scope="page" var="logqtofile"><ct:getConf par="12" /></c:set>
+	<c:if test="${logchat}"><c:set var="logchatcb">checked="checked"</c:set></c:if>
+	<c:if test="${logchattofile}"><c:set var="logchattofilecb">checked="checked"</c:set></c:if>
+	<c:if test="${loggpstofile}"><c:set var="loggpstofilecb">checked="checked"</c:set></c:if>
+	<c:if test="${logq}"><c:set var="logqcb">checked="checked"</c:set></c:if>
+	<c:if test="${logqtofile}"><c:set var="logqtofilecb">checked="checked"</c:set></c:if>
+
 
 
 		<div id="admin_settingscontainer">
@@ -183,7 +194,7 @@
 					<td>
 						<table>
 							<tr>
-								<input type="hidden" name="action" value="config" />
+								<input type="hidden" name="action" value="saveconfig" />
 							</tr>
 							<tr>
 								<td>Car IP:</td>
@@ -211,7 +222,7 @@
 							</tr>
 							<tr>
 								<td>Log Chat:</td>
-								<td><input type="text" name="logchat" value="${logchat}" /></td>
+								<td><input type="checkbox" name="logchat" ${logchatcb} /></td>
 							</tr>
 						</table>
 					</td>
@@ -219,32 +230,33 @@
 						<table>
 							<tr>
 								<td>Log Chat-to-File:</td>
-								<td><input type="text" name="logchattofile" value="${logchattofile}" /></td>
+								<td><input type="checkbox" name="logchattofile" ${logchattofilecb} /></td>
 							</tr>
 							<tr>
 								<td>Log GPS:</td>
-								<td><input type="text" name="loggps" value="${loggps}" /></td>
+								<td><input type="checkbox" name="loggps" value="${loggpscb}" /></td>
 							</tr>
 							<tr>
 								<td>Log GPS-Interval:</td>
-								<td><input type="text" name="loggps" value="${loggpsinterval}" /></td>
+								<td><input type="text" name="loggpsint" value="${loggpsinterval}" /></td>
 							</tr>
 							<tr>
 								<td>Log GPS-to-File</td>
-								<td><input type="text" name="loggps" value="${loggpstofile}" /></td>
+								<td><input type="checkbox" name="loggpstofile" ${loggpstofilecb} /></td>
 							</tr>
 							<tr>
-								<td>Log Query:</td>
-								<td><input type="text" name="loggps" value="${logq}" /></td>
+								<td>Log Queue:</td>
+								<td><input type="checkbox" name="logq" ${logqcb} /></td>
 							</tr>
 							<tr>
-								<td>Log Query-to-File:</td>
-								<td><input type="text" name="loggps" value="${logqtofile}" /></td>
+								<td>Log Queue-to-File:</td>
+								<td><input type="checkbox" name="logqtofile" ${logqtofilecb} /></td>
 							</tr>	
 						</table>
 					</td>
 				</tr>
 			</table>
+			<input type="submit" value="Save settings" />
 		</form>
 		</div>
 </div>

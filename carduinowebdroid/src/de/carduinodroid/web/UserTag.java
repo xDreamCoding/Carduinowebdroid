@@ -79,6 +79,14 @@ public class UserTag extends TagSupport{
 				throw new JspException("Error: " + e.getMessage());
 			}
 			break;
+		case 3:
+			try {
+				Name = UserList.get(userNr).getUserID();
+				out.print(Name);
+			} catch (IOException e) {
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
 		
 		default:
 			throw new JspException("Error: invalid parameter in UserTag");
