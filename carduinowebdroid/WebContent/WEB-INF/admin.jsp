@@ -84,17 +84,17 @@
 				<c:if test="${not empty param.user }">
 					<c:set scope="page" var="nickname"><ct:user num="${param.user}" par="1"/></c:set>
 					<c:set scope="page" var="isAdmin"><ct:user par="2" num="${param.user}" /></c:set>
+					<c:set scope="page" var="userids"><ct:user par="2" num="${param.user}" /></c:set>
 					<c:if test="${isAdmin}"><c:set var="isAdmincb">checked="checked"</c:set></c:if>
 				</c:if>
 			<div id="admin_box">
 					<form action="POST">
 						<input type="hidden" name="action" value="edituser" />
-						<input type="hidden" name="userid" value="${param.user}" />
 						<table>
 							<tr><b>Edit User</b></tr>
 							<tr>
 								<td>UserID:</td>
-								<td>${param.user}</td>
+								<td><input type="text" name="userid" value="${userids}" /></td>
 							</tr>
 							<tr>
 								<td >Nickname:</td>
