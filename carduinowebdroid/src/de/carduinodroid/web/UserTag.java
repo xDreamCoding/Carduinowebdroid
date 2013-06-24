@@ -58,7 +58,7 @@ public class UserTag extends TagSupport{
 		switch(param) {
 		case 0:
 			try {
-				out.print(db.getAllUserCount());
+				out.print(UserList.size());
 			} catch (IOException e) {
 				throw new JspException("Error: " + e.getMessage());
 			}
