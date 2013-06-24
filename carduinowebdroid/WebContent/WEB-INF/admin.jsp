@@ -80,34 +80,53 @@
 			</table>			
 			</div>
 		</td>
-		<td>
+		<td id="admin_add">
 				<c:if test="${not empty param.user }">
 					<c:set scope="page" var="nickname"><ct:user num="${param.user}" par="1"/></c:set>
 					<c:set scope="page" var="isAdmin"><ct:user par="2" num="${param.user}" /></c:set>
 					<c:if test="${isAdmin}"><c:set var="isAdmincb">checked="checked"</c:set></c:if>
 				</c:if>
-			<div id="admin_boxes">
-				<div id="admin_dialog" class="window">
+			<div id="admin_box">
 					<form action="POST">
 						<input type="hidden" name="action" value="edituser" />
 						<input type="hidden" name="userid" value="${param.user}" />
 						<table>
+							<tr><u>Edit User</u></tr>
 							<tr>
-								<td id="admin_mask_left">Editing UserID: ${param.user}</td>
+								<td>UserID:</td>
+								<td>${param.user}</td>
 							</tr>
 							<tr>
-								<td id="admin_mask_left">Nickname:</td>
-								<td><input id="admin_edit_text" type="text" name="nickname" value="${nickname}"/></td>
+								<td >Nickname:</td>
+								<td><input type="text" name="nickname" value="${nickname}"/></td>
 							</tr>
 							<tr>
-								<td id="admin_mask_left">isAdmin:</td>
-								<td><input id="admin_edit_text" type="checkbox" name="rights" ${isAdmincb} /></td>
+								<td >isAdmin:</td>
+								<td><input type="checkbox" name="rights" ${isAdmincb} /></td>
 							</tr>
 						</table>
 						<input type="submit" value="Edit" />
 					</form> 
-				</div>
-				<div id="admin_mask"></div>
+			</div>
+			<div id="admin_box">
+				<form action="POST">
+					<table>
+						<tr><u>Add User</u></tr>
+						<tr>
+							<td>UserID:</td>
+							<td><input type="text" placeholder="UserID"></td>
+						</tr>
+						<tr>
+							<td>Nickname:</td>
+							<td><input type="text" placeholder="Nickname"></td>
+						</tr>
+						<tr>
+							<td>Password:</td>
+							<td><input type="text" placeholder="Password"></td>
+						</tr>
+					</table>
+					<input type="submit" value="Add" />			
+				</form>
 			</div>
 		</td>
 	</tr>
