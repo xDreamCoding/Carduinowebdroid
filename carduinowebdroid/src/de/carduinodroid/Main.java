@@ -37,7 +37,7 @@ public class Main /* extends HttpServlet */ {
 	private static TimerTask GPSLogger;
 	private static TimerTask Session;
 	private static TimerTask action;
-	private static ArrayList<String> aliveSessions;
+	private static boolean aliveSessions;
 	static Log log;
 	static int driveID;
 	static int Fahrzeit, gpsLogInterval;
@@ -78,32 +78,21 @@ public class Main /* extends HttpServlet */ {
     }
 	
 	public static void receivedPing(String SessionID){
-		int index = aliveSessions.indexOf(SessionID);
-		if (index == -1) return;
-		aliveSessions.remove(index);
+		aliveSessions = false;
 	}
     
     public static void main(Options opt, DBConnector db, Log logng) {
     	
     	log = logng;
-    	aliveSessions = new ArrayList<String>();
+    	aliveSessions = false;
     	
     	Session = new TimerTask(){
 			public void run(){
 							
-				for (int i = 0; i < aliveSessions.size(); i++){
-					activeSession.deleteSession(aliveSessions.get(i));
-					waitingqueue.deleteTicket(aliveSessions.get(i));
-				}
-				
-				aliveSessions.clear();
-				String[] Sessions = new String[activeSession.getAllSessions().length];
-				Sessions = activeSession.getAllSessions();
-			
-				for(int i = 0; i < Sessions.length; i++){
-					aliveSessions.add(Sessions[i]);
-				}
-			   			
+				if (aliveSessions){
+					activeSession.deleteSession(activeSession.getDriver());
+				}									
+				aliveSessions = true;			   			
 			}
 		};
     	
