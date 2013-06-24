@@ -21,6 +21,16 @@ function controlToServer(msg) {
 	ws.send(identifierControl + msg);
 }
 
+function controlHandleMessage(message) {
+    if(message.data.charAt(4) === "y") {
+		$("#main_controls").show();
+		$("#main_chat").append("Controller: " + show + "\n");
+    } else if(message.data.charAt(4) === "n") {
+		$("#main_controls").hide();
+		$("#main_chat").append("Controller: " + hide + "\n");
+    }
+}
+
 /**
  * Register controlToServer to buttons.
  * 

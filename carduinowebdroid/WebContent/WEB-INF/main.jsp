@@ -79,8 +79,7 @@ $(document).ready(function()
         <td id="main_table_stream">
         
         	<div id="main_stream">
-        		<iframe src="http://localhost:8889/" width="640" height="480" scrolling="no">
-    			<iframe/>
+        		<!-- <iframe src="http://localhost:8889/" width="640" height="480" scrolling="no" /> -->
     		</div>
         	<div id="main_controls">
             	<table id="main_control_table">

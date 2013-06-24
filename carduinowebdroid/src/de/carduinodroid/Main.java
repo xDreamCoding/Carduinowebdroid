@@ -80,17 +80,17 @@ public class Main extends HttpServlet {
 		
 		if(DEBUG) System.out.println("doGet");
 		
-			String[] args1 = null;							// new
-		
-  	  		if ( !BildSender.Runner) {						// new
-  	  		System.out.println("Starte CarStream ");
-  	  		try {
-  	  			BildSender.main(args1);
-  	  			System.out.println("CarStream gestartet");
-  	  		} catch  (final Exception ex) {
-  	  		System.out.println("Fehler beim Starten des CarStreams");
-  	  		}
-  	  	}													// new
+//			String[] args1 = null;							// new
+//		
+//  	  		if ( !BildSender.Runner) {						// new
+//  	  		System.out.println("Starte CarStream ");
+//  	  		try {
+//  	  			BildSender.main(args1);
+//  	  			System.out.println("CarStream gestartet");
+//  	  		} catch  (final Exception ex) {
+//  	  		System.out.println("Fehler beim Starten des CarStreams");
+//  	  		}
+//  	  	}													// new
 	}
 
 	/**

@@ -46,6 +46,10 @@ public class MyWebSocketServlet extends WebSocketServlet {
 
 		final Log log = (Log)context.getAttribute("log");
 
+		final String identifierChat = "Ch%:";
+		final String identifierControl = "Co%:";
+		final String identifierHeartbeat = "Hb%:";
+
 		/**
 		 * Anonymous inner class to create and define MessageInbound object.
 		 */
@@ -53,7 +57,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 
 			@Override
 			protected void onOpen(WsOutbound outbound) {
-				activeSession.insertSocket(session.getId(), this.getWsOutbound());
+//				activeSession.insertSocket(session.getId(), this.getWsOutbound());
 				int connSize = clients.size();
 				System.out.println("onOpen - connections: " + connSize);
 			}
@@ -78,55 +82,53 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				/**
 				 * Heartbeatpart
 				 */
-				if(msg.startsWith("Hb%:")) {
+				if(msg.startsWith(identifierHeartbeat)) {
 					///TODO \todo heartbeatstuff					
-					Main.receivedPing(session.getId());
+					//Main.receivedPing(session.getId());
 				}
 				/**
 				 * Controllerpart
 				 */
-				else if(msg.startsWith("Co%:")) {
+				else if(msg.startsWith(identifierControl)) {
 					char directionKey = msg.charAt(msg.indexOf(":") + 1);
 					char stateKey = msg.charAt(msg.indexOf(":") + 2);
 					{
 												
-						if (activeSession.isDriver(session.getId()) == false) {
-							return;
-						}
-						
-						switch (directionKey) {
-						case 'a':
-							if(stateKey == 's') CarControllerWrapper.setLeft(true);
-							if(stateKey == 'e') CarControllerWrapper.setLeft(false);
-							break;
-						case 'd':
-							if(stateKey == 's') CarControllerWrapper.setRight(true);
-							if(stateKey == 'e') CarControllerWrapper.setRight(false);
-							break;
-						case 'w':
-							if(stateKey == 's') CarControllerWrapper.setUp(true);
-							if(stateKey == 'e') CarControllerWrapper.setUp(false);
-							break;
-						case 's':
-							if(stateKey == 's') CarControllerWrapper.setDown(true);
-							if(stateKey == 'e') CarControllerWrapper.setDown(false);
-							break;
-						case 'h':
-							System.out.println("honk");
-							CarControllerWrapper.sendSignal();
-							break;
-						case 'l':
-							System.out.println("light");
-							///TODO \todo light
-							//CarControllerWrapper.setLight(on/off);
-							break;	
+						if (activeSession.isDriver(session.getId())) {						
+							switch (directionKey) {
+							case 'a':
+								if(stateKey == 's') CarControllerWrapper.setLeft(true);
+								if(stateKey == 'e') CarControllerWrapper.setLeft(false);
+								break;
+							case 'd':
+								if(stateKey == 's') CarControllerWrapper.setRight(true);
+								if(stateKey == 'e') CarControllerWrapper.setRight(false);
+								break;
+							case 'w':
+								if(stateKey == 's') CarControllerWrapper.setUp(true);
+								if(stateKey == 'e') CarControllerWrapper.setUp(false);
+								break;
+							case 's':
+								if(stateKey == 's') CarControllerWrapper.setDown(true);
+								if(stateKey == 'e') CarControllerWrapper.setDown(false);
+								break;
+							case 'h':
+								System.out.println("honk");
+								CarControllerWrapper.sendSignal();
+								break;
+							case 'l':
+								System.out.println("light");
+								///TODO \todo light
+								//CarControllerWrapper.setLight(on/off);
+								break;	
+							}
 						}
 					}
 				}
 				/**
 				 * Chatpart
 				 */
-				else if(msg.startsWith("Ch%:")){					
+				else if(msg.startsWith(identifierChat)){					
 					String nickName = (String)session.getAttribute("nickName");
 
 					String msgBody = msg.replaceFirst("Ch%:", "");
@@ -138,7 +140,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 					log.logChat(userId, sessionId, msgBody);
 					
 					// Send message to all clients connected
-					broadcast(nickName + ": " + msgBody);
+					broadcast(identifierChat + nickName + ": " + msgBody);
 				}
 			}
 		};
@@ -155,6 +157,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 	 * @param message
 	 */
 	private void broadcast(String message) {
+		System.out.println(message);
 		StreamInbound someClient;
 		ListIterator<StreamInbound> iter = clients.listIterator();
 		while (iter.hasNext()) {

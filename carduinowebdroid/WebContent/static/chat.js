@@ -34,7 +34,9 @@ function registerChat() {
  * Handle incoming messages.
  */
 function chatHandleMessage(message) {
-	$("#main_chat").append(message.data + "\n");
+	data = message.data;
+	msg = data.substring(identifierChat.length, data.length);
+	$("#main_chat").append(msg + "\n");
     $('#main_chat').scrollTop($('#main_chat')[0].scrollHeight);
 }
 
