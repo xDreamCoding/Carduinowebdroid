@@ -53,6 +53,10 @@ public class waitingqueue {
 	 */
 	
 	public static void insertUser(String SessionID){
+		if (Warteschlange.contains(SessionID)){
+			System.out.println("Wurde bereits eingereiht");
+			return;
+		}
 		Warteschlange.add(SessionID);
 		System.out.println("User in Warteschlange eingereiht");
 	}
