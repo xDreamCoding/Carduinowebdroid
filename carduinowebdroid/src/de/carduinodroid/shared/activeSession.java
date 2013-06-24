@@ -208,6 +208,7 @@ public class activeSession {
 	}
 
 	public static String getDriver(){
+		if (Driver == -1) return null;
 		return activeSessions.get(Driver);
 	}
 }
