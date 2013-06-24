@@ -29,7 +29,7 @@
 		registerChat();
 		registerControls();
 		registerKeys();
-		window.setInterval(heartbeat,10000);
+		window.setInterval(heartbeat,1000);
 	});
 </script>
 

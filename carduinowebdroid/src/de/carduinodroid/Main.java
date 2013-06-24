@@ -79,6 +79,7 @@ public class Main /* extends HttpServlet */ {
 	
 	public static void receivedPing(String SessionID){
 		int index = aliveSessions.indexOf(SessionID);
+		if (index == -1) return;
 		aliveSessions.remove(index);
 	}
     
@@ -95,6 +96,7 @@ public class Main /* extends HttpServlet */ {
 					waitingqueue.deleteTicket(aliveSessions.get(i));
 				}
 				
+				aliveSessions.clear();
 				String[] Sessions = new String[activeSession.getAllSessions().length];
 				Sessions = activeSession.getAllSessions();
 			

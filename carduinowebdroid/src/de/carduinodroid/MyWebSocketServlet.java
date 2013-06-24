@@ -57,7 +57,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 
 			@Override
 			protected void onOpen(WsOutbound outbound) {
-//				activeSession.insertSocket(session.getId(), this.getWsOutbound());
+				activeSession.insertSocket(session.getId(), this.getWsOutbound());
 				int connSize = clients.size();
 				System.out.println("onOpen - connections: " + connSize);
 			}
@@ -78,13 +78,13 @@ public class MyWebSocketServlet extends WebSocketServlet {
 			protected void onTextMessage(CharBuffer cb) throws IOException {			
 				String msg = cb.toString();
 				
-				System.out.println("onTextMessage: " + msg);
+				//System.out.println("onTextMessage: " + msg);
 				/**
 				 * Heartbeatpart
 				 */
 				if(msg.startsWith(identifierHeartbeat)) {
 					///TODO \todo heartbeatstuff					
-					//Main.receivedPing(session.getId());
+					Main.receivedPing(session.getId());
 				}
 				/**
 				 * Controllerpart
