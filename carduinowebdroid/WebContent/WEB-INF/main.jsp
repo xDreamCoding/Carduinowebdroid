@@ -71,7 +71,7 @@ $(document).ready(function()
         	<div id="main_chat_container">
         		<textarea type="text" id="main_chat" readonly></textarea>
           	  	<textarea type="text" name="chat" id="main_chat_textinput" maxlength="256"></textarea>
-           		<div id="main_chat_chars">256</div>
+           		<div id="main_chat_chars">256</div>            		
             	<button id="main_chat_speak">Chat</button>
           	</div>
         </td>
