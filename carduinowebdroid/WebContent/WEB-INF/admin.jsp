@@ -154,45 +154,101 @@
 
 <c:if test="${param.menu == 3}">
 
-<form method="POST">
-	<input type="hidden" name="action" value="connect"/>
-	<input id="main_connect" type="submit" value="Connect to Car" />
-</form>
-<br>
+<div id="admin_setting">
+	<form method="POST">
+		<input type="hidden" name="action" value="connect"/>
+		<input id="main_connect" type="submit" value="Connect to Car" />
+	</form>
+	<br>
 
-<c:set scope="page" var="carIP"><ct:getConf par="0" /></c:set>
-<c:set scope="page" var="dbadress"><ct:getConf par="1" /></c:set>
-<c:set scope="page" var="dbpw"><ct:getConf par="2" /></c:set>
-<c:set scope="page" var="dbuser"><ct:getConf par="3" /></c:set>
-<c:set scope="page" var="drivetime"><ct:getConf par="4" /></c:set>
-<c:set scope="page" var="filepath"><ct:getConf par="5" /></c:set>
-<c:set scope="page" var="logchat"><ct:getConf par="6" /></c:set>
-<c:set scope="page" var="logchattofile"><ct:getConf par="7" /></c:set>
-<c:set scope="page" var="loggps"><ct:getConf par="8" /></c:set>
-<c:set scope="page" var="loggpsinterval"><ct:getConf par="9" /></c:set>
-<c:set scope="page" var="loggpstofile"><ct:getConf par="10" /></c:set>
-<c:set scope="page" var="logq"><ct:getConf par="11" /></c:set>
-<c:set scope="page" var="logqtofile"><ct:getConf par="12" /></c:set>
+	<c:set scope="page" var="carIP"><ct:getConf par="0" /></c:set>
+	<c:set scope="page" var="dbadress"><ct:getConf par="1" /></c:set>
+	<c:set scope="page" var="dbpw"><ct:getConf par="2" /></c:set>
+	<c:set scope="page" var="dbuser"><ct:getConf par="3" /></c:set>
+	<c:set scope="page" var="drivetime"><ct:getConf par="4" /></c:set>
+	<c:set scope="page" var="filepath"><ct:getConf par="5" /></c:set>
+	<c:set scope="page" var="logchat"><ct:getConf par="6" /></c:set>
+	<c:set scope="page" var="logchattofile"><ct:getConf par="7" /></c:set>
+	<c:set scope="page" var="loggps"><ct:getConf par="8" /></c:set>
+	<c:set scope="page" var="loggpsinterval"><ct:getConf par="9" /></c:set>
+	<c:set scope="page" var="loggpstofile"><ct:getConf par="10" /></c:set>
+	<c:set scope="page" var="logq"><ct:getConf par="11" /></c:set>
+	<c:set scope="page" var="logqtofile"><ct:getConf par="12" /></c:set>
 
 
-<div id="admin_settingscontainer">
-<form method="POST">
-	<input type="hidden" name="action" value="config" />
-	<p><input type="text" name="IP" value="${carIP}"/></p>
-	<p><input type="text" name="DBAdress" value="${dbadress}" /></p>
-	<p><input type="text" name="DBUser" value="${dbuser}" /></p>
-	<p><input type="text" name="DBPw" value="${dbpw}" /></p>
-	<p><input type="text" name="drivetime" value="${drivetime}" /></p>
-	<p><input type="text" name="filepath" value="${filepath}" /></p>
-	<p><input type="text" name="logchat" value="${logchat}" /></p>	
-	<p><input type="text" name="logchattofile" value="${logchattofile}" /></p>	
-	<p><input type="text" name="loggps" value="${loggps}" /></p>
-	<p><input type="text" name="loggps" value="${loggpsinterval}" /></p>
-	<p><input type="text" name="loggps" value="${loggpstofile}" /></p>
-	<p><input type="text" name="loggps" value="${logq}" /></p>
-	<p><input type="text" name="loggps" value="${logqtofile}" /></p>
-</form>
+		<div id="admin_settingscontainer">
+		<form method="POST">
+			<table>
+				<tr>
+					<td>
+						<table>
+							<tr>
+								<input type="hidden" name="action" value="config" />
+							</tr>
+							<tr>
+								<td>Car IP:</td>
+								<td><input type="text" name="IP" value="${carIP}"/></td>
+							</tr>
+							<tr>
+								<td>DB-Adress:</td>
+								<td><input type="text" name="DBAdress" value="${dbadress}" /></td>
+							</tr>
+							<tr>
+								<td>DB-User:</td>
+								<td><input type="text" name="DBUser" value="${dbuser}" /></td>
+							</tr>
+							<tr>
+								<td>DB-Password:</td>
+								<td><input type="text" name="DBPw" value="${dbpw}" /></td>
+							</tr>
+							<tr>
+								<td>Drive Time:</td>
+								<td><input type="text" name="drivetime" value="${drivetime}" /></td>
+							</tr>
+							<tr>
+								<td>File Path:</td>
+								<td><input type="text" name="filepath" value="${filepath}" /></td>
+							</tr>
+							<tr>
+								<td>Log Chat:</td>
+								<td><input type="text" name="logchat" value="${logchat}" /></td>
+							</tr>
+						</table>
+					</td>
+					<td>
+						<table>
+							<tr>
+								<td>Log Chat-to-File:</td>
+								<td><input type="text" name="logchattofile" value="${logchattofile}" /></td>
+							</tr>
+							<tr>
+								<td>Log GPS:</td>
+								<td><input type="text" name="loggps" value="${loggps}" /></td>
+							</tr>
+							<tr>
+								<td>Log GPS-Interval:</td>
+								<td><input type="text" name="loggps" value="${loggpsinterval}" /></td>
+							</tr>
+							<tr>
+								<td>Log GPS-to-File</td>
+								<td><input type="text" name="loggps" value="${loggpstofile}" /></td>
+							</tr>
+							<tr>
+								<td>Log Query:</td>
+								<td><input type="text" name="loggps" value="${logq}" /></td>
+							</tr>
+							<tr>
+								<td>Log Query-to-File:</td>
+								<td><input type="text" name="loggps" value="${logqtofile}" /></td>
+							</tr>	
+						</table>
+					</td>
+				</tr>
+			</table>
+		</form>
+		</div>
 </div>
+
 </c:if>
 </body>
 </html>
