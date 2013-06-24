@@ -780,14 +780,17 @@ public class DBConnector {
 				rset.next();
 				while(!rset.isAfterLast()){
 					right = rset.getByte("rightFlag");
-					if(Right.values()[right] == Right.GUEST && ignoreGuests)
+					Right r = Right.values()[right];
+					if(r == Right.GUEST && ignoreGuests) {
+						rset.next();
 						continue;
+					}
 					
 					userID = rset.getString("userID");
 					nickname = rset.getString("nickname");
 					if(nickname == null) nickname = userID;
 					
-					user = new User(userID, nickname, Right.values()[right]);
+					user = new User(userID, nickname, r);
 						
 					list.add(user);
 					user = null;
