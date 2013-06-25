@@ -36,7 +36,7 @@
 	<h1>Login</h1>
     	<table id="index_logintable">
         	<tr>
-            	<td for="nickname">UserID:</td>
+            	<td for="UserID">UserID:</td>
                 <td><input type="text" name="loginName" placeholder="Nickname"/></td>
             </tr>
             <tr>
