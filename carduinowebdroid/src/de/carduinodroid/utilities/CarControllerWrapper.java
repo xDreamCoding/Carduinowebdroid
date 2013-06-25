@@ -20,7 +20,7 @@ public class CarControllerWrapper {
 	BufferedImage img;
 	String[] resolutions;
 	String latitude, longitude;
-	static boolean up, down, right, left;
+	static boolean up, down, right, left, lightOn = false;
 
 	private CarControllerWrapper(Log log) {
 		cc = new Controller_Computer(log, this);		
@@ -36,8 +36,6 @@ public class CarControllerWrapper {
 	public static CarControllerWrapper getCarController(Log log) {
 		if(ccw == null) {
 			ccw = new CarControllerWrapper(log);
-			ccw.setSpeed(50);
-			ccw.setAngle(50);
 		}
 		return ccw;
 	}
@@ -110,8 +108,17 @@ public class CarControllerWrapper {
 	 * \brief Turns the light on or off.
 	 * @param on Whether ligth is turned on or no.
 	 */
-	public static void setLight(boolean on) {
+	private static void setLight(boolean on) {
 		ccw.cc.camera_settings.send_switch_light(on ? "1" : "0");
+	}
+	
+	/**
+	 * \brief Toggles light on and off
+	 */
+	public static void toggleLight() {
+		System.out.println(lightOn ? "1" : "0");
+		lightOn = !lightOn;
+		setLight(lightOn);
 	}
 	
 	/**

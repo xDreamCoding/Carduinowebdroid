@@ -118,8 +118,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 								break;
 							case 'l':
 								System.out.println("light");
-								if(stateKey == 's') CarControllerWrapper.setLight(true);
-								if(stateKey == 'e') CarControllerWrapper.setLight(false);
+								if(stateKey == 's') CarControllerWrapper.toggleLight();
 								break;	
 							}
 						}
