@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.AbstractDocument.Content;
+
+import com.sun.xml.internal.bind.CycleRecoverable.Context;
 
 import de.carduinodroid.shared.User;
 import de.carduinodroid.shared.activeSession;
@@ -20,6 +23,7 @@ import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.DBConnector;
 import de.carduinodroid.utilities.Config.Options;
 import de.carduinodroid.utilities.Log;
+import de.carduinodroid.utilities.Config;
 
 @WebServlet(loadOnStartup=1, value = "/filterPass2")
 public class FilterPass2  extends HttpServlet {
@@ -78,6 +82,7 @@ public class FilterPass2  extends HttpServlet {
 		if(DEBUG) System.out.println("doPost");
 		
 		Log log = (Log)request.getServletContext().getAttribute("log");
+		Config conf = (Config)request.getServletContext().getAttribute("config");
 		
 		if(request instanceof HttpServletRequest) {			
 			HttpServletRequest req = (HttpServletRequest) request;
@@ -252,6 +257,59 @@ public class FilterPass2  extends HttpServlet {
 					else{
 						db.createUser(userID, Nickname, password, Right.USER);
 					}
+					break;
+				case "saveconfig":
+					if (session.getAttribute("isAdmin").equals(false)){
+						System.out.println("Admin-Rechte werden für diese Operation benötigt");
+						break;
+					}
+					
+					if (!postParameterMap.containsKey("IP") || !postParameterMap.containsKey("DBAdress") || !postParameterMap.containsKey("DBUser")
+						|| !postParameterMap.containsKey("DBPw") || !postParameterMap.containsKey("drivetime") || !postParameterMap.containsKey("filepath")
+						|| !postParameterMap.containsKey("loggpsint")){
+						System.out.println("Feld unvollständig");
+						break;
+					}
+					
+					Options opt = conf.getOptions();
+					opt.carduinodroidIP = (String) postParameterMap.get("IP")[0];
+					opt.dbAddress = (String) postParameterMap.get("DBAdress")[0];
+					opt.dbPW = (String) postParameterMap.get("DBPw")[0];
+					opt.dbUser = (String) postParameterMap.get("DBUser")[0];
+					opt.fahrZeit = Integer.parseInt(postParameterMap.get("drivetime")[0]);
+					opt.filePath = (String) postParameterMap.get("filepath")[0];
+					opt.logGPSInterval = Integer.parseInt( postParameterMap.get("loggpsint")[0]);
+					if (postParameterMap.containsKey("logchat")){
+						opt.logChat = true;
+					}
+					else{
+						opt.logChat = false;
+					}
+					if (postParameterMap.containsKey("logchattofile")){
+						opt.logChatToFile = true;
+					}
+					else{
+						opt.logChatToFile = false;
+					}
+					if (postParameterMap.containsKey("loggpstofile")){
+						opt.logGPSToFile = true;
+					}
+					else{
+						opt.logGPSToFile = false;
+					}
+					if (postParameterMap.containsKey("logq")){
+						opt.logQueue = true;
+					}
+					else{
+						opt.logQueue = false;
+					}
+					if (postParameterMap.containsKey("logqtofile")){
+						opt.logQueueToFile = true;
+					}
+					else{
+						opt.logQueueToFile = false;
+					}
+					conf.setOptions(opt);
 					break;
 				default:
 					//HOW COULD DIS HAPPEN?

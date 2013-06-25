@@ -56,6 +56,7 @@ public class MyServletContextListener implements ServletContextListener {
 			options = config.getOptions();
 		}
 		log.writelogfile("Options loaded");
+		context.setAttribute("config", config);
 		context.setAttribute("options", options);
 		
 		// car controller
