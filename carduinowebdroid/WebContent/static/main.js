@@ -150,7 +150,7 @@ function registerKeys() {
 				$('#main_steering_button_up')
 					.removeClass("ui-state-active")
 					.mouseup();
-				return v;
+				return false;
 			}
 			// arrow down
 			if (e.keyCode == 40) {
