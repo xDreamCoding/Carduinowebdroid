@@ -101,6 +101,10 @@
 								<td><input type="text" name="nickname" value="${nickname}"/></td>
 							</tr>
 							<tr>
+								<td >Password:</td>
+								<td><input type="text" name="nickname" placeholder="Set new Password"/></td>
+							</tr>
+							<tr>
 								<td >isAdmin:</td>
 								<td><input type="checkbox" name="rights" ${isAdmincb} /></td>
 							</tr>
