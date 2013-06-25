@@ -83,9 +83,9 @@ public class FilterPass2  extends HttpServlet {
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();			
 
-			Map<String, String[]> m = req.getParameterMap();
+			Map<String, String[]> postParameterMap = req.getParameterMap();
 			if(DEBUG) {
-				Iterator<Entry<String, String[]>> entries = m.entrySet().iterator();
+				Iterator<Entry<String, String[]>> entries = postParameterMap.entrySet().iterator();
 				while (entries.hasNext()) {
 				    Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) entries.next();
 				    String key = (String)entry.getKey();
@@ -94,19 +94,19 @@ public class FilterPass2  extends HttpServlet {
 				}
 			}
 			
-			if(m.size() > 0 && m.containsKey("action")) {
+			if(postParameterMap.size() > 0 && postParameterMap.containsKey("action")) {
 				String SessionID = session.getId();
 				String ipAdress = req.getRemoteAddr();
 				DBConnector db = (DBConnector)request.getServletContext().getAttribute("database");
 				
-				switch((String)m.get("action")[0])  {				
+				switch((String)postParameterMap.get("action")[0])  {				
 				case "login":
-					if(!m.containsKey("loginName") || !m.containsKey("password"))
+					if(!postParameterMap.containsKey("loginName") || !postParameterMap.containsKey("password"))
 						break;
 					
 					String userID, pw;
-					userID = (String)m.get("loginName")[0];
-					pw = (String)m.get("password")[0];
+					userID = (String)postParameterMap.get("loginName")[0];
+					pw = (String)postParameterMap.get("password")[0];
 					User u = db.loginUser(userID, pw);
 					
 					if(u == null)
@@ -198,20 +198,60 @@ public class FilterPass2  extends HttpServlet {
 						System.out.println("Admin-Rechte werden für diese Operation benötigt");
 						break;
 					}
-					userID = session.getAttribute("userId").toString(); 
-					String Nickname = session.getAttribute("nickName").toString();
-					/* DIS SHIT DOES NOT EXISTS BECAUSE U NO LISTEN >.< */boolean isAdmin = (session.getAttribute("rights").equals(true));
+					if (!(postParameterMap.containsKey("userid")) || !(postParameterMap.containsKey("nickname"))){
+						System.out.println("Feld unvollständig");
+						break;
+					}
+					boolean isAdmin;
+					userID = (String) postParameterMap.get("userid")[0]; 
+					String Nickname = (String) postParameterMap.get("nickname")[0];
+					if (postParameterMap.containsKey("rights") == false){
+						isAdmin = false;
+					}
+					else{
+						isAdmin = true;
+					}
 					if (userID == db.getUserIdBySession(activeSession.getSessionInt(session.getId())) && (!isAdmin)){
 						System.out.println("Man kann sich nicht selbst das Admin recht entziehen");
 						break;
 					}
 					if (isAdmin){
+						System.out.println("Admin");
 						db.editUser(userID, Nickname, Right.ADMIN);
 					}
 					else{
 						db.editUser(userID, Nickname, Right.USER);
+						System.out.println("User");
 					}
 					
+					break;
+				case "adduser":
+					if (session.getAttribute("isAdmin").equals(false)){
+						System.out.println("Admin-Rechte werden für diese Operation benötigt");
+						break;
+					}
+					
+					if (!(postParameterMap.containsKey("rights")) || !(postParameterMap.containsKey("UserID")) || !(postParameterMap.containsKey("Nickname")) || !(postParameterMap.containsKey("Password"))){
+						System.out.println("Feld unvollständig");
+						break;
+					}
+					
+					userID = (String) postParameterMap.get("UserID")[0]; 
+					Nickname = (String) postParameterMap.get("Nickname")[0];
+					if (postParameterMap.containsKey("rights")){
+						isAdmin = true;
+					}
+					else{
+						isAdmin = false;
+					}
+					String password = (String) postParameterMap.get("Password")[0];
+					
+					if (isAdmin){
+						db.createUser(userID, Nickname, password, Right.ADMIN);
+					}
+					else{
+						db.createUser(userID, Nickname, password, Right.USER);
+					}
 					break;
 				default:
 					//HOW COULD DIS HAPPEN?
