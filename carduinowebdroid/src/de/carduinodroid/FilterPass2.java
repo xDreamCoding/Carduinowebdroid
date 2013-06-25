@@ -231,20 +231,20 @@ public class FilterPass2  extends HttpServlet {
 						break;
 					}
 					
-					if (!(postParameterMap.containsKey("rights")) || !(postParameterMap.containsKey("UserID")) || !(postParameterMap.containsKey("Nickname")) || !(postParameterMap.containsKey("Password"))){
+					if (!(postParameterMap.containsKey("userid")) || !(postParameterMap.containsKey("nickname")) || !(postParameterMap.containsKey("password"))){
 						System.out.println("Feld unvollständig");
 						break;
 					}
 					
-					userID = (String) postParameterMap.get("UserID")[0]; 
-					Nickname = (String) postParameterMap.get("Nickname")[0];
+					userID = (String) postParameterMap.get("userid")[0]; 
+					Nickname = (String) postParameterMap.get("nickname")[0];
 					if (postParameterMap.containsKey("rights")){
 						isAdmin = true;
 					}
 					else{
 						isAdmin = false;
 					}
-					String password = (String) postParameterMap.get("Password")[0];
+					String password = (String) postParameterMap.get("password")[0];
 					
 					if (isAdmin){
 						db.createUser(userID, Nickname, password, Right.ADMIN);

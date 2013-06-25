@@ -146,6 +146,9 @@ public class activeSession {
 	
 	public static void insertSocket(String SessionID, WsOutbound sock){
 		int index = activeSessions.indexOf(SessionID);
+		if (index == -1){
+			return;
+		}
 		activeSocket.set(index, sock);
 	}
 
@@ -171,6 +174,9 @@ public class activeSession {
 	
 	public static boolean isDriver(String SessionID){
 		int index = activeSessions.indexOf(SessionID);
+		if (index == -1){
+			return false;
+		}
 		boolean isDriver = (index == Driver);
 		return isDriver;
 	}
@@ -204,6 +210,9 @@ public class activeSession {
 
 	public static WsOutbound getSocket(String SessionID){
 		int index = activeSessions.indexOf(SessionID);
+		if (index == -1){
+			return null;
+		}
 		return activeSocket.get(index);
 	}
 
