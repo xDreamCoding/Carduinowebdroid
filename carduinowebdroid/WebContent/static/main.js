@@ -92,38 +92,38 @@ function registerKeys() {
 			// h
 			if (e.keyCode == 72) {
 				$('#main_gadget_button_horn').mousedown();
-				return;
+				return false;
 			}
 			// l
 			if (e.keyCode == 76) {
 				$('#main_gadget_button_light').mousedown();
-				return;
+				return false;
 			}
 			// up arrow
 			if (e.keyCode == 38) {
 				$('#main_steering_button_up').mousedown();
-				return;
+				return false;
 			}
 			// down arrow
 			if (e.keyCode == 40) {
 				$('#main_steering_button_down').mousedown();
-				return;
+				return false;
 			}
 			// left arrow
 			if (e.keyCode == 37) {
 				$('#main_steering_button_left').mousedown();
-				return;
+				return false;
 			}
 			// right arrow
 			if (e.keyCode == 39) {
 				$('#main_steering_button_right').mousedown();
-				return;
+				return false;
 			}
 		} else {
 			// enter
 			if(e.keyCode == 13) {
 				$("#main_chat_speak").mousedown();
-				return;
+				return false;
 			}
 		}	
 	});
@@ -136,42 +136,42 @@ function registerKeys() {
 				$('#main_gadget_button_horn')
 					.removeClass("ui-state-active")
 					.mouseup();
-				return;
+				return false;
 			}
 			// l
 			if (e.keyCode == 76) {
 				$('#main_gadget_button_light')
 					.removeClass("ui-state-active")
 					.mouseup();
-				return;
+				return false;
 			}
 			// arrow up
 			if (e.keyCode == 38) {
 				$('#main_steering_button_up')
 					.removeClass("ui-state-active")
 					.mouseup();
-				return;
+				return v;
 			}
 			// arrow down
 			if (e.keyCode == 40) {
 				$('#main_steering_button_down')
 					.removeClass("ui-state-active")
 					.mouseup();
-				return;
+				return false;
 			}
 			// arrow left
 			if (e.keyCode == 37) {
 				$('#main_steering_button_left')
 					.removeClass("ui-state-active")
 					.mouseup();
-				return;
+				return false;
 			}
 			// arrow right
 			if (e.keyCode == 39) {
 				$('#main_steering_button_right')
 					.removeClass("ui-state-active")
 					.mouseup();
-				return;
+				return false;
 			}
 		} else {
 			// enter
@@ -179,7 +179,7 @@ function registerKeys() {
 				$("#main_chat_speak")
 					.removeClass("ui-state-active")
 					.mouseup();
-				return;
+				return false;
 			}
 		}
 	});

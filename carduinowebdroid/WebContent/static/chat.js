@@ -24,10 +24,11 @@ $(function() {
  * Register postToServer on Chat_button.click event.
  */
 function registerChat() {
-	$("#main_chat_speak").mousedown(postToServer);
-	$("#main_chat_speak").mouseup(function () {
-		$("#main_chat_textinput").val('');
-	});
+	$("#main_chat_speak").mousedown(function() {
+			postToServer();
+			$("#main_chat_textinput").val('');
+		});
+
 }
 
 /**
@@ -44,5 +45,5 @@ function chatHandleMessage(message) {
  * Send chat_input to server.
  */
 function postToServer() {
-	if($("#main_chat_textinput").val() !== "") ws.send(identifierChat + $("#main_chat_textinput").val());
+	if($("#main_chat_textinput").val().trim() !== "") ws.send(identifierChat + $("#main_chat_textinput").val());
 }
