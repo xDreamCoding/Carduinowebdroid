@@ -54,7 +54,7 @@ $.fn.extend({
 			
 			function doCount(){
 				var val = $this.val(),
-					length = val.length
+					length = val.length;
 				
 				if(length >= options.maxChars) {
 					val = val.substring(0, options.maxChars); 				
@@ -73,11 +73,13 @@ $.fn.extend({
 					jqEasyCounterMsg.css({"color" : options.msgFontColor});
 				};
 				
-				jqEasyCounterMsg.html('Characters: ' + $this.val().length + "/" + options.maxChars);
+				jqEasyCounterMsg.html($this.val().length + "/" + options.maxChars);
                 jqEasyCounterMsg.stop().fadeTo( 'fast', 1);
 			};
         });
     }
 });
 
-})(jQuery);
+}
+
+)(jQuery);

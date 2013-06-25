@@ -114,12 +114,12 @@ public class MyWebSocketServlet extends WebSocketServlet {
 								break;
 							case 'h':
 								System.out.println("honk");
-								CarControllerWrapper.sendSignal();
+								if(stateKey == 's') CarControllerWrapper.sendSignal();
 								break;
 							case 'l':
 								System.out.println("light");
-								///TODO \todo light
-								//CarControllerWrapper.setLight(on/off);
+								if(stateKey == 's') CarControllerWrapper.setLight(true);
+								if(stateKey == 'e') CarControllerWrapper.setLight(false);
 								break;	
 							}
 						}

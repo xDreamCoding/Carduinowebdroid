@@ -60,8 +60,8 @@ public class FilterPass2  extends HttpServlet {
 		// TODO Auto-generated method stub
 		// nothing to do here
 		
-		if(DEBUG) System.out.println("doGet");
-		
+//		if(DEBUG) System.out.println("doGet");
+//		
 //			String[] args1 = null;							// new
 //		
 //  	  		if ( !BildSender.Runner) {						// new
@@ -176,7 +176,7 @@ public class FilterPass2  extends HttpServlet {
 
 					if ( BildSender.Runner) {							// new
 			  	  		System.out.println("Stoppe CarStream ");		// new
-			  	  		BildSender.Stop();								// new
+			  	  		//BildSender.Stop();								// new
 			  	  		System.out.println("CarStream beendet");		// new
 			  	  	}													// new
 					
@@ -310,6 +310,7 @@ public class FilterPass2  extends HttpServlet {
 						opt.logQueueToFile = false;
 					}
 					conf.setOptions(opt);
+					conf.saveOptions();
 					break;
 				default:
 					//HOW COULD DIS HAPPEN?

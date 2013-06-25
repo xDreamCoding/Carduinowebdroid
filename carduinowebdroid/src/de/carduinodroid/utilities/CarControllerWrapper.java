@@ -34,8 +34,11 @@ public class CarControllerWrapper {
 	 * @return Returns the static CarControllerWrapper object.
 	 */
 	public static CarControllerWrapper getCarController(Log log) {
-		if(ccw == null)
+		if(ccw == null) {
 			ccw = new CarControllerWrapper(log);
+			ccw.setSpeed(50);
+			ccw.setAngle(50);
+		}
 		return ccw;
 	}
 	
