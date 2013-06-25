@@ -112,6 +112,16 @@ public class FilterPass2  extends HttpServlet {
 					String userID, pw;
 					userID = (String)postParameterMap.get("loginName")[0];
 					pw = (String)postParameterMap.get("password")[0];
+					
+					String[] active = new String[activeSession.getLength()];
+					active = activeSession.getAllSessions();
+					for (int i = 0; i < active.length; i++){
+						User online = db.getUserBySession(activeSession.getSessionInt(SessionID));
+						if (online.getUserID().equals(userID)){
+							System.out.println("User bereits eingeloggt");
+							break;
+						}
+					}
 					User u = db.loginUser(userID, pw);
 					
 					if(u == null)
@@ -311,6 +321,25 @@ public class FilterPass2  extends HttpServlet {
 					}
 					conf.setOptions(opt);
 					conf.saveOptions();
+					break;
+				case "admincontrol":
+					if (session.getAttribute("isAdmin").equals(false)){
+						System.out.println("Admin-Rechte werden für diese Operation benötigt");
+						break;
+					}
+					
+					waitingqueue.InsertFirst(session.getId());
+					activeSession.resetDriver();
+					Main.restartTimer();
+					break;
+				case "stopdriving":
+					if (SessionID.equals(activeSession.getDriver())){
+						activeSession.resetDriver();
+						Main.restartTimer();
+					}
+					else{
+						break;
+					}
 					break;
 				default:
 					//HOW COULD DIS HAPPEN?

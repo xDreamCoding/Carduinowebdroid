@@ -28,7 +28,7 @@ import java.util.Map.Entry;
 //@WebServlet(loadOnStartup=1, value = "/main")
 
 /**
- * \brief This Class is used to handle user-timeouts and to log GPS in a given interval and to handle the waiting queue and to handle Servlet Requests
+ * \brief This Class is used to handle user-timeouts and to log GPS in a given interval and to handle the waiting queue
  * @author Alexander Rose
  *
  */
