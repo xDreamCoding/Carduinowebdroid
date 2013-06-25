@@ -77,7 +77,7 @@ $(document).ready(function()
     	<td id="main_table_sidebar_left">
         	<div id="main_chat_container">
         		<textarea type="text" id="main_chat" readonly></textarea>
-          	  	<textarea type="text" name="chat" id="main_chat_textinput" maxlength="256"></textarea>		
+          	  	<textarea type="text" name="chat" id="main_chat_textinput" maxlength="256" placeholder="Chat here..."></textarea>		
             	<button id="main_chat_speak">Chat</button>
           	</div>
         </td>
