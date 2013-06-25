@@ -20,7 +20,7 @@ public class CarControllerWrapper {
 	BufferedImage img;
 	String[] resolutions;
 	String latitude, longitude;
-	static boolean up, down, right, left, lightOn = false;
+	static boolean up = false, down = false, right = false, left = false, lightOn = false, connected = false;
 
 	private CarControllerWrapper(Log log) {
 		cc = new Controller_Computer(log, this);		
@@ -61,55 +61,24 @@ public class CarControllerWrapper {
 			throw new NullPointerException();
 		
 		ccw.cc.network.connect(ip);
+		connected = true;
 	}
 	
 	/**
-	 * \brief Send control signal to the car.
-	 * @param up
-	 * @param down
-	 * @param right
-	 * @param left
+	 * \brief Update Variables in Car_Controller
 	 */
-	public static void setDirection(boolean up, boolean down, boolean right, boolean left) {
-		ccw.cc.car_controller.UpdateVariables(up, down, right, left);
-	}
-	
 	public static void updateDirection() {
-		ccw.cc.car_controller.UpdateVariables(up, down, right, left);
+		if(connected)
+			ccw.cc.car_controller.UpdateVariables(up, down, right, left);
 	}
-	
-	public static void driveForward() { setDirection(true, false, false, false); }
-	public static void driveBackward() { setDirection(false, true, false, false); }
-	public static void driveRight() { setDirection(false, false, true, false); }
-	public static void driveLeft() { setDirection(false, false, false, true); }
-
-	/*
-	public void confirmButtonUp(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void confirmButtonDown(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void confirmButtonRight(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void confirmButtonLeft(boolean b) {
-		// TODO Auto-generated method stub
-	}
-	*/
 	
 	/**
 	 * \brief Turns the light on or off.
-	 * @param on Whether ligth is turned on or no.
+	 * @param on Whether light is turned on or no.
 	 */
 	private static void setLight(boolean on) {
-		ccw.cc.camera_settings.send_switch_light(on ? "1" : "0");
+		if(connected)
+			ccw.cc.camera_settings.send_switch_light(on ? "1" : "0");
 	}
 	
 	/**
@@ -125,7 +94,8 @@ public class CarControllerWrapper {
 	 * \brief Sends an audio signal
 	 */
 	public static void sendSignal() {
-		ccw.cc.sound_output.send_output_soundsignal("1");
+		if(connected)
+			ccw.cc.sound_output.send_output_soundsignal("1");
 	}
 	
 	public static void setUp(boolean bool) { up = bool; updateDirection(); }
