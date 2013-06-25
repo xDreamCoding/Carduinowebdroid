@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.carduinodroid.Main;
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.DBConnector;
+import org.apache.catalina.Session;
 import org.apache.catalina.websocket.WsOutbound;
 
 /**
@@ -46,6 +47,10 @@ public class activeSession {
 	 */
 	
 	public static int insertSession(String SessionID,String ipadress,String userid){
+		if (activeSessions.contains(SessionID)){
+			System.out.println("bereits verbunden");
+			return -1;
+		}
 		int ID = -1;		
 		ID = db.createSession(userid, ipadress);
 		if (ID == -1){
@@ -91,6 +96,7 @@ public class activeSession {
 			Driver = Driver -1;
 		}
 		if (index == Driver){
+			db.stopDrive(activeInt.get(Driver));
 			Driver = -1;
 			Main.restartTimer();
 			CarControllerWrapper.setDown(false);
@@ -126,6 +132,7 @@ public class activeSession {
 	 */
 	
 	public static int getSessionInt(String SessionID){
+		if (SessionID == null) return -1;
 		int SessionInt = activeInt.get(activeSessions.indexOf(SessionID));
 		return SessionInt;
 	}
@@ -225,5 +232,9 @@ public class activeSession {
 	public static String getDriver(){
 		if (Driver == -1) return null;
 		return activeSessions.get(Driver);
+	}
+
+	public static int getLength(){
+		return activeSessions.size();
 	}
 }

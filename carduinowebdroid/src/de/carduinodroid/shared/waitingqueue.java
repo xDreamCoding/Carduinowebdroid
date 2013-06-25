@@ -53,7 +53,7 @@ public class waitingqueue {
 	 */
 	
 	public static void insertUser(String SessionID){
-		if (Warteschlange.contains(SessionID)){
+		if (Warteschlange.contains(SessionID) || activeSession.isDriver(SessionID)){
 			System.out.println("Wurde bereits eingereiht");
 			return;
 		}
@@ -105,8 +105,19 @@ public class waitingqueue {
 	 */
 	
 	public static String[] getNickname(){
+
+		if (!(activeSession.getDriver() == null)){
+			String[] Nickname = new String[Warteschlange.size()+1];
+			User driver = db.getUserBySession(activeSession.getSessionInt(activeSession.getDriver()));
+			Nickname[0] = driver.getNickname();
+			for(int i = 1;i < Nickname.length; i++){			
+				User user = db.getUserBySession(activeSession.getSessionInt(Warteschlange.get(i-1)));
+				Nickname[i] = user.getNickname();
+			}
+			return Nickname;
+		}
 		String[] Nickname = new String[Warteschlange.size()];
-		for(int i = 0;i < Nickname.length; i++){
+		for(int i = 0;i < Nickname.length; i++){			
 			User user = db.getUserBySession(activeSession.getSessionInt(Warteschlange.get(i)));
 			Nickname[i] = user.getNickname();
 		}
