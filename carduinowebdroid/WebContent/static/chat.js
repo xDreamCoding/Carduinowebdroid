@@ -45,5 +45,5 @@ function chatHandleMessage(message) {
  * Send chat_input to server.
  */
 function postToServer() {
-	if($("#main_chat_textinput").val().trim() !== "") ws.send(identifierChat + $("#main_chat_textinput").val());
+	if($("#main_chat_textinput").val().trim() !== "") ws.send(identifierChat + $("#main_chat_textinput").val().trim());
 }
