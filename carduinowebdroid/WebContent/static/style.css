@@ -213,6 +213,15 @@ textarea{
 	margin-bottom:50px;
 }
 
+#main_take_control{
+	position:absolute;
+	bottom:0;
+	right:0;
+	padding-left:8px;
+	padding-right:8px;
+	margin-bottom:50px;
+}
+
 #main_stream{
 	border:1px solid #ECD6BF;
 	padding: 3px;
