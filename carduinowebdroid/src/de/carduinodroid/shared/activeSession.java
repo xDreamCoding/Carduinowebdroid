@@ -187,6 +187,9 @@ public class activeSession {
 	 */
 	
 	public static void setDriver(String SessionID){
+		if (!(Driver == -1)){
+			db.stopDrive(activeInt.get(Driver));
+		}
 		int index = activeSessions.indexOf(SessionID);
 		Driver = index;
 	}
@@ -196,6 +199,9 @@ public class activeSession {
 	 */
 	
 	public static void resetDriver(){
+		if (!(Driver == -1)){
+			db.stopDrive(activeInt.get(Driver));
+		}
 		Driver = -1;
 	}
 
