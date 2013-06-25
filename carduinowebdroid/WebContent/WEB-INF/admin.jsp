@@ -88,7 +88,7 @@
 					<c:if test="${isAdmin}"><c:set var="isAdmincb">checked="checked"</c:set></c:if>
 				</c:if>
 			<div id="admin_box">
-					<form action="POST">
+					<form method="POST">
 						<input type="hidden" name="action" value="edituser" />
 						<table>
 							<tr><b>Edit User</b></tr>
@@ -109,7 +109,7 @@
 					</form> 
 			</div>
 			<div id="admin_box">
-				<form action="POST">
+				<form method="POST">
 					<input type="hidden" name="action" value="adduser" />
 					<table>
 						<tr><b>Add User</b></tr>
@@ -130,7 +130,7 @@
 							<td><input type="checkbox" name="rights" /></td>
 						</tr>
 					</table>
-					<input type="submit" name="action" value="Add user" />			
+					<input type="submit" value="Add user" />			
 				</form>
 			</div>
 		</td>

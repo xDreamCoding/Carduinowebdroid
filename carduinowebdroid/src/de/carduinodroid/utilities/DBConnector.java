@@ -718,7 +718,6 @@ public class DBConnector {
 	 * @return Returns "true" if the SessionID was found or "false" if not.
 	 */
 	private boolean deleteUser(String userID) {
-		///TODO \todo delete all other entries with a reference on this userID
 		PreparedStatement stmt = null;
 		
 		try {
