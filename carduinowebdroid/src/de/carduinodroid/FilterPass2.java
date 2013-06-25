@@ -198,9 +198,9 @@ public class FilterPass2  extends HttpServlet {
 						System.out.println("Admin-Rechte werden für diese Operation benötigt");
 						break;
 					}
-					userID = session.getAttribute("userid").toString(); 
-					String Nickname = session.getAttribute("nickname").toString();
-					boolean isAdmin = (session.getAttribute("rights").equals(true));
+					userID = session.getAttribute("userId").toString(); 
+					String Nickname = session.getAttribute("nickName").toString();
+					/* DIS SHIT DOES NOT EXISTS BECAUSE U NO LISTEN >.< */boolean isAdmin = (session.getAttribute("rights").equals(true));
 					if (userID == db.getUserIdBySession(activeSession.getSessionInt(session.getId())) && (!isAdmin)){
 						System.out.println("Man kann sich nicht selbst das Admin recht entziehen");
 						break;
