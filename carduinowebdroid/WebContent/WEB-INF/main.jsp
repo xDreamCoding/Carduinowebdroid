@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="static/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
 <script src="static/jquery-1.9.1.js"></script>
 <script src="static/jquery-ui.js"></script>
+<script src="static/counter.js"></script>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="/WEB-INF/lib/tags/customTag.tld" prefix="ct" %>
 
@@ -43,6 +44,12 @@ $(document).ready(function() {
 </script>
 
 <script>
+$(document).ready(function(){
+	$("#main_chat_textinput").jqEasyCounter();
+});
+</script>
+
+<script>
 /* ausführen, wenn html-seite geladen wurde */
 $(document).ready(function()
 {
@@ -70,8 +77,7 @@ $(document).ready(function()
     	<td id="main_table_sidebar_left">
         	<div id="main_chat_container">
         		<textarea type="text" id="main_chat" readonly></textarea>
-          	  	<textarea type="text" name="chat" id="main_chat_textinput" maxlength="256"></textarea>
-           		<div id="main_chat_chars">256</div>            		
+          	  	<textarea type="text" name="chat" id="main_chat_textinput" maxlength="256"></textarea>		
             	<button id="main_chat_speak">Chat</button>
           	</div>
         </td>

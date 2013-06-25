@@ -13,35 +13,7 @@
  * @tparam int limit Defines how many chars are accepted.
  * @tparam string elem Element to control.
  */
-	$(function() {
-		$.fn.extend({
-			limiter : function(limit, elem) {
-				$(this).on("keyup focus", function() {
-					setCount(this, elem);
-				});
-				function setCount(src, elem) {
-					var chars = src.value.length;
-					if (chars > limit) {
-						src.value = src.value.substr(0, limit);
-						chars = limit;
-					}
-					elem.html(limit - chars);
-				}
-				setCount($(this)[0], elem);
-			}
-		});
-	});
-	
-/**
- * Limiter call.
- */
-	
-$(function() {
-	var elem = $("#main_chat_chars");
-	if ($("#main_chat_textinput").is(":focus")) {
-		$("#main_chat_textinput").limiter(256, elem);		
-	}
-});
+
 
 /**
  * Handles the dynamic size of the page if the toggle buttons are pressed. Will
