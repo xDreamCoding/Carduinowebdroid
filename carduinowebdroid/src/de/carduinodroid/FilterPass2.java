@@ -213,12 +213,27 @@ public class FilterPass2  extends HttpServlet {
 						System.out.println("Admin-Rechte werden für diese Operation benötigt");
 						break;
 					}
-					if (!(postParameterMap.containsKey("userid")) || !(postParameterMap.containsKey("nickname"))){
+					if (!(postParameterMap.containsKey("userid")) || !(postParameterMap.containsKey("password"))){
 						System.out.println("Feld unvollständig");
 						break;
 					}
 					boolean isAdmin;
 					userID = (String) postParameterMap.get("userid")[0]; 
+					
+					if (postParameterMap.containsKey("chkdel1") && postParameterMap.containsKey("chkdel2") && postParameterMap.containsKey("chkdel3")){
+						db.deleteUser(userID);
+						break;
+					}
+					String Password = (String) postParameterMap.get("password")[0];
+					
+					System.out.println("yolo"+Password);
+					if (Password != null && Password.equals("") == false){
+						db.changePassword(userID, Password);
+					}
+					if (!postParameterMap.containsKey("nickname")){
+						System.out.println("Feld zum editieren von Usern unvollständig");
+						break;
+					}
 					String Nickname = (String) postParameterMap.get("nickname")[0];
 					if (postParameterMap.containsKey("rights") == false){
 						isAdmin = false;
@@ -238,7 +253,6 @@ public class FilterPass2  extends HttpServlet {
 						db.editUser(userID, Nickname, Right.USER);
 						System.out.println("User");
 					}
-					
 					break;
 				case "adduser":
 					if (session.getAttribute("isAdmin").equals(false)){

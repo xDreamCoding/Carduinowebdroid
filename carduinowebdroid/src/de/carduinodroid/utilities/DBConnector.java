@@ -717,7 +717,7 @@ public class DBConnector {
 	 * @param userID UserID to delete.
 	 * @return Returns "true" if the SessionID was found or "false" if not.
 	 */
-	private boolean deleteUser(String userID) {
+	public boolean deleteUser(String userID) {
 		PreparedStatement stmt = null;
 		
 		try {
