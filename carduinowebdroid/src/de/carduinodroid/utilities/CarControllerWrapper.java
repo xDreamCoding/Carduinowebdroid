@@ -55,7 +55,10 @@ public class CarControllerWrapper {
 	 * @param ip IP address to connect to.
 	 * @throws UnknownHostException In case the ip address is invalid or the carduinodroid is unreachable.
 	 */
-	public void connect(String ip) throws UnknownHostException {
+	public void connect(String ip) throws Exception {
+		if(ccw == null)
+			throw new NullPointerException();
+		
 		ccw.cc.network.connect(ip);
 	}
 	

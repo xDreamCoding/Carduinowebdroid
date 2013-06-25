@@ -115,15 +115,15 @@
 						<tr><b>Add User</b></tr>
 						<tr>
 							<td>UserID:</td>
-							<td><input type="text" placeholder="UserID"></td>
+							<td><input type="text" name="userid" placeholder="UserID"></td>
 						</tr>
 						<tr>
 							<td>Nickname:</td>
-							<td><input type="text" placeholder="Nickname" /></td>
+							<td><input type="text" name="nickname" placeholder="Nickname" /></td>
 						</tr>
 						<tr>
 							<td>Password:</td>
-							<td><input type="text" placeholder="Password" /></td>
+							<td><input type="text" name="password" placeholder="Password" /></td>
 						</tr>
 						<tr>
 							<td>isAdmin:</td>
