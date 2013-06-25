@@ -102,7 +102,7 @@
 							</tr>
 							<tr>
 								<td >Password:</td>
-								<td><input type="text" name="nickname" placeholder="Set new Password"/></td>
+								<td><input type="text" name="password" placeholder="Set new Password"/></td>
 							</tr>
 							<tr>
 								<td >isAdmin:</td>
