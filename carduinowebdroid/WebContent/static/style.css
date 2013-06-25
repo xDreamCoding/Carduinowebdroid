@@ -204,6 +204,15 @@ textarea{
 	padding-right:8px;
 }
 
+#main_connect{
+	position:absolute;
+	bottom:0;
+	left:1;
+	padding-left:8px;
+	padding-right:8px;
+	margin-bottom:50px;
+}
+
 #main_stream{
 	border:1px solid #ECD6BF;
 	padding: 3px;

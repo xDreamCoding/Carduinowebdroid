@@ -150,6 +150,10 @@ $(document).ready(function()
                 	<a href="admin.jsp?menu=1">
                 		<button id="main_admin">Admin</button>
                 	</a>
+                	<form method="POST">
+						<input type="hidden" name="action" value="connect"/>
+						<input id="main_connect" type="submit" value="Connect to Car" />
+					</form>
                 </c:if>
             </div> 
         </td>
