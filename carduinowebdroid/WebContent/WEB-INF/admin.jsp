@@ -104,6 +104,10 @@
 								<td >isAdmin:</td>
 								<td><input type="checkbox" name="rights" ${isAdmincb} /></td>
 							</tr>
+							<tr>
+								<td >Delete User:</td>
+								<td><input type="checkbox" name="chkdel1"  /><input type="checkbox" name="chkdel2"  /><input type="checkbox" name="chkdel3"  /></td>
+							</tr>
 						</table>
 						<input type="submit" value="Edit" />
 					</form> 
