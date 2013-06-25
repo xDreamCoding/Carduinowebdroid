@@ -155,7 +155,7 @@ $(document).ready(function()
 						<input id="main_connect" type="submit" value="Connect to Car" />
 					</form>
 					<form method="POST">
-						<input type="hidden" name="action" value="Take Control"/>
+						<input type="hidden" name="action" value="admincontrol"/>
 						<input id="main_take_control" type="submit" value="Take Control" />
 					</form>
                 </c:if>
