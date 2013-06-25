@@ -16,8 +16,8 @@ function initializeWebsocket() {
 	};
 	ws.onclose = function(){
 		$("#main_chat").append("Websocket Closed!" + "\n");
-		//try reconnect after 2 sek
-		//window.setTimeout(initializeWebsocket, 2000);
+		// try reconnect after 2 sek
+		window.setTimeout(initializeWebsocket, 2000);
 	};
 	ws.onmessage = function(message){
 		if(message.data.match(identifierChat + "*"))

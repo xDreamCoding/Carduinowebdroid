@@ -31,6 +31,7 @@
 		registerControls();
 		registerKeys();
 		window.setInterval(heartbeat,1000);
+		$("#main_controls").hide();
 	});
 </script>
 

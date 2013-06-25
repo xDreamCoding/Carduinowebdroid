@@ -31,6 +31,9 @@ import de.carduinodroid.utilities.Log;
 public class MyWebSocketServlet extends WebSocketServlet {
 
 	private static final long serialVersionUID = 4642341228711151433L;
+	public static final String identifierChat = "Ch%:";
+	public static final String identifierControl = "Co%:";
+	public static final String identifierHeartbeat = "Hb%:";
 
 	/**
 	 * Connected clients
@@ -46,9 +49,6 @@ public class MyWebSocketServlet extends WebSocketServlet {
 
 		final Log log = (Log)context.getAttribute("log");
 
-		final String identifierChat = "Ch%:";
-		final String identifierControl = "Co%:";
-		final String identifierHeartbeat = "Hb%:";
 
 		/**
 		 * Anonymous inner class to create and define MessageInbound object.

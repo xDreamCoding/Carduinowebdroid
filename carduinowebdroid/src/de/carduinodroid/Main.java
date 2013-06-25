@@ -1,6 +1,8 @@
 package de.carduinodroid;
 
 import java.io.IOException;
+import java.nio.CharBuffer;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -122,10 +124,23 @@ public class Main /* extends HttpServlet */ {
 						return;
 					}
 					else{
-						String aktSessionID = waitingqueue.getNextUser();
-						driveID = db.startDrive(db.getUserIdBySession(activeSession.getSessionInt(aktSessionID)));
-						activeSession.setDriver(aktSessionID);
-						///TODO \todo Fahrrechte;
+						try {
+							if(aktSessionID != null) 
+								activeSession.getSocket(aktSessionID).writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "n"));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						try {
+							String aktSessionID = waitingqueue.getNextUser();
+							driveID = db.startDrive(db.getUserIdBySession(activeSession.getSessionInt(aktSessionID)));
+							activeSession.setDriver(aktSessionID);
+							activeSession.getSocket(aktSessionID).writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "y"));
+							///TODO \todo Fahrrechte;
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 
 						}
 					}
