@@ -86,7 +86,7 @@ $(document).ready(function()
         <td id="main_table_stream">
         
         	<div id="main_stream">
-        		<!-- <iframe src="http://localhost:8889/" width="640" height="480" scrolling="no" /> -->
+        	<canvas></canvas>
     		</div>
         	<div id="main_controls">
             	<table id="main_control_table">
@@ -138,27 +138,27 @@ $(document).ready(function()
         <td id="main_table_sidebar_right">
         	<div id="main_q_container">	
                	<div id="main_q">Loading Queue</div>
-                <form method="post">
-                    <input id="main_qsubmit" type="submit" value="Enqueue" />
-                </form>
-                <form method="POST">
-                	<input type="hidden" name="action" value="logout"/>
-                	<input id="main_logout" type="submit" value="Logout" />
-				</form>
-                <c:set var="isAdmin"><ct:isAdmin /></c:set>
-                <c:if test="${isAdmin == 1}">
-                	<a href="admin.jsp?menu=1">
-                		<button id="main_admin">Admin</button>
-                	</a>
-                	<form method="POST">
-						<input type="hidden" name="action" value="connect"/>
-						<input id="main_connect" type="submit" value="Connect to Car" />
+	                <form method="post">
+	                    <input id="main_qsubmit" type="submit" value="Enqueue" />
+	                </form>
+	                <form method="POST">
+	                	<input type="hidden" name="action" value="logout"/>
+	                	<input id="main_logout" type="submit" value="Logout" />
 					</form>
-					<form method="POST">
-						<input type="hidden" name="action" value="admincontrol"/>
-						<input id="main_take_control" type="submit" value="Take Control" />
-					</form>
-                </c:if>
+	                <c:set var="isAdmin"><ct:isAdmin /></c:set>
+	                <c:if test="${isAdmin == 1}">
+	                	<a href="admin.jsp?menu=1">
+	                		<button id="main_admin">Admin</button>
+	                	</a>
+	                	<form method="POST">
+							<input type="hidden" name="action" value="connect"/>
+							<input id="main_connect" type="submit" value="Connect to Car" />
+						</form>
+						<form method="POST">
+							<input type="hidden" name="action" value="admincontrol"/>
+							<input id="main_take_control" type="submit" value="Take Control" />
+						</form>
+	                </c:if>
             </div> 
         </td>
     </tr>
