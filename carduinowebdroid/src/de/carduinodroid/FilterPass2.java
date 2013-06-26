@@ -11,10 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.AbstractDocument.Content;
-
-import com.sun.xml.internal.bind.CycleRecoverable.Context;
-
 import de.carduinodroid.shared.User;
 import de.carduinodroid.shared.activeSession;
 import de.carduinodroid.shared.waitingqueue;

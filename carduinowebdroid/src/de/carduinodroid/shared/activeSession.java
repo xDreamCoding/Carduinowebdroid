@@ -6,7 +6,6 @@ import de.carduinodroid.Main;
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.DBConnector;
 import javax.servlet.http.HttpSession;
-import org.apache.catalina.Session;
 import org.apache.catalina.websocket.WsOutbound;
 
 /**

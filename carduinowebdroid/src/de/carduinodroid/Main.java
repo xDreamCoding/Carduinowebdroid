@@ -3,24 +3,12 @@ package de.carduinodroid;
 import java.io.IOException;
 import java.nio.CharBuffer;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import de.carduinodroid.shared.*;
-import de.carduinodroid.shared.User.Right;
 import de.carduinodroid.utilities.*;
 import de.carduinodroid.utilities.Config.Options;
 
-import java.util.Iterator;
-import java.util.Map;
 import java.util.TimerTask;
 import java.util.Timer;
-import java.util.ArrayList;
-import java.util.Map.Entry;
 
 /**
  * Servlet implementation class Main

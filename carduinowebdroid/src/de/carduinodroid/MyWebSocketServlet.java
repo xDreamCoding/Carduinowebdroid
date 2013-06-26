@@ -6,8 +6,6 @@ import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Timer;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
