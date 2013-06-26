@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import de.carduinodroid.Main;
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.DBConnector;
+import javax.servlet.http.HttpSession;
 import org.apache.catalina.Session;
 import org.apache.catalina.websocket.WsOutbound;
 
@@ -19,6 +20,7 @@ public class activeSession {
 	private static ArrayList<String> activeSessions;
 	private static ArrayList<Integer> activeInt;
 	private static ArrayList<WsOutbound> activeSocket;
+	private static ArrayList<HttpSession> activeTomcat;
 	private static int Driver;
 	static DBConnector db;
 	
@@ -30,6 +32,7 @@ public class activeSession {
 		activeSessions = new ArrayList<String>();
 		activeInt = new ArrayList<Integer>();
 		activeSocket = new ArrayList<WsOutbound>();
+		activeTomcat = new ArrayList<HttpSession>();
 		db = null;
 		Driver = -1;
 		try {
@@ -95,16 +98,17 @@ public class activeSession {
 		if (index < Driver){
 			Driver = Driver -1;
 		}
-		if (index == Driver){
-			db.stopDrive(activeInt.get(Driver));
-			Driver = -1;
-			Main.restartTimer();
-			CarControllerWrapper.setDown(false);
-			CarControllerWrapper.setLeft(false);
-			CarControllerWrapper.setRight(false);
-			CarControllerWrapper.setUp(false);
-		}
-	
+		else{
+			if (index == Driver){
+				db.stopDrive(activeInt.get(Driver));
+				Driver = -1;
+				Main.restartTimer();
+				CarControllerWrapper.setDown(false);
+				CarControllerWrapper.setLeft(false);
+				CarControllerWrapper.setRight(false);
+				CarControllerWrapper.setUp(false);
+			}
+		}			
 		if (activeSessions.size() == 0){
 			deleteAll();
 		}
@@ -236,9 +240,5 @@ public class activeSession {
 
 	public static int getLength(){
 		return activeSessions.size();
-	}
-
-	public static boolean contains(String SessionID){
-		return activeSessions.contains(SessionID);
 	}
 }

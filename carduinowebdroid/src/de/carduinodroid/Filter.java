@@ -40,7 +40,7 @@ public class Filter implements javax.servlet.Filter {
 //		HttpServletRequest req = (HttpServletRequest) request;
 //		HttpSession session = req.getSession();
 //		
-//		if (!activeSession.contains(session.getId()) && session.getAttribute("nickName") != null){
+//		if (!activeSession.isActive(session.getId()) && session.getAttribute("nickName") != null){
 //			System.out.println("HAAAAAX");
 //			config.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, res);	
 //			return;<
