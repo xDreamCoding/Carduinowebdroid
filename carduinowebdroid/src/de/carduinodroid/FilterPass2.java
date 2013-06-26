@@ -83,7 +83,7 @@ public class FilterPass2  extends HttpServlet {
 		
 		Log log = (Log)request.getServletContext().getAttribute("log");
 		Config conf = (Config)request.getServletContext().getAttribute("config");
-		
+
 		if(request instanceof HttpServletRequest) {			
 			HttpServletRequest req = (HttpServletRequest) request;
 			HttpSession session = req.getSession();			
@@ -116,10 +116,10 @@ public class FilterPass2  extends HttpServlet {
 					String[] active = new String[activeSession.getLength()];
 					active = activeSession.getAllSessions();
 					for (int i = 0; i < active.length; i++){
-						User online = db.getUserBySession(activeSession.getSessionInt(SessionID));
+						User online = db.getUserBySession(activeSession.getSessionInt(active[i]));
 						if (online.getUserID().equals(userID)){
 							System.out.println("User bereits eingeloggt");
-							break;
+							return;
 						}
 					}
 					User u = db.loginUser(userID, pw);

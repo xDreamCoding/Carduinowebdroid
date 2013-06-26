@@ -237,4 +237,8 @@ public class activeSession {
 	public static int getLength(){
 		return activeSessions.size();
 	}
+
+	public static boolean contains(String SessionID){
+		return activeSessions.contains(SessionID);
+	}
 }

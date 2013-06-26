@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import de.carduinodroid.shared.activeSession;
 import de.carduinodroid.utilities.Log;
 
 /**
@@ -36,6 +37,14 @@ public class Filter implements javax.servlet.Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		if(DEBUG) System.out.println("filter");		
+//		HttpServletRequest req = (HttpServletRequest) request;
+//		HttpSession session = req.getSession();
+//		
+//		if (!activeSession.contains(session.getId()) && session.getAttribute("nickName") != null){
+//			System.out.println("HAAAAAX");
+//			config.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, res);	
+//			return;<
+//		}
 		
 		config.getServletContext().getRequestDispatcher("/filterPass2").include(request, res);
 		

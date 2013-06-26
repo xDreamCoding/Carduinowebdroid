@@ -107,7 +107,7 @@ public class Main /* extends HttpServlet */ {
 		try {
 			action = new TimerTask() {
 				DBConnector db = new DBConnector();
-				public void run() {
+				public void run() {					
 					if(flag){
 			    		caretaker.cancel();
 						caretaker = new Timer();
