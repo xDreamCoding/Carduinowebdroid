@@ -38,8 +38,7 @@ public class Filter implements javax.servlet.Filter {
 	public void doFilter(ServletRequest request, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		if(DEBUG) System.out.println("filter");		
 		
-		boolean staticRequest = false;
-		boolean websocketRequest = false;
+		boolean staticRequest = false, websocketRequest = false;
 		String target = "index";
 
 		if(request instanceof HttpServletRequest) {
@@ -49,9 +48,8 @@ public class Filter implements javax.servlet.Filter {
 			//System.out.println(ipAdress);
 			
 			if (!activeSession.isActive(session.getId()) && session.getAttribute("nickName") != null){
-				System.out.println("HAAAAAX");
-				config.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, res);	
-				return;
+				if(DEBUG) System.out.println("HAAAAAX " + session.getAttribute("nickName"));
+				session.removeAttribute("nickName");
 			}
 			
 			config.getServletContext().getRequestDispatcher("/filterPass2").include(request, res);
