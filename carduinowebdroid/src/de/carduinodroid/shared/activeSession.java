@@ -22,6 +22,7 @@ public class activeSession {
 	private static ArrayList<WsOutbound> activeSocket;
 	private static ArrayList<HttpSession> activeTomcat;
 	private static int Driver;
+	private static int DriverID;
 	static DBConnector db;
 	
 	/** 
@@ -35,6 +36,7 @@ public class activeSession {
 		activeTomcat = new ArrayList<HttpSession>();
 		db = null;
 		Driver = -1;
+		DriverID = -1;
 		try {
 			db = new DBConnector();
 		} catch (Exception e) {
@@ -49,7 +51,7 @@ public class activeSession {
 	 * @param userid of the user
 	 */
 	
-	public static int insertSession(String SessionID,String ipadress,String userid){
+	public static int insertSession(String SessionID,String ipadress,String userid, HttpSession Tomcat){
 		if (activeSessions.contains(SessionID)){
 			System.out.println("bereits verbunden");
 			return -1;
@@ -60,6 +62,7 @@ public class activeSession {
 			System.out.println("konnte Session nicht erstellen");
 			return -1;
 		}
+		activeTomcat.add(Tomcat);
 		activeSessions.add(SessionID);
 		activeInt.add(ID);
 		activeSocket.add(null);
@@ -94,13 +97,14 @@ public class activeSession {
 		activeSessions.remove(index);
 		activeInt.remove(index);
 		activeSocket.remove(index);
+		activeTomcat.remove(index);
 		
 		if (index < Driver){
 			Driver = Driver -1;
 		}
 		else{
 			if (index == Driver){
-				db.stopDrive(activeInt.get(Driver));
+				db.stopDrive(DriverID);
 				Driver = -1;
 				Main.restartTimer();
 				CarControllerWrapper.setDown(false);
@@ -121,11 +125,13 @@ public class activeSession {
 	public static void deleteAll(){
 		for (int i = 0; i < activeSessions.size(); i++){
 			db.closeSession(getSessionInt(activeSessions.get(i)));
+			activeTomcat.get(i).removeAttribute("nickName");
 		}
 		
 		activeSessions.clear();
 		activeInt.clear();	
 		activeSocket.clear();
+		activeTomcat.clear();
 		Driver = -1;
 	}
 
@@ -197,12 +203,13 @@ public class activeSession {
 	 * @param SessionID of the User
 	 */
 	
-	public static void setDriver(String SessionID){
+	public static void setDriver(String SessionID, int driverID){
 		if (!(Driver == -1)){
-			db.stopDrive(activeInt.get(Driver));
+			db.stopDrive(DriverID);
 		}
 		int index = activeSessions.indexOf(SessionID);
 		Driver = index;
+		DriverID = driverID;
 	}
 
 	/** 
@@ -211,9 +218,10 @@ public class activeSession {
 	
 	public static void resetDriver(){
 		if (!(Driver == -1)){
-			db.stopDrive(activeInt.get(Driver));
+			db.stopDrive(DriverID);
 		}
 		Driver = -1;
+		DriverID = -1;
 	}
 
 	/** 

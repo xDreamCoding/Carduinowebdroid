@@ -134,7 +134,7 @@ public class Main /* extends HttpServlet */ {
 						try {
 							String aktSessionID = waitingqueue.getNextUser();
 							driveID = db.startDrive(db.getUserIdBySession(activeSession.getSessionInt(aktSessionID)));
-							activeSession.setDriver(aktSessionID);
+							activeSession.setDriver(aktSessionID, driveID);
 							activeSession.getSocket(aktSessionID).writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "y"));
 							///TODO \todo Fahrrechte;
 						} catch (IOException e) {

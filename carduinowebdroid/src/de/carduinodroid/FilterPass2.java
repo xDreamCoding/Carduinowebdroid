@@ -127,7 +127,7 @@ public class FilterPass2  extends HttpServlet {
 					if(u == null)
 						break;
 					
-					int ID = activeSession.insertSession(SessionID, ipAdress, userID);
+					int ID = activeSession.insertSession(SessionID, ipAdress, userID, session);
 					if (ID == -1)
 						break;
 					
@@ -167,7 +167,7 @@ public class FilterPass2  extends HttpServlet {
 				case "watchDriver":
 					userID = "gue" + System.currentTimeMillis();
 					db.loginGuest(userID);
-					ID = activeSession.insertSession(SessionID, ipAdress, userID);
+					ID = activeSession.insertSession(SessionID, ipAdress, userID, session);
 					if (ID == -1){
 						log.writelogfile("error creating session for guest " + userID);
 						break;

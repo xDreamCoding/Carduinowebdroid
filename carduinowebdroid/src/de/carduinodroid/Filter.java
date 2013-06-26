@@ -37,16 +37,6 @@ public class Filter implements javax.servlet.Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		if(DEBUG) System.out.println("filter");		
-//		HttpServletRequest req = (HttpServletRequest) request;
-//		HttpSession session = req.getSession();
-//		
-//		if (!activeSession.isActive(session.getId()) && session.getAttribute("nickName") != null){
-//			System.out.println("HAAAAAX");
-//			config.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, res);	
-//			return;<
-//		}
-		
-		config.getServletContext().getRequestDispatcher("/filterPass2").include(request, res);
 		
 		boolean staticRequest = false;
 		boolean websocketRequest = false;
@@ -57,6 +47,15 @@ public class Filter implements javax.servlet.Filter {
 			HttpSession session = req.getSession();
 			//String ipAdress = req.getRemoteAddr();
 			//System.out.println(ipAdress);
+			
+			if (!activeSession.isActive(session.getId()) && session.getAttribute("nickName") != null){
+				System.out.println("HAAAAAX");
+				config.getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, res);	
+				return;
+			}
+			
+			config.getServletContext().getRequestDispatcher("/filterPass2").include(request, res);
+			
 			if(DEBUG) System.out.println("-> " + req.getRequestURI());
 
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
