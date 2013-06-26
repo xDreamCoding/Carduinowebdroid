@@ -120,7 +120,7 @@ textarea{
 	margin-left:5px;
 	border:1px solid #ECD6BF;
 	padding: 3px;
-	width: 96%;
+	width: 95%;
 	height: auto !important;
 	height: 75%;
 	min-height: 75%;
@@ -147,7 +147,7 @@ textarea{
     margin-right:auto;
     padding:3px;
     height: 75px;
-	width:96%;
+	width:95%;
     border-radius: 4px;
     margin-left:4px;
     padding:3px;
@@ -163,7 +163,11 @@ textarea{
 	
 #main_chat_speak{
 	margin-top:5px;
-	width:100%;
+	width:19%;
+	position:absolute;
+	bottom:0;
+	margin-bottom:5px;
+	margin-left:5px;
 }
 
 #main_q{
