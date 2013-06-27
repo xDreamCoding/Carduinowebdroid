@@ -80,7 +80,26 @@ $(document).ready(function()
             data: "action=admincontrol",
             success: function(msg)
             {
-                $("main_q").load("queue.jsp")
+                /* TODO: Needs ACK*/
+            }
+        });
+        return false;
+    });
+ 
+});
+</script>
+
+<script>
+$(document).ready(function()
+{
+    $("#main_stopdriving").click(function() {
+        $.ajax({
+            type: "POST",
+            url: "main.jsp",
+            data: "action=stopdriving",
+            success: function(msg)
+            {
+               /* TODO: Needs ACK*/
             }
         });
         return false;
@@ -105,13 +124,6 @@ $(function() {
 
 </head>
 <body>
-
-<div id="dialog-message" title="Download complete">
-<p>
-<span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0;"></span>
-You are now controlling the Car.
-</p>
-</div>
 
 <table id="main_table">
 	<tr>
@@ -182,7 +194,7 @@ You are now controlling the Car.
 	                    <input id="main_qsubmit" type="submit" value="[En/de]queue" />
 	                </form>
 	                <form method="post">
-	                    <input id="main_qsubmit" type="submit" value="Stop driving" />
+	                    <input id="main_stopdriving" type="submit" value="Stop driving" />
 	                </form>
 	                <form method="POST">
 	                	<input type="hidden" name="action" value="logout"/>
