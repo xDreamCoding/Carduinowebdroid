@@ -170,7 +170,6 @@
 <div id="admin_setting">
 	<form method="POST">
 		<input type="hidden" name="action" value="connect"/>
-		<input id="main_connect" type="submit" value="Connect to Car" />
 	</form>
 	<br>
 
@@ -264,7 +263,16 @@
 					</td>
 				</tr>
 			</table>
-			<input type="submit" value="Save settings" />
+			<table>
+				<tr>
+					<td id="main_left_button">
+						<input type="submit" value="Save settings" />
+					</td>
+					<td>
+						<input id="admin_connect" type="submit" value="Connect to Car" />
+					</td>
+				</tr>
+			</table>
 		</form>
 		</div>
 </div>

@@ -411,6 +411,14 @@ width:100%;
 	width:180px;
 }
 
+#admin_connect{
+	align:right;
+}
+
+#main_left_button{
+	width:450px;
+}
+
 #about_frame{
 	border:1px solid #ECD6BF;
 	padding: 3px;
