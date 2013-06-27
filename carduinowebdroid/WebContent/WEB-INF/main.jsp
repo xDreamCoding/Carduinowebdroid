@@ -62,7 +62,7 @@ $(document).ready(function()
             data: "action=toggleq",
             success: function(msg)
             {
-                $("main_q").load("queue.jsp")
+                $("main_q").load("queue.jsp");
             }
         });
         return false;
@@ -100,6 +100,7 @@ $(document).ready(function()
             data: "action=stopdriving",
             success: function(msg)
             {
+            	$("#main_controls").hide();
                /* TODO: Needs ACK*/
             }
         });
