@@ -105,8 +105,7 @@ $(document).ready(function()
             }
         });
         return false;
-    });
- 
+    }); 
 });
 </script>
 
@@ -125,6 +124,28 @@ $(function() {
 });
 </script>
 
+<script>
+$(function(){
+	var count = 10;
+	countdown = setInterval(function(){
+		$("#main_chat_textinput").html(count);
+		if (count == 0){
+			$.ajax({
+	            type: "POST",
+	            url: "main.jsp",
+	            data: "action=stopdriving",
+	            success: function(msg)
+	            {
+	            	$("#main_controls").hide();
+	               /* TODO: Needs ACK*/
+	            }
+			});
+			count = 10;
+		}
+		count--;
+	},1000);
+});
+</script>
 
 </head>
 <body>
