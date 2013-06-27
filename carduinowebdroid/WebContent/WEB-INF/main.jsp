@@ -40,7 +40,7 @@ $(document).ready(function() {
 	$.ajaxSetup({ cache: false }); // This part addresses an IE bug.  without it, IE will only load the first number and will never refresh
 	setInterval(function() {
 	$('#main_q').load('queue.jsp');
-	}, 3000); // the "3000" here refers to the time to refresh the div.  it is in milliseconds. 
+	}, 1000); // the "3000" here refers to the time to refresh the div.  it is in milliseconds. 
 	});
 </script>
 
@@ -58,7 +58,7 @@ $(document).ready(function()
         $.ajax({
             type: "POST",
             url: "main.jsp",
-            data: "action=enqueue",
+            data: "action=toggleq",
             success: function(msg)
             {
                 $("main_q").load("queue.jsp")
@@ -70,8 +70,48 @@ $(document).ready(function()
 });
 </script>
 
+<script>
+$(document).ready(function()
+{
+    $("#main_take_control").click(function() {
+        $.ajax({
+            type: "POST",
+            url: "main.jsp",
+            data: "action=admincontrol",
+            success: function(msg)
+            {
+                $("main_q").load("queue.jsp")
+            }
+        });
+        return false;
+    });
+ 
+});
+</script>
+
+ <script>
+$(function() {
+	$( "#dialog-message" ).dialog({
+		modal: true,
+		buttons: {
+			Ok: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+});
+</script>
+
+
 </head>
 <body>
+
+<div id="dialog-message" title="Download complete">
+<p>
+<span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0;"></span>
+You are now controlling the Car.
+</p>
+</div>
 
 <table id="main_table">
 	<tr>
@@ -139,7 +179,10 @@ $(document).ready(function()
         	<div id="main_q_container">	
                	<div id="main_q">Loading Queue</div>
 	                <form method="post">
-	                    <input id="main_qsubmit" type="submit" value="Enqueue" />
+	                    <input id="main_qsubmit" type="submit" value="[En/de]queue" />
+	                </form>
+	                <form method="post">
+	                    <input id="main_qsubmit" type="submit" value="Stop driving" />
 	                </form>
 	                <form method="POST">
 	                	<input type="hidden" name="action" value="logout"/>
