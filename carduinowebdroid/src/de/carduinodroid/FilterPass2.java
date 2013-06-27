@@ -347,7 +347,7 @@ public class FilterPass2  extends HttpServlet {
 					Main.restartTimer();
 					break;
 				case "stopdriving":
-					if (SessionID.equals(activeSession.getDriver())){
+					if (session.equals(activeSession.getDriver())){
 						activeSession.resetDriver();
 						Main.restartTimer();
 					}
