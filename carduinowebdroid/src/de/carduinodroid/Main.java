@@ -90,7 +90,13 @@ public class Main /* extends HttpServlet */ {
 		aliveSessions = false;
 	}
     
-    public static void main(Options opt, DBConnector db, Log logng) {
+    public static long getRemainingTime(){
+    	long aktTime = System.currentTimeMillis();
+    	long remainingTime = start+60000*Fahrzeit - aktTime;
+    	return remainingTime;
+    }
+	
+	public static void main(Options opt, DBConnector db, Log logng) {
     	
     	log = logng;
     	aliveSessions = false;
