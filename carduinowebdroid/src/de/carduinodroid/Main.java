@@ -76,6 +76,7 @@ public class Main /* extends HttpServlet */ {
 		action.cancel();
 		GPSLogger.cancel();
 		GPSLog.cancel();
+		Session.cancel();
 		activeSession.deleteAll();
 	}
     

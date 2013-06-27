@@ -52,7 +52,7 @@ public class MyServletContextListener implements ServletContextListener {
 		config.readOptions();
 		Options options = config.getOptions();
 		if(options.dbAddress == null) {
-			config.setDefault(true);
+			config.setDefault(false);
 			options = config.getOptions();
 		}
 		log.writelogfile("Options loaded");

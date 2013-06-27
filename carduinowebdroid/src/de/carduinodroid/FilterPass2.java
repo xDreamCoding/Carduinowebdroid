@@ -135,7 +135,7 @@ public class FilterPass2  extends HttpServlet {
 					
 					//System.out.println("user " + u.getNickname() + " has logged in");
 					break;
-				case "enqueue":					
+				case "toggleq":					
 					if (activeSession.isActive(session) == false){
 						session.removeAttribute("nickName");
 						break;
