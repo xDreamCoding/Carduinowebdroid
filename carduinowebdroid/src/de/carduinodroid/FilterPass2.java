@@ -296,7 +296,7 @@ public class FilterPass2  extends HttpServlet {
 					opt.dbAddress = (String) postParameterMap.get("DBAdress")[0];
 					opt.dbPW = (String) postParameterMap.get("DBPw")[0];
 					opt.dbUser = (String) postParameterMap.get("DBUser")[0];
-					opt.fahrZeit = Integer.parseInt(postParameterMap.get("drivetime")[0]);
+					opt.driveTime = Integer.parseInt(postParameterMap.get("drivetime")[0]);
 					opt.filePath = (String) postParameterMap.get("filepath")[0];
 					opt.logGPSInterval = Integer.parseInt( postParameterMap.get("loggpsint")[0]);
 					if (postParameterMap.containsKey("logchat")){

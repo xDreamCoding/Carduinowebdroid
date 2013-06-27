@@ -52,7 +52,7 @@ public class ConfigTag extends TagSupport {
 			break;
 		case 4:
 			try {
-				out.print(option.fahrZeit);
+				out.print(option.driveTime);
 			} catch (IOException e) {
 				throw new JspException("Error: " + e.getMessage());
 			}

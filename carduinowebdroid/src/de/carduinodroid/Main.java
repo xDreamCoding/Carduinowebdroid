@@ -43,7 +43,7 @@ public class Main /* extends HttpServlet */ {
 	 */
 	
 	public static void refresh(Options opt) {
-    	Fahrzeit = opt.fahrZeit;
+    	Fahrzeit = opt.driveTime;
     	gpsLogInterval = opt.logGPSInterval;
     	flag = true;
     }
@@ -88,7 +88,7 @@ public class Main /* extends HttpServlet */ {
     	
 		Timer Sessionhandle = new Timer();
 		Sessionhandle.schedule(Session, 10, 5000);
-		Fahrzeit = opt.fahrZeit;
+		Fahrzeit = opt.driveTime;
 		gpsLogInterval = opt.logGPSInterval;
 		if(DEBUG) System.out.println("Main-function");
 		
