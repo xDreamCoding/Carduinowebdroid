@@ -128,14 +128,11 @@ $(function() {
 </head>
 <body>
 
-<<<<<<< HEAD
-=======
 <div id="dialog-message" title="Download complete">
 <span class="ui-icon ui-icon-circle-check" id="main_top_message"></span>
 You are now controlling the Car.
 </div>
 
->>>>>>> top dialog fixed
 <table id="main_table">
 	<tr>
     	<td id="main_table_sidebar_left">
