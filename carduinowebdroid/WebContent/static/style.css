@@ -394,13 +394,21 @@ width:100%;
 	border:1px solid #ECD6BF;
 	padding: 3px;
 	margin-left:8px;
-	width:545px;
+	width:600px;
 	float:left;
 	border-radius: 4px;
 	box-shadow:
         0 2px 2px rgba(0,0,0,0.2),
         0 1px 5px rgba(0,0,0,0.2),
         0 0 0 12px rgba(255,255,255,0.4);	
+}
+
+#admin_setting_tableleft{
+	width:300px;
+}
+
+#main_left_input{
+	width:180px;
 }
 
 #about_frame{

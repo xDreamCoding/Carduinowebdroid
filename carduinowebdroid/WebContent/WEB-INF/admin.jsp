@@ -199,34 +199,34 @@
 		<form method="POST">
 			<table>
 				<tr>
-					<td>
+					<td id="admin_setting_tableleft">
 						<table>
 							<tr>
 								<input type="hidden" name="action" value="saveconfig" />
 							</tr>
 							<tr>
 								<td>Car IP:</td>
-								<td><input type="text" name="IP" value="${carIP}"/></td>
+								<td><input id="main_left_input" type="text" name="IP" value="${carIP}"/></td>
 							</tr>
 							<tr>
 								<td>DB-Adress:</td>
-								<td><input type="text" name="DBAdress" value="${dbadress}" /></td>
+								<td><input id="main_left_input" type="text" name="DBAdress" value="${dbadress}" /></td>
 							</tr>
 							<tr>
 								<td>DB-User:</td>
-								<td><input type="text" name="DBUser" value="${dbuser}" /></td>
+								<td><input id="main_left_input" type="text" name="DBUser" value="${dbuser}" /></td>
 							</tr>
 							<tr>
 								<td>DB-Password:</td>
-								<td><input type="text" name="DBPw" value="${dbpw}" /></td>
+								<td><input id="main_left_input" type="text" name="DBPw" value="${dbpw}" /></td>
 							</tr>
 							<tr>
 								<td>Drive Time:</td>
-								<td><input type="text" name="drivetime" value="${drivetime}" /></td>
+								<td><input id="main_left_input" type="text" name="drivetime" value="${drivetime}" /></td>
 							</tr>
 							<tr>
 								<td>File Path:</td>
-								<td><input type="text" name="filepath" value="${filepath}" /></td>
+								<td><input id="main_left_input" type="text" name="filepath" value="${filepath}" /></td>
 							</tr>
 							<tr>
 								<td>Log Chat:</td>
@@ -234,7 +234,7 @@
 							</tr>
 						</table>
 					</td>
-					<td>
+					<td id="admin_setting_tableright">
 						<table>
 							<tr>
 								<td>Log Chat-to-File:</td>
