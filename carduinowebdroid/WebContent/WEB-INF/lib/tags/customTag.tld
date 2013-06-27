@@ -33,6 +33,11 @@
     	<name>getQ</name>
     	<tag-class>de.carduinodroid.web.QueueTag</tag-class>
     	<info>Get current Queue</info>
+    	<attribute>
+        	<name>par</name>
+            <required>true</required>
+            <description>Parameter which to output</description>
+        </attribute>
     </tag>
         <tag>
     	<name>getConf</name>
