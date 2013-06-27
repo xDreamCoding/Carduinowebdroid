@@ -2,6 +2,7 @@ package de.carduinodroid.web;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -23,8 +24,9 @@ public class QueueTag extends TagSupport {
 		
 		JspWriter out = pageContext.getOut();
 		String[] ListQ = new  String [waitingqueue.getLength()];
-		String[] ListSession = new  String [activeSession.getLength()];
-	    ListQ = waitingqueue.getNickname();
+		ListQ = waitingqueue.getNickname();
+		String driverName;
+		HttpSession session;
 		
 	    switch(parameter){
 	    case 0:
@@ -37,7 +39,12 @@ public class QueueTag extends TagSupport {
 	    	break;
 	    case 1:
 	    	try {
-					out.print((String)activeSession.getDriver().getAttribute("nickName"));
+	    		session = activeSession.getDriver();
+	    		if(session == null){
+	    			out.print("No one");
+	    		} else {
+					out.print(session.getAttribute("nickName"));
+	    		}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
