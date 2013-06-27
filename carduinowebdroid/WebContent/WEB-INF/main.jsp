@@ -45,6 +45,7 @@ $(document).ready(function() {
 </script>
 
 <script>
+/*	Zeichenzähler	*/
 $(document).ready(function(){
 	$("#main_chat_textinput").jqEasyCounter();
 });
@@ -111,7 +112,9 @@ $(document).ready(function()
  <script>
 $(function() {
 	$( "#dialog-message" ).dialog({
-		modal: true,
+		maxHeight: 30,
+		height:30,
+		modal:true,
 		buttons: {
 			Ok: function() {
 				$( this ).dialog( "close" );
@@ -125,6 +128,14 @@ $(function() {
 </head>
 <body>
 
+<<<<<<< HEAD
+=======
+<div id="dialog-message" title="Download complete">
+<span class="ui-icon ui-icon-circle-check" id="main_top_message"></span>
+You are now controlling the Car.
+</div>
+
+>>>>>>> top dialog fixed
 <table id="main_table">
 	<tr>
     	<td id="main_table_sidebar_left">
