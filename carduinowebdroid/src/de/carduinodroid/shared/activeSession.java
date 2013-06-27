@@ -16,9 +16,6 @@ import org.apache.catalina.websocket.WsOutbound;
 
 public class activeSession {
 
-	private static ArrayList<String> activeSessions;
-	private static ArrayList<Integer> activeInt;
-	private static ArrayList<WsOutbound> activeSocket;
 	private static ArrayList<HttpSession> activeTomcat;
 	private static int Driver;
 	private static int DriverID;
@@ -29,9 +26,6 @@ public class activeSession {
 	 */
 	
 	public static void init(){
-		activeSessions = new ArrayList<String>();
-		activeInt = new ArrayList<Integer>();
-		activeSocket = new ArrayList<WsOutbound>();
 		activeTomcat = new ArrayList<HttpSession>();
 		db = null;
 		Driver = -1;
@@ -50,8 +44,9 @@ public class activeSession {
 	 * @param userid of the user
 	 */
 	
-	public static int insertSession(String SessionID,String ipadress,String userid, HttpSession Tomcat){
-		if (activeSessions.contains(SessionID)){
+	public static int insertSession(String ipadress,String userid, HttpSession Tomcat){
+		
+		if (activeTomcat.contains(Tomcat)){
 			System.out.println("bereits verbunden");
 			return -1;
 		}
@@ -61,10 +56,9 @@ public class activeSession {
 			System.out.println("konnte Session nicht erstellen");
 			return -1;
 		}
+		Tomcat.setAttribute("DBID", ID);
+		Tomcat.setAttribute("Socket", null);
 		activeTomcat.add(Tomcat);
-		activeSessions.add(SessionID);
-		activeInt.add(ID);
-		activeSocket.add(null);
 		
 		return ID;
 	}
@@ -73,10 +67,10 @@ public class activeSession {
 	 * @return Returns all SessionID's in the queue
 	 */
 	
-	public static String[] getAllSessions(){
-		String[] AllSessions = new String[activeSessions.size()];
+	public static HttpSession[] getAllSessions(){
+		HttpSession[] AllSessions = new HttpSession[activeTomcat.size()];
 		for(int i = 0; i < AllSessions.length; i++){
-			AllSessions[i] = activeSessions.get(i);
+			AllSessions[i] = activeTomcat.get(i);
 		}
 		return AllSessions;
 	}
@@ -86,16 +80,16 @@ public class activeSession {
 	 * @param SessionID of the user
 	 */
 	
-	public static void deleteSession(String SessionID){
-		int index = activeSessions.indexOf(SessionID);
+	public static void deleteSession(HttpSession Session){
+		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
 			//System.out.println("Session bereits gelöscht");
 			return;
 		}
-		db.closeSession(getSessionInt(SessionID));
-		activeSessions.remove(index);
-		activeInt.remove(index);
-		activeSocket.remove(index);
+		db.closeSession((int)Session.getAttribute("DBID"));
+		Session.removeAttribute("nickName");
+		Session.removeAttribute("DBID");
+		Session.removeAttribute("Socket");
 		activeTomcat.remove(index);
 		
 		if (index < Driver){
@@ -112,7 +106,7 @@ public class activeSession {
 				CarControllerWrapper.setUp(false);
 			}
 		}			
-		if (activeSessions.size() == 0){
+		if (activeTomcat.size() == 0){
 			deleteAll();
 		}
 	}
@@ -122,14 +116,14 @@ public class activeSession {
 	 */
 	
 	public static void deleteAll(){
-		for (int i = 0; i < activeSessions.size(); i++){
-			db.closeSession(getSessionInt(activeSessions.get(i)));
-			activeTomcat.get(i).removeAttribute("nickName");
+		for (int i = 0; i < activeTomcat.size(); i++){
+			HttpSession Session = activeTomcat.get(i);
+			db.closeSession((int)Session.getAttribute("DBID"));
+			Session.removeAttribute("nickName");
+			Session.removeAttribute("Socket");
+			Session.removeAttribute("DBID");
 		}
 		
-		activeSessions.clear();
-		activeInt.clear();	
-		activeSocket.clear();
 		activeTomcat.clear();
 		Driver = -1;
 	}
@@ -140,32 +134,54 @@ public class activeSession {
 	 * @return Returns SessionID from DB
 	 */
 	
-	public static int getSessionInt(String SessionID){
-		if (SessionID == null) return -1;
-		int SessionInt = activeInt.get(activeSessions.indexOf(SessionID));
-		return SessionInt;
-	}
+//	public static int getSessionInt(String SessionID){
+//		if (SessionID == null) return -1;
+//		int SessionInt = activeInt.get(activeSessions.indexOf(SessionID));
+//		return SessionInt;
+//	}
 	
 	//debug Funktion
-	public static String getSession(String SessionID){
-		int Session = getSessionInt(SessionID);
-		int index = activeInt.indexOf(Session);
-		String debug = activeSessions.get(index);
-		return debug;
+	public static HttpSession getSession(String SessionID){
+		int index = -1;
+		for (int i = 0; i < activeTomcat.size(); i++){
+			if (activeTomcat.get(i).getId().equals(SessionID)){
+				index = i;
+				break;
+			}
+		}
+		if (index == -1){
+			return null;
+		}
+		HttpSession Session = activeTomcat.get(index);
+		return Session;
 	}
 
+	public static HttpSession getSession(int SessionID){
+		int index = -1;
+		for (int i = 0; i < activeTomcat.size(); i++){
+			if ((int)activeTomcat.get(i).getAttribute("DBID") == (SessionID)){
+				index = i;
+				break;
+			}
+		}
+		if (index == -1){
+			return null;
+		}
+		HttpSession Session = activeTomcat.get(index);
+		return Session;
+	}
 	/** 
 	 * \brief saves a Socket for a specific User
 	 * @param SessionID of the User
 	 * @param sock Socket
 	 */
 	
-	public static void insertSocket(String SessionID, WsOutbound sock){
-		int index = activeSessions.indexOf(SessionID);
+	public static void insertSocket(HttpSession Session, WsOutbound sock){
+		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
 			return;
 		}
-		activeSocket.set(index, sock);
+		Session.setAttribute("Socket", sock);
 	}
 
 	/** 
@@ -173,13 +189,13 @@ public class activeSession {
 	 * @param SessionID of the User
 	 */
 	
-	public static void deleteSocket(String SessionID){
-		int index = activeSessions.indexOf(SessionID);
+	public static void deleteSocket(HttpSession Session){
+		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
 			System.out.println("Zugehörige Session bereits gelöscht");
 			return;
 		}
-		activeSocket.set(index, null);
+		Session.removeAttribute("Socket");
 	}
 
 	/** 
@@ -188,8 +204,8 @@ public class activeSession {
 	 * @return true if its the Driver else false
 	 */
 	
-	public static boolean isDriver(String SessionID){
-		int index = activeSessions.indexOf(SessionID);
+	public static boolean isDriver(HttpSession Session){
+		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
 			return false;
 		}
@@ -202,11 +218,11 @@ public class activeSession {
 	 * @param SessionID of the User
 	 */
 	
-	public static void setDriver(String SessionID, int driverID){
+	public static void setDriver(HttpSession Session, int driverID){
 		if (!(Driver == -1)){
 			db.stopDrive(DriverID);
 		}
-		int index = activeSessions.indexOf(SessionID);
+		int index = activeTomcat.indexOf(Session);
 		Driver = index;
 		DriverID = driverID;
 	}
@@ -228,24 +244,24 @@ public class activeSession {
 	 * @param SessionID of the User 
 	 */
 	
-	public static boolean isActive(String SessionID){
-		return activeSessions.contains(SessionID);
+	public static boolean isActive(HttpSession Session){
+		return activeTomcat.contains(Session);
 	}
 
-	public static WsOutbound getSocket(String SessionID){
-		int index = activeSessions.indexOf(SessionID);
+	public static WsOutbound getSocket(HttpSession Session){
+		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
 			return null;
 		}
-		return activeSocket.get(index);
+		return (WsOutbound)activeTomcat.get(index).getAttribute("Socket");
 	}
 
-	public static String getDriver(){
+	public static HttpSession getDriver(){
 		if (Driver == -1) return null;
-		return activeSessions.get(Driver);
+		return activeTomcat.get(Driver);
 	}
 
 	public static int getLength(){
-		return activeSessions.size();
+		return activeTomcat.size();
 	}
 }

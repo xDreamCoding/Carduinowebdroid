@@ -16,6 +16,7 @@ import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
 
 import de.carduinodroid.shared.activeSession;
+import de.carduinodroid.shared.waitingqueue;
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.Log;
 
@@ -55,16 +56,17 @@ public class MyWebSocketServlet extends WebSocketServlet {
 
 			@Override
 			protected void onOpen(WsOutbound outbound) {
-				activeSession.insertSocket(session.getId(), this.getWsOutbound());
+				activeSession.insertSocket(session, this.getWsOutbound());
 				int connSize = clients.size();
 				System.out.println("onOpen - connections: " + connSize);
 			}
 
 			@Override
 			protected void onClose(int status) {
-				activeSession.deleteSocket(session.getId());
+				activeSession.deleteSocket(session);
 				System.out.println("onClose - status code: " + status);
 				activeSession.resetDriver();
+				waitingqueue.deleteTicket(session);
 				Main.restartTimer();
 				clients.remove(this);
 			}
@@ -94,7 +96,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 					char stateKey = msg.charAt(msg.indexOf(":") + 2);
 					{
 												
-						if (activeSession.isDriver(session.getId())) {						
+						if (activeSession.isDriver(session)) {						
 							switch (directionKey) {
 							case 'a':
 								if(stateKey == 's') CarControllerWrapper.setLeft(true);

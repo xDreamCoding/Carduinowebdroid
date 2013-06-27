@@ -109,10 +109,10 @@ public class FilterPass2  extends HttpServlet {
 					userID = (String)postParameterMap.get("loginName")[0];
 					pw = (String)postParameterMap.get("password")[0];
 					
-					String[] active = new String[activeSession.getLength()];
+					HttpSession[] active = new HttpSession[activeSession.getLength()];
 					active = activeSession.getAllSessions();
 					for (int i = 0; i < active.length; i++){
-						User online = db.getUserBySession(activeSession.getSessionInt(active[i]));
+						User online = db.getUserBySession((int)active[i].getAttribute("DBID"));
 						if (online.getUserID().equals(userID)){
 							System.out.println("User bereits eingeloggt");
 							return;
@@ -123,7 +123,7 @@ public class FilterPass2  extends HttpServlet {
 					if(u == null)
 						break;
 					
-					int ID = activeSession.insertSession(SessionID, ipAdress, userID, session);
+					int ID = activeSession.insertSession(ipAdress, userID, session);
 					if (ID == -1)
 						break;
 					
@@ -136,25 +136,25 @@ public class FilterPass2  extends HttpServlet {
 					//System.out.println("user " + u.getNickname() + " has logged in");
 					break;
 				case "enqueue":					
-					if (activeSession.isActive(SessionID) == false){
+					if (activeSession.isActive(session) == false){
 						session.removeAttribute("nickName");
 						break;
 					}
-					User user = db.getUserBySession(activeSession.getSessionInt(SessionID));
+					User user = db.getUserBySession((int)session.getAttribute("DBID"));
 					if (user == null){
 						System.out.println("User nicht gefunden");
 						break;
 					}
 					if (user.isGuest() == true) return;
-					waitingqueue.insertUser(SessionID);
-					log.logQueue(user.getUserID(), activeSession.getSessionInt(SessionID));
+					waitingqueue.insertUser(session);
+					log.logQueue(user.getUserID(), (int)session.getAttribute("DBID"));
 					break;
 				case "dequeue":
-					if (activeSession.isActive(SessionID) == false){
+					if (activeSession.isActive(session) == false){
 						session.removeAttribute("nickName");
 						break;
 					}
-					waitingqueue.deleteTicket(SessionID);
+					waitingqueue.deleteTicket(session);
 					break;
 				case "NextUser":
 					//String nextUserID = waitingqueue.getNextUser();
@@ -163,7 +163,7 @@ public class FilterPass2  extends HttpServlet {
 				case "watchDriver":
 					userID = "gue" + System.currentTimeMillis();
 					db.loginGuest(userID);
-					ID = activeSession.insertSession(SessionID, ipAdress, userID, session);
+					ID = activeSession.insertSession(ipAdress, userID, session);
 					if (ID == -1){
 						log.writelogfile("error creating session for guest " + userID);
 						break;
@@ -175,8 +175,8 @@ public class FilterPass2  extends HttpServlet {
 					session.setAttribute("dbSessionID", ID);
 					break;
 				case "logout":
-					activeSession.deleteSession(SessionID);
-					waitingqueue.deleteTicket(SessionID);
+					activeSession.deleteSession(session);
+					waitingqueue.deleteTicket(session);
 					session.removeAttribute("nickName");
 					///TODO \todo logout = ich lösche ein paar sachen und das wars? session? rechte? zurück zum index?				
 
@@ -188,7 +188,7 @@ public class FilterPass2  extends HttpServlet {
 					
 					break;
 				case "connect":
-					if (activeSession.isActive(SessionID) == false){
+					if (activeSession.isActive(session) == false){
 						session.removeAttribute("nickName");
 						break;
 					}
@@ -216,13 +216,17 @@ public class FilterPass2  extends HttpServlet {
 					boolean isAdmin;
 					userID = (String) postParameterMap.get("userid")[0]; 
 					
-					if (postParameterMap.containsKey("chkdel1") && postParameterMap.containsKey("chkdel2") && postParameterMap.containsKey("chkdel3")){
+					if (postParameterMap.containsKey("chkdel1") && postParameterMap.containsKey("chkdel2") && postParameterMap.containsKey("chkdel3") && !(userID == db.getUserIdBySession((int)session.getAttribute("DBID")))){
 						db.deleteUser(userID);
+						int DBID = db.getSessionIDByUserID(userID);
+						if (!(DBID == -1)){							
+							HttpSession deleted = activeSession.getSession(DBID);
+							deleted.removeAttribute("nickName");
+						}
 						break;
 					}
 					String Password = (String) postParameterMap.get("password")[0];
 					
-					System.out.println("yolo"+Password);
 					if (Password != null && Password.equals("") == false){
 						db.changePassword(userID, Password);
 					}
@@ -237,7 +241,7 @@ public class FilterPass2  extends HttpServlet {
 					else{
 						isAdmin = true;
 					}
-					if (userID == db.getUserIdBySession(activeSession.getSessionInt(session.getId())) && (!isAdmin)){
+					if (userID == db.getUserIdBySession((int)session.getAttribute("DBID")) && (!isAdmin)){
 						System.out.println("Man kann sich nicht selbst das Admin recht entziehen");
 						break;
 					}
@@ -338,7 +342,7 @@ public class FilterPass2  extends HttpServlet {
 						break;
 					}
 					
-					waitingqueue.InsertFirst(session.getId());
+					waitingqueue.InsertFirst(session);
 					activeSession.resetDriver();
 					Main.restartTimer();
 					break;

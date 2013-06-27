@@ -2,6 +2,7 @@ package de.carduinodroid.shared;
 
 import java.util.LinkedList;
 import de.carduinodroid.utilities.DBConnector;
+import javax.servlet.http.HttpSession;
 
 /**
  * \brief This Class is used to queue all users who want to get driver-rights
@@ -11,7 +12,7 @@ import de.carduinodroid.utilities.DBConnector;
 
 public class waitingqueue {
 
-	private static LinkedList<String> Warteschlange = null;
+	private static LinkedList<HttpSession> Warteschlange = null;
 	static DBConnector db;
 	
 	/** 
@@ -21,7 +22,7 @@ public class waitingqueue {
 	
 	public static void initqueue(DBConnector db2){
 		if (Warteschlange == null){
-			Warteschlange = new LinkedList<String>();
+			Warteschlange = new LinkedList<HttpSession>();
 			db = db2;
 		}
 		else{
@@ -34,7 +35,7 @@ public class waitingqueue {
 	 * @return returns a LinkedList of Strings
 	 */
 	
-	public static LinkedList<String> getqueue(){
+	public static LinkedList<HttpSession> getqueue(){
 		return Warteschlange;
 	}
 	
@@ -43,7 +44,7 @@ public class waitingqueue {
 	 * @return returns the UserID from the first User as String
 	 */
 	
-	public static String getNextUser(){
+	public static HttpSession getNextUser(){
 		return Warteschlange.removeFirst();
 	}
 	
@@ -52,12 +53,12 @@ public class waitingqueue {
 	 * @param SessionID from the User
 	 */
 	
-	public static void insertUser(String SessionID){
-		if (Warteschlange.contains(SessionID) || activeSession.isDriver(SessionID)){
+	public static void insertUser(HttpSession Session){
+		if (Warteschlange.contains(Session) || activeSession.isDriver(Session)){
 			System.out.println("Wurde bereits eingereiht");
 			return;
 		}
-		Warteschlange.add(SessionID);
+		Warteschlange.add(Session);
 		System.out.println("User in Warteschlange eingereiht");
 	}
 	
@@ -82,8 +83,8 @@ public class waitingqueue {
 	 * @param SessionID of the User
 	 */
 	
-	public static void deleteTicket(String SessionID){
-		int index = Warteschlange.indexOf(SessionID);
+	public static void deleteTicket(HttpSession Session){
+		int index = Warteschlange.indexOf(Session);
 		if (index == -1){
 			System.out.println("Wurde bereits gelöscht");
 			return;
@@ -96,8 +97,8 @@ public class waitingqueue {
 	 * @param SessionID of the User
 	 */
 	
-	public static void InsertFirst(String SessionID){
-		Warteschlange.addFirst(SessionID);
+	public static void InsertFirst(HttpSession Session){
+		Warteschlange.addFirst(Session);
 	}
 	
 	/** 
@@ -108,17 +109,17 @@ public class waitingqueue {
 
 		if (!(activeSession.getDriver() == null)){
 			String[] Nickname = new String[Warteschlange.size()+1];
-			User driver = db.getUserBySession(activeSession.getSessionInt(activeSession.getDriver()));
+			User driver = db.getUserBySession((int)activeSession.getDriver().getAttribute("DBID"));
 			Nickname[0] = driver.getNickname();
 			for(int i = 1;i < Nickname.length; i++){			
-				User user = db.getUserBySession(activeSession.getSessionInt(Warteschlange.get(i-1)));
+				User user = db.getUserBySession((int)(Warteschlange.get(i-1).getAttribute("DBID")));
 				Nickname[i] = user.getNickname();
 			}
 			return Nickname;
 		}
 		String[] Nickname = new String[Warteschlange.size()];
 		for(int i = 0;i < Nickname.length; i++){			
-			User user = db.getUserBySession(activeSession.getSessionInt(Warteschlange.get(i)));
+			User user = db.getUserBySession((int)(Warteschlange.get(i).getAttribute("DBID")));
 			Nickname[i] = user.getNickname();
 		}
 		
@@ -129,8 +130,8 @@ public class waitingqueue {
 	 * @return Returns the UserID from every User in the waiting queue in the right order
 	 */
 	
-	public static String[] getAllSessions(){
-		String[] Liste = new  String [Warteschlange.size()];
+	public static HttpSession[] getAllSessions(){
+		HttpSession[] Liste = new  HttpSession [Warteschlange.size()];
 		for (int i = 0;i < Warteschlange.size();i++){
 			Liste[i] = Warteschlange.get(i);
 		}
