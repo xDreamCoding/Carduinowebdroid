@@ -560,7 +560,7 @@ public class DBConnector {
 	 * @param userID UserID to look for.
 	 * @return Returns the sessionID or -1 is no session was found. If an older session was not closed properly it can return the old session instead of -1.
 	 */
-	public int getSessionIDByUserID(int userID) {
+	public int getSessionIDByUserID(String userID) {
 		PreparedStatement stmt = null;
 		ResultSet rset = null;
 		int sessionID = -1;
@@ -569,7 +569,7 @@ public class DBConnector {
 		
 		try {
 			stmt = dbConnection.prepareStatement("SELECT sessionID FROM session WHERE userID=? AND loginTime<? AND logoutTime IS NULL");
-			stmt.setInt(1, sessionID);
+			stmt.setString(1, userID);
 			stmt.setTimestamp(2, datetime);
 			
 			rset = executeQuery(stmt);
