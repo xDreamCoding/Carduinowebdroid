@@ -198,30 +198,61 @@ You are now controlling the Car.
         <td id="main_table_sidebar_right">
         	<div id="main_q_container">	
                	<div id="main_q">Loading Queue</div>
-	                <form method="post">
-	                    <input id="main_qsubmit" type="submit" value="[En/de]queue" />
-	                </form>
-	                <form method="post">
-	                    <input id="main_stopdriving" type="submit" value="Stop driving" />
-	                </form>
-	                <form method="POST">
-	                	<input type="hidden" name="action" value="logout"/>
-	                	<input id="main_logout" type="submit" value="Logout" />
-					</form>
-	                <c:set var="isAdmin"><ct:isAdmin /></c:set>
-	                <c:if test="${isAdmin == 1}">
-	                	<a href="admin.jsp?menu=1">
-	                		<button id="main_admin">Admin</button>
-	                	</a>
-	                	<form method="POST">
-							<input type="hidden" name="action" value="connect"/>
-							<input id="main_connect" type="submit" value="Connect to Car" />
-						</form>
-						<form method="POST">
-							<input type="hidden" name="action" value="admincontrol"/>
-							<input id="main_take_control" type="submit" value="Take Control" />
-						</form>
-	                </c:if>
+               		<div id="main_button_container">
+               		<table>
+               			<tr>
+               				<td id="main_qsubmitleft">
+				                <form method="post">
+				                    <input id="main_qsubmit" type="submit" value="[En/de]queue" />
+				                </form>
+			                </td>
+			                <td>
+			                	<form method="post">
+			                    	<input id="main_stopdriving" type="submit" value="Stop driving" />
+			                	</form>
+			                </td>
+						</tr>
+			            <tr>
+			                <td>		                	
+			                	<c:set var="isAdmin"><ct:isAdmin /></c:set>
+			              		<c:if test="${isAdmin == 1}">
+			                	<form method="POST">
+									<input type="hidden" name="action" value="connect"/>
+									<input id="main_connect" type="submit" value="Connect to Car" />
+								</form>
+								</c:if>
+							</td>
+							<td>
+								
+								<c:set var="isAdmin"><ct:isAdmin /></c:set>
+			              		<c:if test="${isAdmin == 1}">
+								<form method="POST">
+									<input type="hidden" name="action" value="admincontrol"/>
+									<input id="main_take_control" type="submit" value="Take Control" />
+								</form>
+								</c:if>
+							</td>			                
+			            </tr>
+			            <tr> 			            	
+			            	<td>	
+			            		<c:set var="isAdmin"><ct:isAdmin /></c:set>
+			              		<c:if test="${isAdmin == 1}">		            	
+			                	<a href="admin.jsp?menu=1">
+			                		<button id="main_admin">Admin</button>
+			                	</a>
+			                	</c:if>
+			                </td>
+			                  
+			            	<td>
+				                <form method="POST">
+				                	<input type="hidden" name="action" value="logout"/>
+				                	<input id="main_logout" type="submit" value="Logout" />
+								</form>
+							</td>
+							
+						</tr>		                
+	                </table>
+	                </div>
             </div> 
         </td>
     </tr>
