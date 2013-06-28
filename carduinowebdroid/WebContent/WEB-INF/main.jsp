@@ -121,27 +121,20 @@ $(function() {
 });
 </script>
 
-<script>
-$(function(){
-	var count = 10;
-	countdown = setInterval(function(){
-		$("#main_chat_textinput").html(count);
-		if (count == 0){
-			$.ajax({
-	            type: "POST",
-	            url: "main.jsp",
-	            data: "action=stopdriving",
-	            success: function(msg)
-	            {
-	            	$("#main_controls").hide();
-	               /* TODO: Needs ACK*/
-	            }
-			});
-			count = 10;
-		}
-		count--;
-	},1000);
-});
+
+
+<script type="text/javascript">
+/*
+*	COUNTDOWN
+*/
+var counter = 10;
+
+setInterval("timer()", 1000);
+
+function timer(){
+	counter--;
+	$('#counter').text(counter);
+}
 </script>
 
 </head>
@@ -162,9 +155,9 @@ You are now controlling the Car.
           	</div>
         </td>
         <td><button id="main_close_left" class="ui-icon ui-icon-triangle-1-w"></button> <button id="main_open_left" class="ui-icon ui-icon-triangle-1-e"></button></td>
-        <td id="main_table_stream">
-        
+        <td id="main_table_stream">        
         	<div id="main_stream">
+        	<span id="counter" style="font-weight:500; font-size:20px; padding:0px 2px;">0</span>
         	<canvas></canvas>
     		</div>
         	<div id="main_controls">
