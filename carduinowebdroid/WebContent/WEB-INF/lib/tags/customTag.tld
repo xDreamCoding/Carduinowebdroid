@@ -39,7 +39,7 @@
             <description>Parameter which to output</description>
         </attribute>
     </tag>
-        <tag>
+    <tag>
     	<name>getConf</name>
     	<tag-class>de.carduinodroid.web.ConfigTag</tag-class>
     	<info>Get current Settings</info>
@@ -48,5 +48,10 @@
             <required>true</required>
             <description>Parameter which to output</description>
         </attribute>
+    </tag>
+    <tag>
+    	<name>getremTime</name>
+    	<tag-class>de.carduinodroid.web.TimeTag</tag-class>
+    	<info>Get the remaining drive time</info>
     </tag>
 </taglib>

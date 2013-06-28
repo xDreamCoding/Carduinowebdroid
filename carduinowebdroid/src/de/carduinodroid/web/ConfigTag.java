@@ -8,6 +8,13 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import de.carduinodroid.utilities.Config.Options;
 
+/**
+ * \brief This class handles the Config related custom tags.
+ * \details The User tag returns all config settings.
+ * @author Christoph Braun
+ *
+ */
+
 public class ConfigTag extends TagSupport {
 
 	private static final long serialVersionUID = 1L;

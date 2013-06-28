@@ -24,15 +24,10 @@ public class UserTag extends TagSupport{
 	private int userNr;
 	private int param;
 	
-	/**
-	 * \brief Setter methods
-	 * @param i Number in UserList
-	 * @param o Parameter on which function to call
-	 */
 	public void setNum(int i) {
 		userNr = i;
 	}
-	
+
 	public void setPar(int o) {
 		param = o;
 	}

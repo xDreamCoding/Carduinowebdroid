@@ -10,6 +10,13 @@ import javax.servlet.jsp.tagext.TagSupport;
 import de.carduinodroid.shared.activeSession;
 import de.carduinodroid.shared.waitingqueue;
 
+/**
+ * \brief This class handles the Queue related custom tags.
+ * \details The User tag returns the current Queue and the current driver.
+ * @author Christoph Braun
+ *
+ */
+
 public class QueueTag extends TagSupport {
 	
 	private static final long serialVersionUID = 1L;
