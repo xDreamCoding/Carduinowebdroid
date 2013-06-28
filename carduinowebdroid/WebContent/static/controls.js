@@ -16,18 +16,41 @@ h = false;
  * Send to server. Append s to start control and e to end control.
  */
 function controlToServer(msg) {
+	$("#main_chat").append("Controller: " + msg + "\n");
 	if($("#main_controls").is(":visible")) {
 		ws.send(identifierControl + msg);
 	}
 }
 
+/**
+ * Heartbeat
+ */
+function heartbeat() {
+	if($("#main_controls").is(":visible")) {
+		ws.send(identifierHeartbeat);
+	}
+}
+
+/**
+ * Initialize Slider.
+ */
+$(function() {
+	$("#main_maxspeed").on( "slidestop", function( event, ui ) {
+		controlToServer("speed" + ui.value);
+	} );
+	$("#main_steerangle").on( "slidestop", function( event, ui ) {
+		controlToServer("angle" + ui.value);
+	} );
+});
+
+
 function controlHandleMessage(message) {
     if(message.data.charAt(4) === "y") {
 		$("#main_controls").show();
-		$("#main_chat").append("Controller: " + show + "\n");
+		$("#main_chat").append("Controller: show" + "\n");
     } else if(message.data.charAt(4) === "n") {
 		$("#main_controls").hide();
-		$("#main_chat").append("Controller: " + hide + "\n");
+		$("#main_chat").append("Controller: hide" + "\n");
     }
 }
 
@@ -37,7 +60,7 @@ function controlHandleMessage(message) {
  * @param control
  *            message identifier
  */
-function registerControls() {
+$(function() {
 	$('#main_gadget_button_horn').mousedown(function() {
 		if (!h) {
 			controlToServer("hs");
@@ -110,4 +133,4 @@ function registerControls() {
 			s = false;
 		}
 	});
-}
+});

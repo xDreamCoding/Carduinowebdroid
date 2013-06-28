@@ -91,38 +91,41 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				/**
 				 * Controllerpart
 				 */
-				else if(msg.startsWith(identifierControl)) {
-					char directionKey = msg.charAt(msg.indexOf(":") + 1);
-					char stateKey = msg.charAt(msg.indexOf(":") + 2);
-					{
-												
-						if (activeSession.isDriver(session.getId())) {						
-							switch (directionKey) {
-							case 'a':
-								if(stateKey == 's') CarControllerWrapper.setLeft(true);
-								if(stateKey == 'e') CarControllerWrapper.setLeft(false);
-								break;
-							case 'd':
-								if(stateKey == 's') CarControllerWrapper.setRight(true);
-								if(stateKey == 'e') CarControllerWrapper.setRight(false);
-								break;
-							case 'w':
-								if(stateKey == 's') CarControllerWrapper.setUp(true);
-								if(stateKey == 'e') CarControllerWrapper.setUp(false);
-								break;
-							case 's':
-								if(stateKey == 's') CarControllerWrapper.setDown(true);
-								if(stateKey == 'e') CarControllerWrapper.setDown(false);
-								break;
-							case 'h':
-								System.out.println("honk");
-								if(stateKey == 's') CarControllerWrapper.sendSignal();
-								break;
-							case 'l':
-								System.out.println("light");
-								if(stateKey == 's') CarControllerWrapper.toggleLight();
-								break;	
-							}
+				else if(msg.startsWith(identifierControl) && activeSession.isDriver(session.getId())) {
+					msg = msg.substring(identifierControl.length());
+					if(msg.startsWith("speed")) {
+						System.out.println("speed: " + msg.substring("speed".length()));
+						CarControllerWrapper.setSpeed(Integer.valueOf(msg.substring("speed".length())));
+					} else if(msg.startsWith("angle")) {
+						System.out.println("angle: " + msg.substring("angle".length()));
+						CarControllerWrapper.setAngle(Integer.valueOf(msg.substring("angle".length())));
+					} else {
+						char directionKey = msg.charAt(msg.indexOf(":") + 1);
+						char stateKey = msg.charAt(msg.indexOf(":") + 2);		
+						
+						switch (directionKey) {
+						case 'a':
+							if(stateKey == 's') CarControllerWrapper.setLeft(true);
+							if(stateKey == 'e') CarControllerWrapper.setLeft(false);
+							break;
+						case 'd':
+							if(stateKey == 's') CarControllerWrapper.setRight(true);
+							if(stateKey == 'e') CarControllerWrapper.setRight(false);
+							break;
+						case 'w':
+							if(stateKey == 's') CarControllerWrapper.setUp(true);
+							if(stateKey == 'e') CarControllerWrapper.setUp(false);
+							break;
+						case 's':
+							if(stateKey == 's') CarControllerWrapper.setDown(true);
+							if(stateKey == 'e') CarControllerWrapper.setDown(false);
+							break;
+						case 'h':
+							if(stateKey == 's') CarControllerWrapper.sendSignal();
+							break;
+						case 'l':
+							if(stateKey == 's') CarControllerWrapper.toggleLight();
+							break;	
 						}
 					}
 				}

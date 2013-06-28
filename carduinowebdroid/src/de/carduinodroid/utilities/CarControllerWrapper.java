@@ -85,7 +85,6 @@ public class CarControllerWrapper {
 	 * \brief Toggles light on and off
 	 */
 	public static void toggleLight() {
-		System.out.println(lightOn ? "1" : "0");
 		lightOn = !lightOn;
 		setLight(lightOn);
 	}
@@ -115,7 +114,7 @@ public class CarControllerWrapper {
 	 * \brief Sets the current max speed of the car.
 	 * @param speed The speed to set.
 	 */
-	public void setSpeed(int speed) {
+	public static void setSpeed(int speed) {
 		ccw.speed = speed;
 	}
 
@@ -131,7 +130,7 @@ public class CarControllerWrapper {
 	 * \brief Sets the current steering angle of the car.
 	 * @param angle The angle to set.
 	 */
-	public void setAngle(int angle) {
+	public static void setAngle(int angle) {
 		ccw.angle = angle;
 	}
 

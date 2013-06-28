@@ -23,13 +23,12 @@ $(function() {
 /**
  * Register postToServer on Chat_button.click event.
  */
-function registerChat() {
+$(function() {
 	$("#main_chat_speak").mousedown(function() {
 			postToServer();
 			$("#main_chat_textinput").val('');
 		});
-
-}
+});
 
 /**
  * Handle incoming messages.

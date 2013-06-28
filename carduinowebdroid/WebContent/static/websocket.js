@@ -36,11 +36,3 @@ function initializeWebsocket() {
 function closeConnect(){
 	ws.close();
 }
-
-/**
- * Heartbeat
- */
-function heartbeat() {
-	ws.send(identifierHeartbeat);
-}
-

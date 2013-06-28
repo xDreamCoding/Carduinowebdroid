@@ -27,9 +27,6 @@
 <script type="text/javascript">
 	$(function() {
 		initializeWebsocket();
-		registerChat();
-		registerControls();
-		registerKeys();
 		window.setInterval(heartbeat,1000);
 		$("#main_controls").hide();
 	});

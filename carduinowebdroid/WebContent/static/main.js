@@ -64,12 +64,8 @@ $(function() {
 		range : "min",
 		min : 0,
 		max : 100,
-		value : 60,
-		slide : function(event, ui) {
-			$("#amount").val(ui.value);
-		}
+		value : 60
 	});
-	$("#amount").val($(".slider-vertical").slider("value"));
 });
 
 /**
@@ -84,7 +80,7 @@ $(function() {
  * Handles keystrokes which made on the clients keyboard. Will only work if the
  * chat is not in focus.
  */
-function registerKeys() {
+$(function() {
 	
 	$(document).keydown(function(e) {
 
@@ -173,6 +169,24 @@ function registerKeys() {
 					.mouseup();
 				return false;
 			}
+			// +
+			if (e.keyCode == 107) {
+				if($("#main_maxspeed").slider("value") < 100) {
+					$("#main_maxspeed").slider("value", $("#main_maxspeed").slider("value") + 10 );
+					controlToServer("speed" + $("#main_maxspeed").slider("value"));
+					$("#main_maxspeed").removeClass("ui-state-active");
+				}
+				return false;
+			}
+			// -
+			if (e.keyCode == 109) {
+				if($("#main_maxspeed").slider("value") > 0) {
+					$("#main_maxspeed").slider("value", $("#main_maxspeed").slider("value") - 10 );
+					controlToServer("speed" + $("#main_maxspeed").slider("value"));
+					$("#main_maxspeed").removeClass("ui-state-active");
+				}
+				return false;
+			}
 		} else {
 			// enter
 			if(e.keyCode == 13) {
@@ -183,6 +197,6 @@ function registerKeys() {
 			}
 		}
 	});
-}
+});
 
 
