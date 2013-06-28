@@ -67,7 +67,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				activeSession.deleteSocket(session);
 				System.out.println("onClose - status code: " + status);
 				activeSession.resetDriver();
-				Main.restartTimer();
+				QueueManager.restartTimer();
 				clients.remove(this);
 			}
 
@@ -86,7 +86,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				 */
 				if(msg.startsWith(identifierHeartbeat)) {
 					///TODO \todo heartbeatstuff					
-					Main.receivedPing(session.getId());
+					QueueManager.receivedPing(session.getId());
 				}
 				/**
 				 * Controllerpart

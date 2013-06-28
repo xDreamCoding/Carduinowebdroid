@@ -21,7 +21,7 @@ import java.util.Timer;
  *
  */
 
-public class Main /* extends HttpServlet */ {
+public class QueueManager /* extends HttpServlet */ {
 	private static Timer caretaker;
 	private static Timer GPSLog;
 	private static TimerTask GPSLogger;

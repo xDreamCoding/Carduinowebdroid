@@ -344,12 +344,12 @@ public class FilterPass2  extends HttpServlet {
 					
 					waitingqueue.InsertFirst(session);
 					activeSession.resetDriver();
-					Main.restartTimer();
+					QueueManager.restartTimer();
 					break;
 				case "stopdriving":
 					if (session.equals(activeSession.getDriver())){
 						activeSession.resetDriver();
-						Main.restartTimer();
+						QueueManager.restartTimer();
 					}
 					else{
 						break;

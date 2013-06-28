@@ -29,8 +29,8 @@ public class MyServletContextListener implements ServletContextListener {
 		this.context = null;
 		
 		DBConnector db = (DBConnector)event.getServletContext().getAttribute("database");
+		QueueManager.shutDown();
 		db.shutDown();
-		Main.shutDown();
 	}
 
 
@@ -76,7 +76,7 @@ public class MyServletContextListener implements ServletContextListener {
 		//main
 		activeSession.init();
 		waitingqueue.initqueue(db);
-		Main.main(options, db, log);
+		QueueManager.main(options, db, log);
 
 		//db.dbTest();		
 	}

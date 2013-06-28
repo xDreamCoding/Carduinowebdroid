@@ -3,7 +3,7 @@ package de.carduinodroid.utilities;
 import java.io.*;
 import java.util.*;
 
-import de.carduinodroid.Main;
+import de.carduinodroid.QueueManager;
 
 /**
  * \brief Config class managing options.
@@ -173,7 +173,7 @@ public class Config {
 		options.logQueueToFile = false;
 		options.carduinodroidIP = "";
     	saveOptions();
-    	Main.refresh(options);
+    	QueueManager.refresh(options);
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class Config {
 	 */
 	public void setOptions(Options options) {
 		this.options = options;
-		Main.refresh(options);
+		QueueManager.refresh(options);
 	}
 	
 	

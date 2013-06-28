@@ -2,7 +2,7 @@ package de.carduinodroid.shared;
 
 import java.util.ArrayList;
 
-import de.carduinodroid.Main;
+import de.carduinodroid.QueueManager;
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.DBConnector;
 import javax.servlet.http.HttpSession;
@@ -99,7 +99,7 @@ public class activeSession {
 			if (index == Driver){
 				db.stopDrive(DriverID);
 				Driver = -1;
-				Main.restartTimer();
+				QueueManager.restartTimer();
 				CarControllerWrapper.setDown(false);
 				CarControllerWrapper.setLeft(false);
 				CarControllerWrapper.setRight(false);
@@ -118,10 +118,15 @@ public class activeSession {
 	public static void deleteAll(){
 		for (int i = 0; i < activeTomcat.size(); i++){
 			HttpSession Session = activeTomcat.get(i);
-			db.closeSession((int)Session.getAttribute("DBID"));
-			Session.removeAttribute("nickName");
-			Session.removeAttribute("Socket");
-			Session.removeAttribute("DBID");
+			try{
+				db.closeSession((int)Session.getAttribute("DBID"));
+				Session.removeAttribute("nickName");
+				Session.removeAttribute("Socket");
+				Session.removeAttribute("DBID");
+			}
+			catch(IllegalStateException ie){
+				System.out.println("Session bereits teilweise oder ganz entfernt");
+			}
 		}
 		
 		activeTomcat.clear();
