@@ -57,14 +57,14 @@ public class MyWebSocketServlet extends WebSocketServlet {
 
 			@Override
 			protected void onOpen(WsOutbound outbound) {
-				activeSession.insertSocket(session.getId(), this.getWsOutbound());
+				activeSession.insertSocket(session, this.getWsOutbound());
 				int connSize = clients.size();
 				System.out.println("onOpen - connections: " + connSize);
 			}
 
 			@Override
 			protected void onClose(int status) {
-				activeSession.deleteSocket(session.getId());
+				activeSession.deleteSocket(session);
 				System.out.println("onClose - status code: " + status);
 				activeSession.resetDriver();
 				Main.restartTimer();
@@ -91,7 +91,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				/**
 				 * Controllerpart
 				 */
-				else if(msg.startsWith(identifierControl) && activeSession.isDriver(session.getId())) {
+				else if(msg.startsWith(identifierControl) && activeSession.isDriver(session)) {
 					msg = msg.substring(identifierControl.length());
 					if(msg.startsWith("speed")) {
 						System.out.println("speed: " + msg.substring("speed".length()));

@@ -82,7 +82,6 @@ public class Socket_Picture implements Runnable{
 	 */
 	@Override
 	public void run() {
-		BufferedImage buffer;
 		int i = 0;
 		while(!socket_picture.isClosed())
 		{

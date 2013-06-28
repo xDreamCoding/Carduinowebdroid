@@ -35,6 +35,7 @@ public class Filter implements javax.servlet.Filter {
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
+	@SuppressWarnings("unused")
 	public void doFilter(ServletRequest request, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 		if(DEBUG) System.out.println("filter");		
 		
@@ -47,7 +48,7 @@ public class Filter implements javax.servlet.Filter {
 			//String ipAdress = req.getRemoteAddr();
 			//System.out.println(ipAdress);
 			
-			if (!activeSession.isActive(session.getId()) && session.getAttribute("nickName") != null){
+			if (!activeSession.isActive(session) && session.getAttribute("nickName") != null){
 				if(DEBUG) System.out.println("HAAAAAX " + session.getAttribute("nickName"));
 				session.removeAttribute("nickName");
 			}

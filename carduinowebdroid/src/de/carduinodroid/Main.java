@@ -3,24 +3,12 @@ package de.carduinodroid;
 import java.io.IOException;
 import java.nio.CharBuffer;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import de.carduinodroid.shared.*;
-import de.carduinodroid.shared.User.Right;
 import de.carduinodroid.utilities.*;
 import de.carduinodroid.utilities.Config.Options;
-
-import java.util.Iterator;
-import java.util.Map;
+import javax.servlet.http.HttpSession;
 import java.util.TimerTask;
 import java.util.Timer;
-import java.util.ArrayList;
-import java.util.Map.Entry;
 
 /**
  * Servlet implementation class Main
@@ -40,12 +28,13 @@ public class Main /* extends HttpServlet */ {
 	private static TimerTask Session;
 	private static TimerTask action;
 	private static boolean aliveSessions;
+	private static long start;
 	static Log log;
 	static int driveID;
 	static int Fahrzeit, gpsLogInterval;
 	static Options opt;
 	static boolean flag;
-	static String aktSessionID;
+	static HttpSession aktSession;
     
 	final static boolean DEBUG = false;
 	
@@ -55,7 +44,24 @@ public class Main /* extends HttpServlet */ {
 	 */
 	
 	public static void refresh(Options opt) {
-    	Fahrzeit = opt.fahrZeit;
+
+		Fahrzeit = opt.driveTime;
+
+		if (!(activeSession.getDriver() == null && !(Fahrzeit == opt.driveTime))){
+			long driveTime = System.currentTimeMillis() - start;
+			long remainingTime = (opt.driveTime*60000) - driveTime;
+			if (remainingTime <= 100){
+				driveTime = opt.driveTime;
+				restartTimer();
+			}
+			else{
+				caretaker.cancel();
+				caretaker = new Timer();
+				caretaker.schedule(new de.carduinodroid.Dummy(action), remainingTime, 60000*opt.driveTime);
+			}
+		}
+		Fahrzeit = opt.driveTime;
+
     	gpsLogInterval = opt.logGPSInterval;
     	flag = true;
     }
@@ -70,6 +76,7 @@ public class Main /* extends HttpServlet */ {
 		action.cancel();
 		GPSLogger.cancel();
 		GPSLog.cancel();
+		Session.cancel();
 		activeSession.deleteAll();
 	}
     
@@ -83,7 +90,13 @@ public class Main /* extends HttpServlet */ {
 		aliveSessions = false;
 	}
     
-    public static void main(Options opt, DBConnector db, Log logng) {
+    public static long getRemainingTime(){
+    	long aktTime = System.currentTimeMillis();
+    	long remainingTime = start+60000*Fahrzeit - aktTime;
+    	return remainingTime;
+    }
+	
+	public static void main(Options opt, DBConnector db, Log logng) {
     	
     	log = logng;
     	aliveSessions = false;
@@ -100,7 +113,8 @@ public class Main /* extends HttpServlet */ {
     	
 		Timer Sessionhandle = new Timer();
 		Sessionhandle.schedule(Session, 10, 5000);
-		Fahrzeit = opt.fahrZeit;
+
+		Fahrzeit = opt.driveTime;
 		gpsLogInterval = opt.logGPSInterval;
 		if(DEBUG) System.out.println("Main-function");
 		
@@ -125,17 +139,18 @@ public class Main /* extends HttpServlet */ {
 					}
 					else{
 						try {
-							if(aktSessionID != null) 
-								activeSession.getSocket(aktSessionID).writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "n"));
+							if(aktSession != null) 
+								activeSession.getSocket(aktSession).writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "n"));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						try {
-							String aktSessionID = waitingqueue.getNextUser();
-							driveID = db.startDrive(db.getUserIdBySession(activeSession.getSessionInt(aktSessionID)));
-							activeSession.setDriver(aktSessionID, driveID);
-							activeSession.getSocket(aktSessionID).writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "y"));
+							aktSession = waitingqueue.getNextUser();
+							start = System.currentTimeMillis();
+							driveID = db.startDrive(db.getUserIdBySession((int)aktSession.getAttribute("DBID")));
+							activeSession.setDriver(aktSession, driveID);
+							activeSession.getSocket(aktSession).writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "y"));
 							///TODO \todo Fahrrechte;
 						} catch (IOException e) {
 							// TODO Auto-generated catch block

@@ -1,12 +1,11 @@
 package de.carduinodroid.web;
 
 import java.io.IOException;
-import java.util.LinkedList;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
-import de.carduinodroid.utilities.Config;
+
 import de.carduinodroid.utilities.Config.Options;
 
 public class ConfigTag extends TagSupport {
@@ -53,7 +52,7 @@ public class ConfigTag extends TagSupport {
 			break;
 		case 4:
 			try {
-				out.print(option.fahrZeit);
+				out.print(option.driveTime);
 			} catch (IOException e) {
 				throw new JspException("Error: " + e.getMessage());
 			}

@@ -21,7 +21,8 @@ public class Config {
 	 *
 	 */
 	public class Options {
-		public int fahrZeit; /** in minutes */	
+		public int driveTime; /** in minutes */
+		public int maxDriveSpeed; /** 0-100 */
 		public String dbAddress; /** Internet address of the database server */
 		public String dbUser; /** database username */
 		public String dbPW; /** database password */
@@ -83,9 +84,10 @@ public class Config {
 				String key = (String)keys.nextElement();
 				String value = (String)p.get(key);
 				log.writelogfile(key + " = " + value);
-			}		
+			}
 			
-			options.fahrZeit = Integer.parseInt(p.getProperty("fahrZeit"));			
+			options.driveTime = Integer.parseInt(p.getProperty("driveTime"));
+			options.maxDriveSpeed = Integer.parseInt(p.getProperty("maxDriveSpeed"));	
 			options.dbAddress = p.getProperty("dbAddress");
 			options.dbUser = p.getProperty("dbUser");
 			options.dbPW = p.getProperty("dbPW");
@@ -98,6 +100,8 @@ public class Config {
 			options.logQueue = Boolean.valueOf(p.getProperty("logQueue"));
 			options.logQueueToFile = Boolean.valueOf(p.getProperty("logQueueToFile"));
 			options.carduinodroidIP = p.getProperty("carduinodroidIP");
+			
+			log.writelogfile("settings loaded");
 		}
 		catch (Exception e) {
 			  System.out.println(e);
@@ -111,7 +115,8 @@ public class Config {
 		try{
 			log.writelogfile("saving settings");
 			Properties p = new Properties();
-			p.setProperty("fahrZeit", String.valueOf(options.fahrZeit));			
+			p.setProperty("driveTime", String.valueOf(options.driveTime));
+			p.setProperty("maxDriveSpeed", String.valueOf(options.maxDriveSpeed));
 			p.setProperty("dbAddress", options.dbAddress);
 			p.setProperty("dbUser", options.dbUser);
 			p.setProperty("dbPW", options.dbPW);
@@ -125,6 +130,15 @@ public class Config {
 			p.setProperty("logQueueToFile", String.valueOf(options.logQueueToFile));
 			p.setProperty("carduinodroidIP", options.carduinodroidIP);
 			p.store(new FileOutputStream(optionsPath), null);
+			
+			Enumeration<Object> keys = p.keys();
+			while (keys.hasMoreElements()) {
+				String key = (String)keys.nextElement();
+				String value = (String)p.get(key);
+				log.writelogfile(key + " = " + value);
+			}
+			
+			log.writelogfile("settings saved");
 		}
 		catch (Exception e) {
 			  System.out.println(e);
@@ -138,7 +152,8 @@ public class Config {
 	public void setDefault(boolean localhost) {    	
     	
     	options = new Options();
-    	options.fahrZeit = 10;
+    	options.driveTime = 10;
+    	options.maxDriveSpeed = 50;
     	options.logGPSInterval = 5;
     	if(localhost) {
     		options.dbAddress = "localhost:3306/carduinodroid";

@@ -37,11 +37,12 @@ $(document).ready(function() {
 	$.ajaxSetup({ cache: false }); // This part addresses an IE bug.  without it, IE will only load the first number and will never refresh
 	setInterval(function() {
 	$('#main_q').load('queue.jsp');
-	}, 3000); // the "3000" here refers to the time to refresh the div.  it is in milliseconds. 
+	}, 1000); // the "3000" here refers to the time to refresh the div.  it is in milliseconds. 
 	});
 </script>
 
 <script>
+/*	Zeichenzähler	*/
 $(document).ready(function(){
 	$("#main_chat_textinput").jqEasyCounter();
 });
@@ -55,10 +56,10 @@ $(document).ready(function()
         $.ajax({
             type: "POST",
             url: "main.jsp",
-            data: "action=enqueue",
+            data: "action=toggleq",
             success: function(msg)
             {
-                $("main_q").load("queue.jsp")
+                $("main_q").load("queue.jsp");
             }
         });
         return false;
@@ -67,8 +68,89 @@ $(document).ready(function()
 });
 </script>
 
+<script>
+$(document).ready(function()
+{
+    $("#main_take_control").click(function() {
+        $.ajax({
+            type: "POST",
+            url: "main.jsp",
+            data: "action=admincontrol",
+            success: function(msg)
+            {
+                /* TODO: Needs ACK*/
+            }
+        });
+        return false;
+    });
+ 
+});
+</script>
+
+<script>
+$(document).ready(function()
+{
+    $("#main_stopdriving").click(function() {
+        $.ajax({
+            type: "POST",
+            url: "main.jsp",
+            data: "action=stopdriving",
+            success: function(msg)
+            {
+            	$("#main_controls").hide();
+               /* TODO: Needs ACK*/
+            }
+        });
+        return false;
+    }); 
+});
+</script>
+
+ <script>
+$(function() {
+	$( "#dialog-message" ).dialog({
+		maxHeight: 30,
+		height:30,
+		modal:true,
+		buttons: {
+			Ok: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+});
+</script>
+
+<script>
+$(function(){
+	var count = 10;
+	countdown = setInterval(function(){
+		$("#main_chat_textinput").html(count);
+		if (count == 0){
+			$.ajax({
+	            type: "POST",
+	            url: "main.jsp",
+	            data: "action=stopdriving",
+	            success: function(msg)
+	            {
+	            	$("#main_controls").hide();
+	               /* TODO: Needs ACK*/
+	            }
+			});
+			count = 10;
+		}
+		count--;
+	},1000);
+});
+</script>
+
 </head>
 <body>
+
+<div id="dialog-message" title="Download complete">
+<span class="ui-icon ui-icon-circle-check" id="main_top_message"></span>
+You are now controlling the Car.
+</div>
 
 <table id="main_table">
 	<tr>
@@ -135,27 +217,61 @@ $(document).ready(function()
         <td id="main_table_sidebar_right">
         	<div id="main_q_container">	
                	<div id="main_q">Loading Queue</div>
-	                <form method="post">
-	                    <input id="main_qsubmit" type="submit" value="Enqueue" />
-	                </form>
-	                <form method="POST">
-	                	<input type="hidden" name="action" value="logout"/>
-	                	<input id="main_logout" type="submit" value="Logout" />
-					</form>
-	                <c:set var="isAdmin"><ct:isAdmin /></c:set>
-	                <c:if test="${isAdmin == 1}">
-	                	<a href="admin.jsp?menu=1">
-	                		<button id="main_admin">Admin</button>
-	                	</a>
-	                	<form method="POST">
-							<input type="hidden" name="action" value="connect"/>
-							<input id="main_connect" type="submit" value="Connect to Car" />
-						</form>
-						<form method="POST">
-							<input type="hidden" name="action" value="admincontrol"/>
-							<input id="main_take_control" type="submit" value="Take Control" />
-						</form>
-	                </c:if>
+               		<div id="main_button_container">
+               		<table>
+               			<tr>
+               				<td id="main_qsubmitleft">
+				                <form method="post">
+				                    <input id="main_qsubmit" type="submit" value="[En/de]queue" />
+				                </form>
+			                </td>
+			                <td>
+			                	<form method="post">
+			                    	<input id="main_stopdriving" type="submit" value="Stop driving" />
+			                	</form>
+			                </td>
+						</tr>
+			            <tr>
+			                <td>		                	
+			                	<c:set var="isAdmin"><ct:isAdmin /></c:set>
+			              		<c:if test="${isAdmin == 1}">
+			                	<form method="POST">
+									<input type="hidden" name="action" value="connect"/>
+									<input id="main_connect" type="submit" value="Connect to Car" />
+								</form>
+								</c:if>
+							</td>
+							<td>
+								
+								<c:set var="isAdmin"><ct:isAdmin /></c:set>
+			              		<c:if test="${isAdmin == 1}">
+								<form method="POST">
+									<input type="hidden" name="action" value="admincontrol"/>
+									<input id="main_take_control" type="submit" value="Take Control" />
+								</form>
+								</c:if>
+							</td>			                
+			            </tr>
+			            <tr> 			            	
+			            	<td>	
+			            		<c:set var="isAdmin"><ct:isAdmin /></c:set>
+			              		<c:if test="${isAdmin == 1}">		            	
+			                	<a href="admin.jsp?menu=1">
+			                		<button id="main_admin">Admin</button>
+			                	</a>
+			                	</c:if>
+			                </td>
+			                  
+			            	<td>
+				                <form method="POST">
+				                	<input type="hidden" name="action" value="logout"/>
+				                	<input id="main_logout" type="submit" value="Logout" />
+								</form>
+							</td>
+							
+						</tr>		                
+	                </table>
+	                </div>
             </div> 
         </td>
     </tr>

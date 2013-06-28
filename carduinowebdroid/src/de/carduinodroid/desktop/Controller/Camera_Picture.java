@@ -7,9 +7,6 @@ import java.awt.GraphicsEnvironment;
 import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 
-import javax.swing.ImageIcon;
-
-
 /**
  * This class is used to update the Camera pictures on the GUI
  * @author Robin

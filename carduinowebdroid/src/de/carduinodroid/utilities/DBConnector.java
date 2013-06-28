@@ -526,7 +526,6 @@ public class DBConnector {
 		
 		return sessionID;
 	}
-
 	
 	/**
 	 * \brief Adds logout time to a given session.
@@ -554,6 +553,41 @@ public class DBConnector {
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * \brief Looks up the (active) sessionID to a given userID.
+	 * @param userID UserID to look for.
+	 * @return Returns the sessionID or -1 is no session was found. If an older session was not closed properly it can return the old session instead of -1.
+	 */
+	public int getSessionIDByUserID(String userID) {
+		PreparedStatement stmt = null;
+		ResultSet rset = null;
+		int sessionID = -1;
+		
+		Timestamp datetime = new Timestamp(System.currentTimeMillis());
+		
+		try {
+			stmt = dbConnection.prepareStatement("SELECT sessionID FROM session WHERE userID=? AND loginTime<? AND logoutTime IS NULL");
+			stmt.setString(1, userID);
+			stmt.setTimestamp(2, datetime);
+			
+			rset = executeQuery(stmt);
+			if(rset == null)
+				return sessionID;
+			
+			rset.next();
+			while(!rset.isAfterLast()) {
+				sessionID = rset.getInt("sessionID");
+				rset.next();
+			}
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+		}
+
+		closeStatement(stmt);
+		
+		return sessionID;
 	}
 	
 	/**
