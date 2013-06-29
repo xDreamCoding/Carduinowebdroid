@@ -121,22 +121,6 @@ $(function() {
 });
 </script>
 
-
-
-<script type="text/javascript">
-/*
-*	COUNTDOWN
-*/
-var counter = 10;
-
-setInterval("timer()", 1000);
-
-function timer(){
-	counter--;
-	$('#counter').text(counter);
-}
-</script>
-
 </head>
 <body>
 
@@ -259,8 +243,7 @@ You are now controlling the Car.
 				                	<input type="hidden" name="action" value="logout"/>
 				                	<input id="main_logout" type="submit" value="Logout" />
 								</form>
-							</td>
-							
+							</td>							
 						</tr>		                
 	                </table>
 	                </div>
@@ -268,8 +251,6 @@ You are now controlling the Car.
         </td>
     </tr>
 </table>
-
 <br>
-
 </body>
 </html>
