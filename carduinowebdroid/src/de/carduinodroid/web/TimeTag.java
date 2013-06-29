@@ -27,7 +27,7 @@ public class TimeTag extends TagSupport{
 	public int doStartTag() throws JspException {
 		remTime = QueueManager.getRemainingTime();
 		JspWriter out = pageContext.getOut();
-		remTime *= 1000;
+		remTime /= 1000;
 		remTimeMin = (long)Math.floor(remTime / 60);
 		remTimeSec = remTime - (remTimeMin * 60);
 		try {
