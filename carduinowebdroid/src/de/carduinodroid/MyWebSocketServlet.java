@@ -57,7 +57,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 
 			@Override
 			protected void onOpen(WsOutbound outbound) {
-				activeSession.insertSocket(session, this.getWsOutbound());
+				activeSession.insertSocket(session, this);
 				int connSize = clients.size();
 				System.out.println("onOpen - connections: " + connSize);
 			}
@@ -66,6 +66,8 @@ public class MyWebSocketServlet extends WebSocketServlet {
 			protected void onClose(int status) {
 				activeSession.deleteSocket(session);
 				System.out.println("onClose - status code: " + status);
+				//wieso hier resetDriver?das wird aufgerufen wenn irgendjemand seinen websocket closed
+				//nicht nur beim fahrer?
 				activeSession.resetDriver();
 				QueueManager.restartTimer();
 				clients.remove(this);

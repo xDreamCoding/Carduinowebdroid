@@ -2,11 +2,14 @@ package de.carduinodroid.shared;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
+import org.apache.catalina.websocket.StreamInbound;
+import org.apache.catalina.websocket.WsOutbound;
+
 import de.carduinodroid.QueueManager;
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.DBConnector;
-import javax.servlet.http.HttpSession;
-import org.apache.catalina.websocket.WsOutbound;
 
 /**
  * \brief This Class is used to store all active sessions and provides access to them
@@ -181,7 +184,7 @@ public class activeSession {
 	 * @param sock Socket
 	 */
 	
-	public static void insertSocket(HttpSession Session, WsOutbound sock){
+	public static void insertSocket(HttpSession Session, StreamInbound sock){
 		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
 			return;
@@ -253,12 +256,12 @@ public class activeSession {
 		return activeTomcat.contains(Session);
 	}
 
-	public static WsOutbound getSocket(HttpSession Session){
+	public static StreamInbound getSocket(HttpSession Session){
 		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
 			return null;
 		}
-		return (WsOutbound)activeTomcat.get(index).getAttribute("Socket");
+		return (StreamInbound)Session.getAttribute("Socket");
 	}
 
 	public static HttpSession getDriver(){

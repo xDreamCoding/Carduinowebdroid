@@ -140,7 +140,7 @@ public class QueueManager /* extends HttpServlet */ {
 					else{
 						try {
 							if(aktSession != null) 
-								activeSession.getSocket(aktSession).writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "n"));
+								activeSession.getSocket(aktSession).getWsOutbound().writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "n"));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -150,7 +150,7 @@ public class QueueManager /* extends HttpServlet */ {
 							start = System.currentTimeMillis();
 							driveID = db.startDrive(db.getUserIdBySession((int)aktSession.getAttribute("DBID")));
 							activeSession.setDriver(aktSession, driveID);
-							activeSession.getSocket(aktSession).writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "y"));
+							activeSession.getSocket(aktSession).getWsOutbound().writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "y"));
 							///TODO \todo Fahrrechte;
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
