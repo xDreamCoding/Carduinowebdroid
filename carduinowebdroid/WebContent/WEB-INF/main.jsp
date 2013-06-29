@@ -124,7 +124,7 @@ $(function() {
 </head>
 <body>
 
-<div id="dialog-message" title="Download complete">
+<div id="dialog-message" title="Car Control" style="visibility=hidden;">
 <span class="ui-icon ui-icon-circle-check" id="main_top_message"></span>
 You are now controlling the Car.
 </div>
