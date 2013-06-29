@@ -86,8 +86,10 @@ public class QueueManager /* extends HttpServlet */ {
     	caretaker.schedule(new de.carduinodroid.Dummy(action), 1000, 60000*Fahrzeit);		
     }
 	
-	public static void receivedPing(String SessionID){
-		aliveSessions = false;
+	public static void receivedPing(HttpSession Session){
+		if(activeSession.isDriver(Session)){
+			aliveSessions = false;
+		}
 	}
     
     public static long getRemainingTime(){

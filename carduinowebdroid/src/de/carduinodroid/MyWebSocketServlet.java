@@ -88,7 +88,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 				 */
 				if(msg.startsWith(identifierHeartbeat)) {
 					///TODO \todo heartbeatstuff					
-					QueueManager.receivedPing(session.getId());
+					QueueManager.receivedPing(session);
 				}
 				/**
 				 * Controllerpart
