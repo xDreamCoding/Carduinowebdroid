@@ -66,10 +66,11 @@ public class MyWebSocketServlet extends WebSocketServlet {
 			protected void onClose(int status) {
 				activeSession.deleteSocket(session);
 				System.out.println("onClose - status code: " + status);
-				//wieso hier resetDriver?das wird aufgerufen wenn irgendjemand seinen websocket closed
-				//nicht nur beim fahrer?
-				activeSession.resetDriver();
-				QueueManager.restartTimer();
+				//stimmt... nur beim fahrer
+				if (activeSession.isDriver(session));{
+					activeSession.resetDriver();
+					QueueManager.restartTimer();
+				}
 				clients.remove(this);
 			}
 
