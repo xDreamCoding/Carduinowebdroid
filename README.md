@@ -5,6 +5,17 @@ Carduinodroid Webserver
 
 Webserver for the https://code.google.com/p/carduinodroid/ project
 _______________________
+Carduinowebdroid uses the following softwares:
+
+* Java - http://www.java.com/de/
+* Tomcat - http://tomcat.apache.org/
+* jQuerry UI - http://jqueryui.com/
+* jQueery DataTable - https://datatables.net/
+* MariaDB - https://mariadb.org/en/
+* JSTL - https://jstl.java.net/
+* carduinodroid - https://code.google.com/p/carduinodroid/
+
+_______________________
 
 ##Basics:
 
