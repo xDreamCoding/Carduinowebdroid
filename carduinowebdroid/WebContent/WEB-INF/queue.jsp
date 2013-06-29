@@ -5,7 +5,7 @@
 	<ct:getQ par="0" />
 </c:set>
 
-<div style="font-size:20px;"><b>Current driver: <ct:getQ par="1" /><getremTime /></b></div>
+<div style="font-size:20px;"><b>Current driver: <ct:getQ par="1" />&nbsp;<ct:getremTime /></b></div>
 <c:forEach items="${qlist}" var="s"> 
 	<c:out value="${s}" /><br>
 </c:forEach>
