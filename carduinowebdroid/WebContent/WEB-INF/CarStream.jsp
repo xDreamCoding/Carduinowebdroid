@@ -40,6 +40,9 @@ body {
 
 </Style>
 <script type="text/javascript">
+
+	/* Vincenz Vogel */
+	
 	var frame = 0;
 	ws = new WebSocket("ws://"+ location.host + "/carduinowebdroid/websocketStream");
     ws.binaryType = "arraybuffer"; //Binärtyp auf arraybuffer setzen	
