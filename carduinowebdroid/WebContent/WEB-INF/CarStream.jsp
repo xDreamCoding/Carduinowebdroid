@@ -39,9 +39,10 @@ body {
 }
 
 </Style>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 
-	/* Vincenz Vogel */
+	/* momentan in websocket.js */
+	/*	@author Vincenz Vogel */
 	
 	var frame = 0;
 	ws = new WebSocket("ws://"+ location.host + "/carduinowebdroid/websocketStream");
@@ -150,7 +151,7 @@ body {
         console.log("DataView verschickt");
     }
    
-    </script>
+    </script> -->
     
 </head>
   <body>

@@ -26,7 +26,9 @@ work */
 import de.carduinodroid.utilities.CarControllerWrapper;
 
 
-/* Steht alles im MyWebSocketServlet momentan */
+/* Steht alles im MyWebSocketServlet momentan
+ * @author Vincenz Vogel
+ */
 
 
 //public class StreamWebSocket extends WebSocketServlet {
