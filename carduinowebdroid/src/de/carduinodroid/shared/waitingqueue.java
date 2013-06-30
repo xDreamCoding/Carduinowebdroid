@@ -32,7 +32,7 @@ public class waitingqueue {
 	
 	/** 
 	 * \brief returns the waiting queue
-	 * @return returns a LinkedList of Strings
+	 * @return returns a LinkedList of HttpSessions
 	 */
 	
 	public static LinkedList<HttpSession> getqueue(){
@@ -41,7 +41,7 @@ public class waitingqueue {
 	
 	/** 
 	 * \brief returns the first User from the Queue and removes the User from the Queue
-	 * @return returns the UserID from the first User as String
+	 * @return returns the Tomcat Session from the first User as HttpSession
 	 */
 	
 	public static HttpSession getNextUser(){
@@ -50,7 +50,7 @@ public class waitingqueue {
 	
 	/** 
 	 * \brief inserts a new User at the end of the waiting queue
-	 * @param SessionID from the User
+	 * @param Session from the User (Tomcat)
 	 */
 	
 	public static void insertUser(HttpSession Session){
@@ -83,7 +83,7 @@ public class waitingqueue {
 	
 	/** 
 	 * \brief removes a User from the waiting queue
-	 * @param SessionID of the User
+	 * @param Session of the User (Tomcat)
 	 */
 	
 	public static void deleteTicket(HttpSession Session){
@@ -97,7 +97,7 @@ public class waitingqueue {
 	
 	/** 
 	 * \brief inserts a User at the first position of the waiting queue
-	 * @param SessionID of the User
+	 * @param Session of the User (Tomcat)
 	 */
 	
 	public static void InsertFirst(HttpSession Session){
@@ -119,7 +119,8 @@ public class waitingqueue {
 	}
 	
 	/** 
-	 * @return Returns the UserID from every User in the waiting queue in the right order
+	 * \brief returns the waiting queue
+	 * @return returns an Array of HttpSessions
 	 */
 	
 	public static HttpSession[] getAllSessions(){

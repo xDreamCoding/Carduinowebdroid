@@ -80,11 +80,19 @@ public class QueueManager /* extends HttpServlet */ {
 		activeSession.deleteAll();
 	}
     
-    public static void restartTimer() {
+	/** 
+	 * \brief cancels the Timer for waitingqueue handling and restarts the Timer again
+	 */
+	
+	public static void restartTimer() {
     	caretaker.cancel();
     	caretaker = new Timer();
     	caretaker.schedule(new de.carduinodroid.Dummy(action), 2000, 60000*Fahrzeit);		
     }
+	
+	/** 
+	 * \brief if this method is called, it protects the driver from timeout
+	 */
 	
 	public static void receivedPing(HttpSession Session){
 		if(activeSession.isDriver(Session)){
@@ -92,7 +100,11 @@ public class QueueManager /* extends HttpServlet */ {
 		}
 	}
     
-    public static long getRemainingTime(){
+	/** 
+	 * \brief calculates the remaining driveTime for the current driver or 0 if there is no driver
+	 */
+	
+	public static long getRemainingTime(){
     	long aktTime = System.currentTimeMillis();
     	long remainingTime = start+60000*Fahrzeit - aktTime;
     	if (remainingTime < 0){
@@ -100,6 +112,13 @@ public class QueueManager /* extends HttpServlet */ {
     	}
     	return remainingTime;
     }
+	
+	/** 
+	 * \brief handles the waiting queue and logs GPS in the given interval
+	 * @param opt Options object
+	 * @param db DBConnector object
+	 * @param logng Log object
+	 */
 	
 	public static void main(Options opt, DBConnector db, Log logng) {
     	

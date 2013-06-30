@@ -21,6 +21,12 @@ import de.carduinodroid.utilities.Config.Options;
 import de.carduinodroid.utilities.Log;
 import de.carduinodroid.utilities.Config;
 
+/**
+ * \brief This Class is used to handle the different Servlet-Requests
+ * @author Alexander Rose
+ *
+ */
+
 @WebServlet(loadOnStartup=1, value = "/filterPass2")
 public class FilterPass2  extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -101,6 +107,11 @@ public class FilterPass2  extends HttpServlet {
 				DBConnector db = (DBConnector)request.getServletContext().getAttribute("database");
 				
 				switch((String)postParameterMap.get("action")[0])  {				
+				
+				/** 
+				 * \brief User tries to login with his User-account
+				 */
+				
 				case "login":
 					if(!postParameterMap.containsKey("loginName") || !postParameterMap.containsKey("password"))
 						break;
@@ -135,6 +146,11 @@ public class FilterPass2  extends HttpServlet {
 					
 					//System.out.println("user " + u.getNickname() + " has logged in");
 					break;
+				
+					/** 
+					 * \brief Someone tries to enqueue or dequeue from the waitingqueue
+					 */
+					
 				case "toggleq":					
 					if (activeSession.isActive(session) == false){
 						session.removeAttribute("nickName");
@@ -149,17 +165,11 @@ public class FilterPass2  extends HttpServlet {
 					waitingqueue.insertUser(session);
 					log.logQueue(user.getUserID(), (int)session.getAttribute("DBID"));
 					break;
-				case "dequeue":
-					if (activeSession.isActive(session) == false){
-						session.removeAttribute("nickName");
-						break;
-					}
-					waitingqueue.deleteTicket(session);
-					break;
-				case "NextUser":
-					//String nextUserID = waitingqueue.getNextUser();
-					///TODO \todo wohin soll der übergeben werden
-					break;
+					
+					/** 
+					 * \brief Guest-Login without an account
+					 */
+					
 				case "watchDriver":
 					userID = "gue" + System.currentTimeMillis();
 					db.loginGuest(userID);
@@ -174,6 +184,11 @@ public class FilterPass2  extends HttpServlet {
 					session.setAttribute("userId", userID);
 					session.setAttribute("dbSessionID", ID);
 					break;
+				
+					/** 
+					 * \brief logout from the Server and return to the landing-page
+					 */
+					
 				case "logout":
 					activeSession.deleteSession(session);
 					waitingqueue.deleteTicket(session);
@@ -187,6 +202,11 @@ public class FilterPass2  extends HttpServlet {
 			  	  	//}													// new
 					
 					break;
+				
+					/** 
+					 * \brief connects the Server to the carduinodroid
+					 */
+					
 				case "connect":
 					if (activeSession.isActive(session) == false){
 						session.removeAttribute("nickName");
@@ -204,6 +224,11 @@ public class FilterPass2  extends HttpServlet {
 						log.writelogfile(e.getMessage());
 					}
 					break;
+				
+					/** 
+					 * \brief edits an user (userid, nickname, rights) or deletes an user
+					 */
+				
 				case "edituser":
 					if (session.getAttribute("isAdmin").equals(false)){
 						System.out.println("Admin-Rechte werden für diese Operation benötigt");
@@ -254,6 +279,11 @@ public class FilterPass2  extends HttpServlet {
 						System.out.println("User");
 					}
 					break;
+				
+					/** 
+					 * \brief creates a new user
+					 */
+					
 				case "adduser":
 					if (session.getAttribute("isAdmin").equals(false)){
 						System.out.println("Admin-Rechte werden für diese Operation benötigt");
@@ -282,6 +312,11 @@ public class FilterPass2  extends HttpServlet {
 						db.createUser(userID, Nickname, password, Right.USER);
 					}
 					break;
+				
+					/** 
+					 * \brief saves a new config for the Server
+					 */
+					
 				case "saveconfig":
 					if (session.getAttribute("isAdmin").equals(false)){
 						System.out.println("Admin-Rechte werden für diese Operation benötigt");
@@ -336,6 +371,11 @@ public class FilterPass2  extends HttpServlet {
 					conf.setOptions(opt);
 					conf.saveOptions();
 					break;
+				
+					/** 
+					 * \brief an Admin can kick out a driver and become driver immediately
+					 */
+				
 				case "admincontrol":
 					if (session.getAttribute("isAdmin").equals(false)){
 						System.out.println("Admin-Rechte werden für diese Operation benötigt");
@@ -346,6 +386,11 @@ public class FilterPass2  extends HttpServlet {
 					activeSession.resetDriver();
 					QueueManager.restartTimer();
 					break;
+				
+					/** 
+					 * \brief a driver can decide to end his drive before his driving-time ends
+					 */
+				
 				case "stopdriving":
 					if (session.equals(activeSession.getDriver())){
 						activeSession.resetDriver();

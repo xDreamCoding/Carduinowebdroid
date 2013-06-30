@@ -13,7 +13,7 @@ import de.carduinodroid.utilities.DBConnector;
 
 /**
  * \brief This Class is used to store all active sessions and provides access to them
- * @author Alexander ROse
+ * @author Alexander Rose
  *
  */
 
@@ -42,9 +42,9 @@ public class activeSession {
 	
 	/** 
 	 * \brief inserts a session into the queue and also creates a session in the DB
-	 * @param SessionID Tomcat session of the user
 	 * @param ipadress of the user (ipv4 and ipv6 are possible)
 	 * @param userid of the user
+	 * @param HttpSession Tomcat session of the user
 	 */
 	
 	public static int insertSession(String ipadress,String userid, HttpSession Tomcat){
@@ -79,8 +79,8 @@ public class activeSession {
 	}
 	
 	/** 
-	 * \brief removes a session from the queue and closes the DB Session
-	 * @param SessionID of the user
+	 * \brief removes a session from the queue and closes the DB Session. If the Session belongs to a Driver the car is stopped
+	 * @param Session of the user (Tomcat)
 	 */
 	
 	public static void deleteSession(HttpSession Session){
@@ -137,18 +137,11 @@ public class activeSession {
 	}
 
 	/** 
-	 * \brief returns the SessionID of the DB which belongs to the given Tomcat SessionID
+	 * \brief returns the Tomcat Session which belongs to the given Tomcat SessionID
 	 * @param SessionID from Tomcat
-	 * @return Returns SessionID from DB
+	 * @return Tomcat Session
 	 */
 	
-//	public static int getSessionInt(String SessionID){
-//		if (SessionID == null) return -1;
-//		int SessionInt = activeInt.get(activeSessions.indexOf(SessionID));
-//		return SessionInt;
-//	}
-	
-	//debug Funktion
 	public static HttpSession getSession(String SessionID){
 		int index = -1;
 		for (int i = 0; i < activeTomcat.size(); i++){
@@ -164,6 +157,12 @@ public class activeSession {
 		return Session;
 	}
 
+	/** 
+	 * \brief returns the Tomcat Session which belongs to the given DB SessionID
+	 * @param SessionID from the DB
+	 * @return Tomcat Session
+	 */
+	
 	public static HttpSession getSession(int SessionID){
 		int index = -1;
 		for (int i = 0; i < activeTomcat.size(); i++){
@@ -180,7 +179,7 @@ public class activeSession {
 	}
 	/** 
 	 * \brief saves a Socket for a specific User
-	 * @param SessionID of the User
+	 * @param Session of the User (Tomcat)
 	 * @param sock Socket
 	 */
 	
@@ -194,7 +193,7 @@ public class activeSession {
 
 	/** 
 	 * \brief delete a Socket from a specific User
-	 * @param SessionID of the User
+	 * @param Session of the User (Tomcat)
 	 */
 	
 	public static void deleteSocket(HttpSession Session){
@@ -207,8 +206,8 @@ public class activeSession {
 	}
 
 	/** 
-	 * \brief find out if the SessionID belongs to the current Driver
-	 * @param SessionID of the User
+	 * \brief find out if the Session belongs to the current Driver
+	 * @param Session of the User (Tomcat)
 	 * @return true if its the Driver else false
 	 */
 	
@@ -223,7 +222,8 @@ public class activeSession {
 
 	/** 
 	 * \brief mark the given User as Driver (if someone else was Diver before, he is no longer the Driver)
-	 * @param SessionID of the User
+	 * @param Session of the User (Tomcat)
+	 * @param driverID the ID from the DB given for the actual drive
 	 */
 	
 	public static void setDriver(HttpSession Session, int driverID){
@@ -248,14 +248,20 @@ public class activeSession {
 	}
 
 	/** 
-	 * \brief returns true if the activeSessions-queue contains the given SessionID
-	 * @param SessionID of the User 
+	 * \brief returns true if the activeSessions-queue contains the given Session
+	 * @param Session of the User (Tomcat)
 	 */
 	
 	public static boolean isActive(HttpSession Session){
 		return activeTomcat.contains(Session);
 	}
 
+	/** 
+	 * \brief returns the Socket which belongs to the given Tomcat SessionID
+	 * @param Session from Tomcat
+	 * @return Socket
+	 */
+	
 	public static StreamInbound getSocket(HttpSession Session){
 		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
@@ -264,11 +270,20 @@ public class activeSession {
 		return (StreamInbound)Session.getAttribute("Socket");
 	}
 
+	/** 
+	 * \brief returns the Tomcat Session which belongs to the current Driver
+	 * @return Tomcat Session
+	 */
+	
 	public static HttpSession getDriver(){
 		if (Driver == -1) return null;
 		return activeTomcat.get(Driver);
 	}
 
+	/** 
+	 * \brief returns the Number of Sessions, that are active
+	 */
+	
 	public static int getLength(){
 		return activeTomcat.size();
 	}
