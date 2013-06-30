@@ -122,8 +122,8 @@ You are now controlling the Car.
                             </table>
                         </td>
                         <td id="main_gadget">
-                            <button value="Horn" type="button" id="main_gadget_button_horn">Horn</button><br>
-                            <button value="Light" type="button" id="main_gadget_button_light">Light</button>
+                            <button value="Horn [H]" type="button" id="main_gadget_button_horn">Horn</button><br>
+                            <button value="Light [L]" type="button" id="main_gadget_button_light">Light</button>
                         </td>
                 	</tr>
             	</table>
