@@ -28,7 +28,7 @@ public class QueueManager /* extends HttpServlet */ {
 	private static TimerTask Session;
 	private static TimerTask action;
 	private static boolean aliveSessions;
-	private static long start;
+	private static long start = 0;
 	static Log log;
 	static int driveID;
 	static int Fahrzeit, gpsLogInterval;
@@ -47,7 +47,7 @@ public class QueueManager /* extends HttpServlet */ {
 
 		Fahrzeit = opt.driveTime;
 
-		if (!(activeSession.getDriver() == null && !(Fahrzeit == opt.driveTime))){
+		if (!(activeSession.getDriver() == null) && !(Fahrzeit == opt.driveTime)){
 			long driveTime = System.currentTimeMillis() - start;
 			long remainingTime = (opt.driveTime*60000) - driveTime;
 			if (remainingTime <= 100){
@@ -83,7 +83,7 @@ public class QueueManager /* extends HttpServlet */ {
     public static void restartTimer() {
     	caretaker.cancel();
     	caretaker = new Timer();
-    	caretaker.schedule(new de.carduinodroid.Dummy(action), 1000, 60000*Fahrzeit);		
+    	caretaker.schedule(new de.carduinodroid.Dummy(action), 2000, 60000*Fahrzeit);		
     }
 	
 	public static void receivedPing(HttpSession Session){
@@ -95,6 +95,9 @@ public class QueueManager /* extends HttpServlet */ {
     public static long getRemainingTime(){
     	long aktTime = System.currentTimeMillis();
     	long remainingTime = start+60000*Fahrzeit - aktTime;
+    	if (remainingTime < 0){
+    		return 0;
+    	}
     	return remainingTime;
     }
 	
