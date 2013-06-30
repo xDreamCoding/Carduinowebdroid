@@ -180,11 +180,11 @@ public class FilterPass2  extends HttpServlet {
 					session.removeAttribute("nickName");
 					///TODO \todo logout = ich lösche ein paar sachen und das wars? session? rechte? zurück zum index?				
 
-					if ( BildSender.Runner) {							// new
-			  	  		System.out.println("Stoppe CarStream ");		// new
+					//if ( BildSender.Runner) {							// new
+			  	  	//	System.out.println("Stoppe CarStream ");		// new
 			  	  		//BildSender.Stop();								// new
-			  	  		System.out.println("CarStream beendet");		// new
-			  	  	}													// new
+			  	  		//System.out.println("CarStream beendet");		// new
+			  	  	//}													// new
 					
 					break;
 				case "connect":
