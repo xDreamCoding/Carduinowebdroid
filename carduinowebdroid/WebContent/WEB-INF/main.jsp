@@ -6,6 +6,7 @@
 
 <title>CarDuinoDroid</title>
 <link rel="icon" href="static/favicon.ico" type="image/x-icon" />
+
 <!--JQuery Import-->
 <link rel="stylesheet" href="static/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
 <script src="static/jquery-1.9.1.js"></script>
@@ -24,6 +25,10 @@
 <script src="static/websocket.js"></script>
 <script src="static/chat.js"></script>
 <script src="static/controls.js"></script>
+<script src="static/ajax.js"></script>
+
+<!-- initializing Websockets -->
+
 <script type="text/javascript">
 	$(function() {
 		initializeWebsocket();
@@ -32,14 +37,7 @@
 	});
 </script>
 
-<script type="text/javascript">
-$(document).ready(function() {
-	$.ajaxSetup({ cache: false }); // This part addresses an IE bug.  without it, IE will only load the first number and will never refresh
-	setInterval(function() {
-	$('#main_q').load('queue.jsp');
-	}, 1000); // the "3000" here refers to the time to refresh the div.  it is in milliseconds. 
-	});
-</script>
+<!-- site-related jS -->
 
 <script>
 /*	Zeichenzähler	*/
@@ -49,64 +47,6 @@ $(document).ready(function(){
 </script>
 
 <script>
-/* ausführen, wenn html-seite geladen wurde */
-$(document).ready(function()
-{
-    $("#main_qsubmit").click(function() {
-        $.ajax({
-            type: "POST",
-            url: "main.jsp",
-            data: "action=toggleq",
-            success: function(msg)
-            {
-                $("main_q").load("queue.jsp");
-            }
-        });
-        return false;
-    });
- 
-});
-</script>
-
-<script>
-$(document).ready(function()
-{
-    $("#main_take_control").click(function() {
-        $.ajax({
-            type: "POST",
-            url: "main.jsp",
-            data: "action=admincontrol",
-            success: function(msg)
-            {
-                /* TODO: Needs ACK*/
-            }
-        });
-        return false;
-    });
- 
-});
-</script>
-
-<script>
-$(document).ready(function()
-{
-    $("#main_stopdriving").click(function() {
-        $.ajax({
-            type: "POST",
-            url: "main.jsp",
-            data: "action=stopdriving",
-            success: function(msg)
-            {
-            	$("#main_controls").hide();
-               /* TODO: Needs ACK*/
-            }
-        });
-        return false;
-    }); 
-});
-</script>
-
- <script>
 $(function() {
 	$( "#dialog-message" ).dialog({
 		maxHeight: 30,
@@ -118,8 +58,7 @@ $(function() {
 			}
 		}
 	});
-});
-</script>
+});</script>
 
 </head>
 <body>

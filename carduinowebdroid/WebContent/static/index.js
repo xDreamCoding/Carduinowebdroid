@@ -1,6 +1,6 @@
 /**
  * @File This is the Javascript file for the index.jsp page.
- * It handles all Javascript calls made. 
+ * It handles jQuery Javascript calls made. 
  * @author Christoph Braun
  * 
  */
