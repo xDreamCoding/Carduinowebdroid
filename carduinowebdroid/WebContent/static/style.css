@@ -447,6 +447,7 @@ width:100%;
 }
 
 #about_frame{
+	margin-top:5px;
 	border:1px solid #ECD6BF;
 	padding: 3px;
 	width:50%;
@@ -455,6 +456,11 @@ width:100%;
         0 2px 2px rgba(0,0,0,0.2),
         0 1px 5px rgba(0,0,0,0.2),
         0 0 0 12px rgba(255,255,255,0.4);
+}
+
+#about_return{
+	margin-left:auto;
+	margin-right:auto;
 }
 
 #about_home{
