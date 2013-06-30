@@ -1,31 +1,30 @@
-<%@ page contentType="text/html; charset=utf-8" language="java" import="java.sql.*" errorPage="" %>
-<!DOCTYPE HTML>
+<!DOCTYPE HTML> 
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
 <title>CarDuinoDroid</title>
-<link rel="icon" href="static/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="static/favicon.ico" type="image/x-icon">
 
 <!--JQuery Import-->
-<link rel="stylesheet" href="static/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css" />
-<script src="static/jquery-1.9.1.js"></script>
-<script src="static/jquery-ui.js"></script>
-<script src="static/counter.js"></script>
+<link rel="stylesheet" href="static/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css">
+<script type="text/javascript" src="static/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="static/jquery-ui.js"></script>
+<script type="text/javascript" src="static/counter.js"></script>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="/WEB-INF/lib/tags/customTag.tld" prefix="ct" %>
 
 <!--Custom Stylesheet-->
 
-<link rel="stylesheet" href="static/style.css" />
+<link rel="stylesheet" href="static/style.css">
 
 <!--Custom jS-->
 
-<script src="static/main.js"></script>
-<script src="static/websocket.js"></script>
-<script src="static/chat.js"></script>
-<script src="static/controls.js"></script>
-<script src="static/ajax.js"></script>
+<script type="text/javascript" src="static/main.js"></script>
+<script type="text/javascript" src="static/websocket.js"></script>
+<script type="text/javascript" src="static/chat.js"></script>
+<script type="text/javascript" src="static/controls.js"></script>
+<script type="text/javascript" src="static/ajax.js"></script>
 
 <!-- initializing Websockets -->
 
@@ -39,21 +38,20 @@
 
 <!-- site-related jS -->
 
-<script>
-/*	Zeichenz√§hler	*/
+<script type="text/javascript">
+/*	Zeichenz‰hler	*/
 $(document).ready(function(){
 	$("#main_chat_textinput").jqEasyCounter();
 });
 </script>
-
 </head>
 <body>
 <table id="main_table">
 	<tr>
     	<td id="main_table_sidebar_left">
         	<div id="main_chat_container">
-        		<textarea type="text" id="main_chat" readonly></textarea>
-          	  	<textarea type="text" name="chat" id="main_chat_textinput" maxlength="256" placeholder="Chat here..."></textarea>		
+        		<textarea id="main_chat" readonly rows="0" cols="0"></textarea>
+          	  	<textarea name="chat" id="main_chat_textinput" placeholder="Chat here..." rows="0" cols="0"></textarea>		
             	<button id="main_chat_speak">Chat</button>
           	</div>
         </td>
@@ -62,17 +60,17 @@ $(document).ready(function(){
         	<div id="main_stream">
         	 <canvas id="CarStream" >
         	Dein Browser kann diese Grafik nicht darstellen.
-       		Oder Javascript ist nicht aktiviert</canvas></center>
+       		Oder Javascript ist nicht aktiviert</canvas>
     		</div>
         	<div id="main_controls">
             	<table id="main_control_table">
             		<tr>
-            			<td id="main_slider">
-                			<center><div class="slider-vertical" id="main_maxspeed"></div></center>
+            			<td class="main_slider">
+                			<div class="slider-vertical" id="main_maxspeed"></div>
                 			Max. Speed
                 		</td>
-                		<td id="main_slider">
-                			<center><div class="slider-vertical" id="main_steerangle"></div></center>
+                		<td class="main_slider">
+                			<div class="slider-vertical" id="main_steerangle"></div>
                 			Steering Angle
                 		</td>
                         <td id="main_steering">
@@ -118,13 +116,17 @@ $(document).ready(function(){
                		<table>
                			<tr>
                				<td id="main_qsubmitleft">
-				                <form method="post">
-				                    <input id="main_qsubmit" type="submit" value="[En/de]queue" />
+				                <form method="POST" action="">
+				                	<div>
+				                    	<input id="main_qsubmit" type="submit" value="[En/de]queue">
+				                    </div>
 				                </form>
 			                </td>
 			                <td>
-			                	<form method="post">
-			                    	<input id="main_stopdriving" type="submit" value="Stop driving" />
+			                	<form method="post" action="">
+			                		<div>
+				                    	<input id="main_stopdriving" type="submit" value="Stop driving">
+			                    	</div>
 			                	</form>
 			                </td>
 						</tr>
@@ -132,9 +134,11 @@ $(document).ready(function(){
 			                <td>		                	
 			                	<c:set var="isAdmin"><ct:isAdmin /></c:set>
 			              		<c:if test="${isAdmin == 1}">
-			                	<form method="POST">
-									<input type="hidden" name="action" value="connect"/>
-									<input id="main_connect" type="submit" value="Connect to Car" />
+			                	<form method="POST" action="">
+			                		<div>
+									<input type="hidden" name="action" value="connect">
+									<input id="main_connect" type="submit" value="Connect to Car">
+									</div>
 								</form>
 								</c:if>
 							</td>
@@ -142,9 +146,11 @@ $(document).ready(function(){
 								
 								<c:set var="isAdmin"><ct:isAdmin /></c:set>
 			              		<c:if test="${isAdmin == 1}">
-								<form method="POST">
-									<input type="hidden" name="action" value="admincontrol"/>
-									<input id="main_take_control" type="submit" value="Take Control" />
+								<form method="POST" action="">
+									<div>
+									<input type="hidden" name="action" value="admincontrol">
+									<input id="main_take_control" type="submit" value="Take Control">
+									</div>
 								</form>
 								</c:if>
 							</td>			                
@@ -160,9 +166,11 @@ $(document).ready(function(){
 			                </td>
 			                  
 			            	<td>
-				                <form method="POST">
-				                	<input type="hidden" name="action" value="logout"/>
-				                	<input id="main_logout" type="submit" value="Logout" />
+				                <form method="POST" action="">
+				                	<div>
+					                	<input type="hidden" name="action" value="logout">
+					                	<input id="main_logout" type="submit" value="Logout">
+				                	</div>
 								</form>
 							</td>							
 						</tr>		                
@@ -172,6 +180,5 @@ $(document).ready(function(){
         </td>
     </tr>
 </table>
-<br>
 </body>
 </html>

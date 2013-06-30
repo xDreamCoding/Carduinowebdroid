@@ -4,7 +4,6 @@
 html{
 	height: 100%;
 	width: 100%;
-	position:relative;
 	overflow:hidden !important;
 }
 
@@ -163,7 +162,6 @@ textarea{
     margin-left:4px;
     padding:3px;
     margin-top: 8px;
-	maxlength: 256;
 }
 
 #main_chat_chars{
@@ -304,7 +302,7 @@ width:100%;
 	width:30%;
 }
 
-#main_slider{
+.main_slider{
     border:1px solid #ECD6BF;
     margin-left:10px;
     margin-right:auto;
@@ -352,6 +350,14 @@ width:100%;
 
 #main_maxspeed{
 	height:100px;
+  	margin-left: auto;
+ 	margin-right: auto;
+}
+
+#main_steerangle{
+	height:100px;
+  	margin-left: auto;
+ 	margin-right: auto;
 }
 
 #main_close_left{
@@ -434,10 +440,6 @@ width:100%;
 
 #main_left_input{
 	width:180px;
-}
-
-#admin_connect{
-	align:right;
 }
 
 #main_left_button{
