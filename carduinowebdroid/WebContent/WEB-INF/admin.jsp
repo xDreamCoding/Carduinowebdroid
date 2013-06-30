@@ -268,14 +268,16 @@
 					<td id="main_left_button">
 						<input type="submit" value="Save settings" />
 					</td>
+		</form>
 					<td>
 						<form method="POST">
+							<input type="hidden" name="action" value="connect"/>
 							<input id="admin_connect" type="submit" value="Connect to Car" />
 						</form>
 					</td>
 				</tr>
 			</table>
-		</form>
+		
 		</div>
 </div>
 
