@@ -30,6 +30,10 @@ textarea{
 	resize:none;
 }
 
+.bold{
+	font-weight:bold;
+}
+
 #index_logo {
 	margin-top:50px;
 	text-align:center;	
@@ -392,7 +396,7 @@ width:100%;
 	float:left;
 }
 
-#admin_menuicons{
+.admin_menuicons{
 	margin-top:4px;
 }
 
@@ -408,7 +412,7 @@ width:100%;
 	float:left;
 }
 
-#admin_box{
+.admin_box{
 	border:1px solid #ECD6BF;
 	padding: 3px;
 	margin-left:5px;
@@ -438,7 +442,7 @@ width:100%;
 	width:300px;
 }
 
-#main_left_input{
+.admin_left_input{
 	width:180px;
 }
 
