@@ -30,7 +30,7 @@ public class Filter implements javax.servlet.Filter {
 	FilterConfig config;
 	Log log;
 	final boolean DEBUG = false;
-	final boolean ENABLE_GENERIC_MODE = false; /** redirect to target - allways - made for JSPs, use for debugging only*/
+	final boolean ENABLE_GENERIC_MODE = true; /** redirect to target - allways - made for JSPs, use for debugging only*/
 	
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
@@ -58,7 +58,7 @@ public class Filter implements javax.servlet.Filter {
 			if(DEBUG) System.out.println("-> " + req.getRequestURI());
 
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
-			websocketRequest = req.getRequestURI().startsWith(req.getContextPath() + "/websocket");
+			websocketRequest = req.getRequestURI().startsWith(req.getContextPath() + "/websocket") || req.getRequestURI().startsWith(req.getContextPath() + "/websocketStream") ;
 
 			if(session.getAttribute("nickName") != null && ((String)session.getAttribute("nickName")) != "") {
 				target = "main";

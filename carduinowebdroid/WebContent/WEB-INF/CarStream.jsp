@@ -1,4 +1,4 @@
-<%-- <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page import="java.text.*" %>
 <%@ page import="java.util.*" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -38,10 +38,10 @@ body {
         0 0 0 12px rgba(255,255,255,0.4);
 }
 
-</Style>--%>
+</Style>
 <script type="text/javascript">
 	var frame = 0;
-    ws = new WebSocket("ws://localhost:8080/CarStreamTest/WebSocket");
+	ws = new WebSocket("ws://"+ location.host + "/carduinowebdroid/websocketStream");
     ws.binaryType = "arraybuffer"; //Binärtyp auf arraybuffer setzen	
     ws.onopen = function(){
     	console.log("Websocket Ready!!");
@@ -149,7 +149,7 @@ body {
    
     </script>
     
-<%--   </head>
+</head>
   <body>
     <h3> Hallo, der CarStream meldet sich. </h3>
     <p> <%= (new SimpleDateFormat("yyyy-MM-dd, HH:mm:ss")).format(new Date()) + " h" %> </p>
@@ -161,4 +161,4 @@ body {
     
     <p> <a href='/CarStreamTest/'>zur&uuml;ck</a> </p>
   </body>
-</html> --%>
+</html>

@@ -23,6 +23,8 @@ import de.carduinodroid.utilities.CarControllerWrapper;
 work */
 /* author: Vincenz Vogel*/
 
+import de.carduinodroid.utilities.CarControllerWrapper;
+
 public class StreamWebSocket extends WebSocketServlet {
 
 		private static final long serialVersionUID = 4642341228711151433L;
@@ -64,35 +66,35 @@ public class StreamWebSocket extends WebSocketServlet {
 					System.out.println("ws onBinaryMessage");
 					
 					/* Test */
-					File file = new File("H:\\Eclipse-Apps\\GutscheinHinten.jpg");
-					System.out.println("Datei gefunden, Laenge = " + file.length());
-					ByteBuffer bbu = ByteBuffer.allocate((int) file.length());
-					System.out.println("ByteBuffer erzeugt");
-					final int BYTES_PER_READ = (int) file.length();
-					System.out.println("Bytes ermittelt");
-				    FileInputStream fis = new FileInputStream("H:\\Eclipse-Apps\\GutscheinHinten.jpg");
-				    System.out.println("Inputstream erstellt");
-				    int bytesRead = 0;
-				    byte[] buf = new byte[BYTES_PER_READ];
-				    System.out.println("Buf erzeugt");
-				    while (bytesRead != -1)
-				    {
-				        bbu.put(buf, 0, bytesRead);
-				        bytesRead = fis.read(buf);
-				        System.out.println(" " + bytesRead);
-				    }
-				    System.out.println("Bytes kopiert");
-				    fis.close();
-				    
-					BufferedImage image = ImageIO.read( file);
+//					File file = new File("C:\\Users\\Michael\\Pictures\\im_super_serial__2.png");
+//					System.out.println("Datei gefunden, Laenge = " + file.length());
+//					ByteBuffer bbu = ByteBuffer.allocate((int) file.length());
+//					System.out.println("ByteBuffer erzeugt");
+//					final int BYTES_PER_READ = (int) file.length();
+//					System.out.println("Bytes ermittelt");
+//				    FileInputStream fis = new FileInputStream("C:\\Users\\Michael\\Pictures\\im_super_serial__2.png");
+//				    System.out.println("Inputstream erstellt");
+//				    int bytesRead = 0;
+//				    byte[] buf = new byte[BYTES_PER_READ];
+//				    System.out.println("Buf erzeugt");
+//				    while (bytesRead != -1)
+//				    {
+//				        bbu.put(buf, 0, bytesRead);
+//				        bytesRead = fis.read(buf);
+//				        System.out.println(" " + bytesRead);
+//				    }
+//				    System.out.println("Bytes kopiert");
+//				    fis.close();
+//				    
+//					BufferedImage image = ImageIO.read( file);
+//					B = image.getWidth();
+//					H = image.getHeight();
+					/* Test */
+					/* Work */
+					BufferedImage image = CarControllerWrapper.getImg();
 					B = image.getWidth();
 					H = image.getHeight();
-					/* Test */
-					/* Work
-					BufferedImage image = CarControllerWrapper.getImg();
-					B = 
-					H = 
-					work */
+					/*work */
 					
 					System.out.println("Bild gelesen, Breite = " + B + " Höhe = " + H);
 					// Grösse von pixels = Breite * Höhe * 4 bytes 
