@@ -65,7 +65,7 @@ public class StreamWebSocket extends WebSocketServlet {
 					
 					/* Test */
 					File file = new File("H:\\Eclipse-Apps\\GutscheinHinten.jpg");
-					System.out.println("Datei gefunden, L�nge = " + file.length());
+					System.out.println("Datei gefunden, Laenge = " + file.length());
 					ByteBuffer bbu = ByteBuffer.allocate((int) file.length());
 					System.out.println("ByteBuffer erzeugt");
 					final int BYTES_PER_READ = (int) file.length();
@@ -94,10 +94,10 @@ public class StreamWebSocket extends WebSocketServlet {
 					H = 
 					work */
 					
-					System.out.println("Bild gelesen, Breite = " + B + " H�he = " + H);
-					// Gr��e von pixels = Breite * H�he * 4 bytes 
+					System.out.println("Bild gelesen, Breite = " + B + " Höhe = " + H);
+					// Grösse von pixels = Breite * Höhe * 4 bytes 
 					int[] pixels = new int[B * H];
-					int BufLeange = B * H * 4 + 8;  // 8 bytes f�r Breite und H�he
+					int BufLeange = B * H * 4 + 8;  // 8 bytes fuer Breite und Hoehe
 					System.out.println("pixels angelegt");
 					// kopiert alle Pixel von image ( oder nur Bildausschnitt) in ein Feld ( pixels)
 			        image.getRGB(0, 0, B, H, pixels, 0, B);
@@ -108,7 +108,7 @@ public class StreamWebSocket extends WebSocketServlet {
 			        buffer.clear();
 			        System.out.println("ByteBuffer erstellt = " + BufLeange + " byte");
 			        
-			        // Bildgr��e im Puffer hinterlegen
+			        // Bildgroesse im Puffer hinterlegen
 			        // Bild- Breite int -> byte[]
 			        buffer.put((byte)(B >>> 24));
 			        buffer.put((byte)(B >>> 16));
@@ -116,7 +116,7 @@ public class StreamWebSocket extends WebSocketServlet {
 			        buffer.put((byte)(B ));
 			        System.out.println("Bildbreite in ByteBuffer");
 			        
-			        // Bild- H�he int -> byte[]
+			        // Bild- Hoehe int -> byte[]
 			        buffer.put((byte)(H >>> 24));
 			        buffer.put((byte)(H >>> 16));
 			        buffer.put((byte)(H >>> 8));
