@@ -141,7 +141,9 @@ You are now controlling the Car.
         <td><button id="main_close_left" class="ui-icon ui-icon-triangle-1-w"></button> <button id="main_open_left" class="ui-icon ui-icon-triangle-1-e"></button></td>
         <td id="main_table_stream">   
         	<div id="main_stream">
-        	<canvas></canvas>
+        	 <canvas id="CarStream" width="1080" height="720">
+        	Dein Browser kann diese Grafik nicht darstellen.
+       		Oder Javascript ist nicht aktiviert</canvas></center>
     		</div>
         	<div id="main_controls">
             	<table id="main_control_table">
