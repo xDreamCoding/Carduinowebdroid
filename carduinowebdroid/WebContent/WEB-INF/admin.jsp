@@ -269,7 +269,9 @@
 						<input type="submit" value="Save settings" />
 					</td>
 					<td>
-						<input id="admin_connect" type="submit" value="Connect to Car" />
+						<form method="POST">
+							<input id="admin_connect" type="submit" value="Connect to Car" />
+						</form>
 					</td>
 				</tr>
 			</table>
