@@ -36,9 +36,9 @@ body {
         0 2px 2px rgba(0,0,0,0.2),
         0 1px 5px rgba(0,0,0,0.2),
         0 0 0 12px rgba(255,255,255,0.4);
-} --%>
+}
 
-</Style>
+</Style>--%>
 <!-- <script type="text/javascript">
 
 	/* momentan in websocket.js */
