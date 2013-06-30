@@ -5,6 +5,6 @@
  * 
  */
 
-$(function() {
-	$( "input[type=submit], button" ).button();
+$(function () {
+    $("input[type=submit], button").button();
 });

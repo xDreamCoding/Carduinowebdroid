@@ -46,28 +46,8 @@ $(document).ready(function(){
 });
 </script>
 
-<script>
-$(function() {
-	$( "#dialog-message" ).dialog({
-		maxHeight: 30,
-		height:30,
-		modal:true,
-		buttons: {
-			Ok: function() {
-				$( this ).dialog( "close" );
-			}
-		}
-	});
-});</script>
-
 </head>
 <body>
-
-<div id="dialog-message" title="Car Control" style="visibility=hidden;">
-<span class="ui-icon ui-icon-circle-check" id="main_top_message"></span>
-You are now controlling the Car.
-</div>
-
 <table id="main_table">
 	<tr>
     	<td id="main_table_sidebar_left">
