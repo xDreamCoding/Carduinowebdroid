@@ -16,6 +16,12 @@ public class SessionTag extends TagSupport {
 
 	private static final long serialVersionUID = 1L;
 
+	private int parameter;
+	
+	public void setPar(int i){
+		parameter = i;
+	}
+	
 	/**
 	 * \brief Starting tag handler
 	 * @return EVAL_PAGE. Tells the Server to continue evaluating Tags.
@@ -23,14 +29,30 @@ public class SessionTag extends TagSupport {
 	 */
 	public int doStartTag() throws JspException {
 		JspWriter out = pageContext.getOut();
-		try {
-			if((Boolean)pageContext.getSession().getAttribute("isAdmin")) {
-                out.print("1");
-            } else {
-                out.print("0");
-            }	
-		} catch (IOException e){
-			throw new JspException("Error: " + e.getMessage());
+		
+		switch(parameter){
+		case 0:
+			try {
+				if((Boolean)pageContext.getSession().getAttribute("isAdmin")) {
+	                out.print("1");
+	            } else {
+	                out.print("0");
+	            }	
+			} catch (IOException e){
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
+		case 1:
+			try {
+				if((Boolean)pageContext.getSession().getAttribute("isGuest")) {
+					out.print("1");
+				} else {
+					out.print("0");
+				}
+			} catch (IOException e){
+				throw new JspException("Error: " + e.getMessage());
+			}
+			break;
 		}
 		return EVAL_PAGE;
 	}
