@@ -241,7 +241,7 @@ public class FilterPass2  extends HttpServlet {
 					boolean isAdmin;
 					userID = (String) postParameterMap.get("userid")[0]; 
 					
-					if (postParameterMap.containsKey("chkdel1") && postParameterMap.containsKey("chkdel2") && postParameterMap.containsKey("chkdel3") && !(userID == db.getUserIdBySession((int)session.getAttribute("DBID")))){
+					if (postParameterMap.containsKey("chkdel1") && postParameterMap.containsKey("chkdel2") && postParameterMap.containsKey("chkdel3") && !(userID.equals(db.getUserIdBySession((int)session.getAttribute("DBID"))))){
 						db.deleteUser(userID);
 						int DBID = db.getSessionIDByUserID(userID);
 						if (!(DBID == -1)){							
@@ -266,17 +266,15 @@ public class FilterPass2  extends HttpServlet {
 					else{
 						isAdmin = true;
 					}
-					if (userID == db.getUserIdBySession((int)session.getAttribute("DBID")) && (!isAdmin)){
+					if (userID.equals(db.getUserIdBySession((int)session.getAttribute("DBID"))) && (!isAdmin)){
 						System.out.println("Man kann sich nicht selbst das Admin recht entziehen");
 						break;
 					}
 					if (isAdmin){
-						System.out.println("Admin");
 						db.editUser(userID, Nickname, Right.ADMIN);
 					}
 					else{
 						db.editUser(userID, Nickname, Right.USER);
-						System.out.println("User");
 					}
 					break;
 				
