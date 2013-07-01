@@ -44,7 +44,7 @@ public class SessionTag extends TagSupport {
 			break;
 		case 1:
 			try {
-				if((Boolean)pageContext.getSession().getAttribute("isGuest")) {
+				if(!(Boolean)pageContext.getSession().getAttribute("isUser")) {
 					out.print("1");
 				} else {
 					out.print("0");
