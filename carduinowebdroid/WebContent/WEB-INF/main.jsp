@@ -113,8 +113,8 @@ $(document).ready(function(){
                	<div id="main_q">Loading Queue</div>
                		<div id="main_button_container">
                		<table>
-               			<c:set var="isGuest"><ct:chkRight par="1" /></c:set>
-               			<c:if test="${isGuest == 0}">
+               			<c:set var="isUser"><ct:chkRight par="1" /></c:set>
+               			<c:if test="${isUser == 1}">
                			<tr>
                				<td id="main_qsubmitleft">
 				                <form method="POST" action="">

@@ -44,10 +44,10 @@ public class SessionTag extends TagSupport {
 			break;
 		case 1:
 			try {
-				if((Boolean)pageContext.getSession().getAttribute("isUser") || (Boolean)pageContext.getSession().getAttribute("isAdmin")) {
-					out.print("0");
-				} else {
+				if((Boolean)pageContext.getSession().getAttribute("isUser")) {
 					out.print("1");
+				} else {
+					out.print("0");
 				}
 			} catch (IOException e){
 				throw new JspException("Error: " + e.getMessage());
