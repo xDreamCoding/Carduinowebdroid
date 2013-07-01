@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Timer;
@@ -43,7 +44,8 @@ public class MyWebSocketServlet extends WebSocketServlet {
 	/**
 	 * Connected clients
 	 */
-	private static List<StreamInbound> clients = new ArrayList<StreamInbound>();
+	private static List<StreamInbound> clients = Collections.synchronizedList(new ArrayList<StreamInbound>());
+//	private static List<StreamInbound> newClients = new ArrayList<StreamInbound>();
 	private static BufferedImage oldImage;
 	private static int sameImage = 0;
 
@@ -165,20 +167,35 @@ public class MyWebSocketServlet extends WebSocketServlet {
 	}
 	
 	/**
+	 * Get Iter
+	 * 
+	 * @param message
+//	 */
+//	private static ListIterator<StreamInbound> getIter() {
+//		clients.addAll(newClients);
+//		newClients.clear();
+//		return clients.listIterator();
+//	}
+//	
+	/**
 	 * Send a message to all clients connected.
 	 * 
 	 * @param message
 	 */
-	private void broadcast(String message) {
+	private static void broadcast(String message) {
 		System.out.println(message);
 		StreamInbound someClient;
-		ListIterator<StreamInbound> iter = clients.listIterator();
-		while (iter.hasNext()) {
-			someClient = (MessageInbound) iter.next();
-			try {
-				someClient.getWsOutbound().writeTextMessage(
-						CharBuffer.wrap(message));
-			} catch (IOException e) {
+		synchronized(clients) {
+			ListIterator<StreamInbound> iter = clients.listIterator();
+			
+			while (iter.hasNext()) {
+				someClient = (MessageInbound) iter.next();
+				try {
+					someClient.getWsOutbound().writeTextMessage(
+							CharBuffer.wrap(message));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -191,14 +208,16 @@ public class MyWebSocketServlet extends WebSocketServlet {
 	public static void broadcastImage(ByteBuffer buffer) {
 		System.out.println("Send ByteBuffer");
 		StreamInbound someClient;
-		ListIterator<StreamInbound> iter = clients.listIterator();
-
-		while (iter.hasNext()) {
-			someClient = (MessageInbound) iter.next();
-			try {
-				someClient.getWsOutbound().writeBinaryMessage( buffer);
-			} catch (IOException e) {
-				e.printStackTrace();
+		synchronized(clients) {
+			ListIterator<StreamInbound> iter = clients.listIterator();
+	
+			while (iter.hasNext()) {
+				someClient = (MessageInbound) iter.next();
+				try {
+					someClient.getWsOutbound().writeBinaryMessage( buffer);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

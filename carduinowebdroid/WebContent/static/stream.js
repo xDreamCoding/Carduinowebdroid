@@ -44,7 +44,7 @@ function streamHandleMessage(message) {
 													// 0xff0000;
           img.data[idx + 3] = 255; // IntBuffer[i + 3] &
 										// 0xff000000;
-          i = i + 4;
+          i = i + 3;
         }
     }
               

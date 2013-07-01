@@ -1,5 +1,7 @@
 package de.carduinodroid.utilities;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -192,7 +194,15 @@ public class CarControllerWrapper {
 		ccw.img = img;
 	}
 
-	public void sendImg(BufferedImage image) {
+	public void sendImg(BufferedImage before) {
+		int w = before.getWidth() / 2;
+		int h = before.getHeight() / 2;
+		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		AffineTransform at = new AffineTransform();
+		at.scale(0.5, 0.5);
+		AffineTransformOp scaleOp = 
+		   new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+		image = scaleOp.filter(before, image);
 		int H;
 		int B;
 
@@ -268,7 +278,7 @@ public class CarControllerWrapper {
 					buffer.put((byte) ((pixel >> 16) & 0xFF)); // Red component
 					buffer.put((byte) ((pixel >> 8) & 0xFF)); // Green component
 					buffer.put((byte) (pixel & 0xFF)); // Blue component
-					buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha
+//					buffer.put((byte) ((pixel >> 24) & 0xFF)); // Alpha
 																// component.
 																// nicht bei
 																// BufferdImage
