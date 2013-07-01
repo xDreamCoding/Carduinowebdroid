@@ -28,7 +28,7 @@ import de.carduinodroid.utilities.Log;
  *  Handle messages from clients and broadcast them to the rest.
  *  Receive control commands.
  * @author Sven-Leonhard Weiler
- * @author Vincenz Vogel - onBinaryMessage
+ * @author Vincenz Vogel
  */
 
 public class MyWebSocketServlet extends WebSocketServlet {
