@@ -252,7 +252,8 @@ public class MyWebSocketServlet extends WebSocketServlet {
 			/* Work */
 			
 			BufferedImage image = CarControllerWrapper.getImg();
-			if(!image.equals(oldImage)) {
+			
+			if(oldImage == null || !image.equals(oldImage)) {
 				oldImage = image;
 				B = image.getWidth();
 				H = image.getHeight();
