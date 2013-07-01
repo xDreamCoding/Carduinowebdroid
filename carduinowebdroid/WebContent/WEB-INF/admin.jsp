@@ -268,12 +268,12 @@
 					</tr>
 				</table>
 			</div>
-		</form>
 			<table>
 				<tr>
 					<td id="main_left_button">
 						<input type="submit" value="Save settings">
 					</td>
+		</form>
 					<td>
 						<form method="POST" action="">
 							<div>
