@@ -15,6 +15,11 @@
 
 <link rel="stylesheet" href="static/style.css">
 
+<style>
+html{ overflow: auto !important; }
+body{ overflow: auto !important; }
+</style>
+
 <!--Custom jS-->
 
 <script type="text/javascript" src="static/index.js"></script>
