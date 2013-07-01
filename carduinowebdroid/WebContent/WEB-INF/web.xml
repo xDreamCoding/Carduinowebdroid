@@ -10,14 +10,5 @@
 		<servlet-name>WebSocketServlet</servlet-name>
 		<url-pattern>/websocket</url-pattern>
 	</servlet-mapping>
-	
-	<servlet>
-		<servlet-name>WebSocketStreamServlet</servlet-name>
-		<servlet-class>de.carduinodroid.StreamWebSocket</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>WebSocketStreamServlet</servlet-name>
-		<url-pattern>/websocketStream</url-pattern>
-	</servlet-mapping>
 
 </web-app>

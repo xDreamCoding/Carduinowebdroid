@@ -11,17 +11,12 @@ import java.util.TimerTask;
 import java.util.Timer;
 
 /**
- * Servlet implementation class Main
- */
-//@WebServlet(loadOnStartup=1, value = "/main")
-
-/**
  * \brief This Class is used to handle user-timeouts and to log GPS in a given interval and to handle the waiting queue
  * @author Alexander Rose
  *
  */
 
-public class QueueManager /* extends HttpServlet */ {
+public class QueueManager {
 	private static Timer caretaker;
 	private static Timer GPSLog;
 	private static TimerTask GPSLogger;

@@ -58,9 +58,7 @@ $(document).ready(function(){
         <td><button id="main_close_left" class="ui-icon ui-icon-triangle-1-w"></button> <button id="main_open_left" class="ui-icon ui-icon-triangle-1-e"></button></td>
         <td id="main_table_stream">   
         	<div id="main_stream">
-        	 <canvas id="CarStream" >
-        	Dein Browser kann diese Grafik nicht darstellen.
-       		Oder Javascript ist nicht aktiviert</canvas>
+        	 <canvas id="CarStream">Canvas kann nicht angezeigt werden. Bitte verwenden Sie einen aktuellen Browser!</canvas>
     		</div>
         	<div id="main_controls">
             	<table id="main_control_table">

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -36,6 +37,8 @@ public class MyWebSocketServlet extends WebSocketServlet {
 	public static final String identifierChat = "Ch%:";
 	public static final String identifierControl = "Co%:";
 	public static final String identifierHeartbeat = "Hb%:";
+	
+	private static Timer streamTimer = new Timer("streamTimer");
 
 	/**
 	 * Connected clients
@@ -68,116 +71,16 @@ public class MyWebSocketServlet extends WebSocketServlet {
 			protected void onClose(int status) {
 				activeSession.deleteSocket(session);
 				System.out.println("onClose - status code: " + status);
-				//stimmt... nur beim fahrer
 				if (activeSession.isDriver(session));{
 					activeSession.resetDriver();
 					QueueManager.restartTimer();
 				}
 				clients.remove(this);
 			}
-
+			
 			@Override
-			
-			/* @author Vincenz Vogel */
-			
 			protected void onBinaryMessage(ByteBuffer bb) throws IOException {
-				int H;
-				int B;
-				
-				StreamInbound someClient;
-				ListIterator<StreamInbound> iter = clients.listIterator();
-				
-				System.out.println("ws onBinaryMessage");
-				
-				/* Test */
-//				File file = new File("C:\\Users\\Michael\\Pictures\\im_super_serial__2.png");
-//				System.out.println("Datei gefunden, Laenge = " + file.length());
-//				ByteBuffer bbu = ByteBuffer.allocate((int) file.length());
-//				System.out.println("ByteBuffer erzeugt");
-//				final int BYTES_PER_READ = (int) file.length();
-//				System.out.println("Bytes ermittelt");
-//			    FileInputStream fis = new FileInputStream("C:\\Users\\Michael\\Pictures\\im_super_serial__2.png");
-//			    System.out.println("Inputstream erstellt");
-//			    int bytesRead = 0;
-//			    byte[] buf = new byte[BYTES_PER_READ];
-//			    System.out.println("Buf erzeugt");
-//			    while (bytesRead != -1)
-//			    {
-//			        bbu.put(buf, 0, bytesRead);
-//			        bytesRead = fis.read(buf);
-//			        System.out.println(" " + bytesRead);
-//			    }
-//			    System.out.println("Bytes kopiert");
-//			    fis.close();
-//			    
-//				BufferedImage image = ImageIO.read( file);
-//				B = image.getWidth();
-//				H = image.getHeight();
-				/* Test */
-				/* Work */
-				BufferedImage image = CarControllerWrapper.getImg();
-				B = image.getWidth();
-				H = image.getHeight();
-				/*work */
-				
-				System.out.println("Bild gelesen, Breite = " + B + " Höhe = " + H);
-				// Grösse von pixels = Breite * Höhe * 4 bytes 
-				int[] pixels = new int[B * H];
-				int BufLeange = B * H * 4 + 8;  // 8 bytes fuer Breite und Hoehe
-				System.out.println("pixels angelegt");
-				// kopiert alle Pixel von image ( oder nur Bildausschnitt) in ein Feld ( pixels)
-		        image.getRGB(0, 0, B, H, pixels, 0, B);
-		        System.out.println("Bildgr��e bestimmt und RGB- Image erzeugt");
-		        
-		        System.out.println("Daten f�r ByteBuffer: " + B * H);
-		        ByteBuffer buffer = ByteBuffer.allocate( BufLeange);	
-		        buffer.clear();
-		        System.out.println("ByteBuffer erstellt = " + BufLeange + " byte");
-		        
-		        // Bildgroesse im Puffer hinterlegen
-		        // Bild- Breite int -> byte[]
-		        buffer.put((byte)(B >>> 24));
-		        buffer.put((byte)(B >>> 16));
-		        buffer.put((byte)(B >>> 8));
-		        buffer.put((byte)(B ));
-		        System.out.println("Bildbreite in ByteBuffer");
-		        
-		        // Bild- Hoehe int -> byte[]
-		        buffer.put((byte)(H >>> 24));
-		        buffer.put((byte)(H >>> 16));
-		        buffer.put((byte)(H >>> 8));
-		        buffer.put((byte)(H ));
-		        System.out.println("Bildh�he in ByteBuffer");
-		        
-		        
-		        // Bild Pixelinformationen in Puffer hinterlegen
-		        for(int y = 0; y < image.getHeight(); y++){
-		            for(int x = 0; x < image.getWidth(); x++){
-		                int pixel = pixels[y * image.getWidth() + x];
-		                buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
-		                buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
-		                buffer.put((byte) (pixel & 0xFF));             // Blue component
-		                buffer.put((byte) ((pixel >> 24) & 0xFF));     // Alpha component. 
-		                												// nicht bei BufferdImage
-		            }
-		        }
-		        
-		        			        
-		        buffer.flip(); //ByteBuffer speichern
-		        System.out.println("ByteBuffer geschrieben");
-		        	        
-				while (iter.hasNext()) {
-					someClient = (MessageInbound) iter.next();
-					try {
-						System.out.println("ByteBuffer senden");
-						//someClient.getWsOutbound().writeBinaryMessage( ByteBuffer.wrap(buf));
-						someClient.getWsOutbound().writeBinaryMessage( buffer);
-						System.out.println("ByteBuffer gesendet");
-					} catch (IOException e) {
-					}
-				}
-				
-				
+				System.out.println("onBinaryMessage");
 			}
 
 			@Override
@@ -277,5 +180,128 @@ public class MyWebSocketServlet extends WebSocketServlet {
 			}
 		}
 	}
+	
+	/**
+	 * Send a message to all clients connected.
+	 * 
+	 * @param message
+	 */
+	private static void broadcastImage(ByteBuffer buffer) {
+		System.out.println("Send ByteBuffer");
+		StreamInbound someClient;
+		ListIterator<StreamInbound> iter = clients.listIterator();
+
+		while (iter.hasNext()) {
+			someClient = (MessageInbound) iter.next();
+			try {
+				someClient.getWsOutbound().writeBinaryMessage( buffer);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * start streamTimer 100ms.
+	 */
+	public static void startStream() {
+		System.out.println("start stream");
+		streamTimer.schedule(streamTick, 1000, 100);
+	}
+
+	/**
+	 * stop streamTimer.
+	 */
+	public static void stopStream() {
+		streamTimer.cancel();
+	}
+	
+	private static TimerTask streamTick = new TimerTask() {	
+		@Override
+		public void run() {
+			int H;
+			int B;
+						
+			/* Test */
+//			File file = new File("C:\\Users\\Michael\\Pictures\\im_super_serial__2.png");
+//			System.out.println("Datei gefunden, Laenge = " + file.length());
+//			ByteBuffer bbu = ByteBuffer.allocate((int) file.length());
+//			System.out.println("ByteBuffer erzeugt");
+//			final int BYTES_PER_READ = (int) file.length();
+//			System.out.println("Bytes ermittelt");
+//		    FileInputStream fis = new FileInputStream("C:\\Users\\Michael\\Pictures\\im_super_serial__2.png");
+//		    System.out.println("Inputstream erstellt");
+//		    int bytesRead = 0;
+//		    byte[] buf = new byte[BYTES_PER_READ];
+//		    System.out.println("Buf erzeugt");
+//		    while (bytesRead != -1)
+//		    {
+//		        bbu.put(buf, 0, bytesRead);
+//		        bytesRead = fis.read(buf);
+//		        System.out.println(" " + bytesRead);
+//		    }
+//		    System.out.println("Bytes kopiert");
+//		    fis.close();
+//		    
+//			BufferedImage image = ImageIO.read( file);
+//			B = image.getWidth();
+//			H = image.getHeight();
+			/* Test */
+			/* Work */
+			
+			BufferedImage image = CarControllerWrapper.getImg();
+			B = image.getWidth();
+			H = image.getHeight();
+			/*work */
+			
+			System.out.println("Bild gelesen, Breite = " + B + " Höhe = " + H);
+			// Grösse von pixels = Breite * Höhe * 4 bytes 
+			int[] pixels = new int[B * H];
+			int BufLeange = B * H * 4 + 8;  // 8 bytes fuer Breite und Hoehe
+			System.out.println("pixels angelegt");
+			// kopiert alle Pixel von image ( oder nur Bildausschnitt) in ein Feld ( pixels)
+	        image.getRGB(0, 0, B, H, pixels, 0, B);
+	        System.out.println("Bildgröße bestimmt und RGB- Image erzeugt");
+	        
+	        System.out.println("Daten für ByteBuffer: " + B * H);
+	        ByteBuffer buffer = ByteBuffer.allocate( BufLeange);	
+	        buffer.clear();
+	        System.out.println("ByteBuffer erstellt = " + BufLeange + " byte");
+	        
+	        // Bildgroesse im Puffer hinterlegen
+	        // Bild- Breite int -> byte[]
+	        buffer.put((byte)(B >>> 24));
+	        buffer.put((byte)(B >>> 16));
+	        buffer.put((byte)(B >>> 8));
+	        buffer.put((byte)(B ));
+	        System.out.println("Bildbreite in ByteBuffer");
+	        
+	        // Bild- Hoehe int -> byte[]
+	        buffer.put((byte)(H >>> 24));
+	        buffer.put((byte)(H >>> 16));
+	        buffer.put((byte)(H >>> 8));
+	        buffer.put((byte)(H ));
+	        System.out.println("Bildhöhe in ByteBuffer");
+	        
+	        
+	        // Bild Pixelinformationen in Puffer hinterlegen
+	        for(int y = 0; y < image.getHeight(); y++){
+	            for(int x = 0; x < image.getWidth(); x++){
+	                int pixel = pixels[y * image.getWidth() + x];
+	                buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
+	                buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
+	                buffer.put((byte) (pixel & 0xFF));             // Blue component
+	                buffer.put((byte) ((pixel >> 24) & 0xFF));     // Alpha component. 
+	                												// nicht bei BufferdImage
+	            }
+	        }
+	        
+	        			        
+	        buffer.flip(); //ByteBuffer speichern
+	        System.out.println("ByteBuffer geschrieben");
+	        	        
+			broadcastImage(buffer);
+		}
+	};
 }
 
