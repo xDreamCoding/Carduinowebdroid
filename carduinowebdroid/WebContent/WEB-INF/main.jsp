@@ -7,7 +7,7 @@
 <link rel="icon" href="static/favicon.ico" type="image/x-icon">
 
 <!--JQuery Import-->
-<link rel="stylesheet" href="static/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css">
+<link rel="stylesheet" href="static/jqueryui_static/css/ui-lightness/jquery-ui-1.10.3.custom.css">
 <script type="text/javascript" src="static/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="static/jquery-ui.js"></script>
 <script type="text/javascript" src="static/counter.js"></script>

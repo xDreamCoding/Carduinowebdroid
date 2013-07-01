@@ -8,10 +8,19 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import de.carduinodroid.utilities.Log;
 
+/**
+ * \brief This class handles the Log related custom tags.
+ * \details The Log tag returns all logs.
+ * @author Michael Röding
+ *
+ */
+
 public class LogTag extends TagSupport {
+	
 	private static final long serialVersionUID = 1L;
 
 	public int doStartTag() throws JspException {
+		
 		Log log = (Log)pageContext.getServletContext().getAttribute("log");
 		JspWriter out = pageContext.getOut();
 		LinkedList<String> logList = new LinkedList<String>();
@@ -20,7 +29,9 @@ public class LogTag extends TagSupport {
 		try {
 			for(String s : logList)	
 				out.print(s+",");
-		} catch (IOException e) { throw new JspException("Error: " + e.getMessage()); }
+		} catch (IOException e) { 
+			throw new JspException("Error: " + e.getMessage()); 
+		}
 		return EVAL_PAGE;
 	}
 	

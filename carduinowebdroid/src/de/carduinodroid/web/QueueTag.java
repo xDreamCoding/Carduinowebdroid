@@ -32,7 +32,6 @@ public class QueueTag extends TagSupport {
 		JspWriter out = pageContext.getOut();
 		String[] ListQ = new  String [waitingqueue.getLength()];
 		ListQ = waitingqueue.getNickname();
-		String driverName;
 		HttpSession session;
 		
 	    switch(parameter){
