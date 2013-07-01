@@ -20,9 +20,14 @@
         </attribute>
     </tag>
     <tag>
-    	<name>isAdmin</name>
+    	<name>chkRight</name>
     	<tag-class>de.carduinodroid.web.SessionTag</tag-class>
-    	<info>Asks if current User is an Admin or not</info>
+    	<info>Check specific rights</info>
+    	<attribute>
+    		<name>par</name>
+    		<required>true</required>
+    		<description>Parameter</description>
+    	</attribute>
     </tag>
     <tag>
     	<name>getLog</name>

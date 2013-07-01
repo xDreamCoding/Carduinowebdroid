@@ -102,7 +102,7 @@ public class QueueManager {
 	public static long getRemainingTime(){
     	long aktTime = System.currentTimeMillis();
     	long remainingTime = start+60000*Fahrzeit - aktTime;
-    	if (remainingTime < 0){
+    	if (remainingTime < 0 || activeSession.getDriver() == null){
     		return 0;
     	}
     	return remainingTime;

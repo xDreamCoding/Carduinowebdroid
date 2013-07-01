@@ -113,6 +113,8 @@ $(document).ready(function(){
                	<div id="main_q">Loading Queue</div>
                		<div id="main_button_container">
                		<table>
+               			<c:set var="isGuest"><ct:chkRight par="1" /></c:set>
+               			<c:if test="${isGuest == 0}">
                			<tr>
                				<td id="main_qsubmitleft">
 				                <form method="POST" action="">
@@ -129,9 +131,10 @@ $(document).ready(function(){
 			                	</form>
 			                </td>
 						</tr>
+						</c:if>
 			            <tr>
 			                <td>		                	
-			                	<c:set var="isAdmin"><ct:isAdmin /></c:set>
+			                	<c:set var="isAdmin"><ct:chkRight par="0" /></c:set>
 			              		<c:if test="${isAdmin == 1}">
 			                	<form method="POST" action="">
 			                		<div>
@@ -143,7 +146,7 @@ $(document).ready(function(){
 							</td>
 							<td>
 								
-								<c:set var="isAdmin"><ct:isAdmin /></c:set>
+								<c:set var="isAdmin"><ct:chkRight par="0" /></c:set>
 			              		<c:if test="${isAdmin == 1}">
 								<form method="POST" action="">
 									<div>
@@ -156,7 +159,7 @@ $(document).ready(function(){
 			            </tr>
 			            <tr> 			            	
 			            	<td>	
-			            		<c:set var="isAdmin"><ct:isAdmin /></c:set>
+			            		<c:set var="isAdmin"><ct:chkRight par="0" /></c:set>
 			              		<c:if test="${isAdmin == 1}">		            	
 			                	<a href="admin.jsp?menu=1">
 			                		<button id="main_admin">Admin</button>
