@@ -21,6 +21,11 @@
 <link rel="stylesheet" href="static/style.css">
 <link rel="stylesheet" href="static/table.css">
 
+<style  type="text/css">
+html{ overflow: auto !important; }
+body{ overflow: auto !important; }
+</style>
+
 <!--Custom jS-->
 
 <script type="text/javascript">
