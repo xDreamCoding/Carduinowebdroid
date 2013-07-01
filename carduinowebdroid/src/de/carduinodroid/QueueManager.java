@@ -158,7 +158,7 @@ public class QueueManager {
 					}
 					else{
 						try {
-							if(aktSession != null) 
+							if(aktSession != null && activeSession.getSocket(aktSession) != null) 
 								activeSession.getSocket(aktSession).getWsOutbound().writeTextMessage(CharBuffer.wrap(MyWebSocketServlet.identifierControl + "n"));
 						} catch (IOException e) {
 							// TODO Auto-generated catch block

@@ -75,7 +75,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 			protected void onClose(int status) {
 				activeSession.deleteSocket(session);
 				System.out.println("onClose - status code: " + status);
-				if (activeSession.isDriver(session));{
+				if (activeSession.isDriver(session)){
 					activeSession.resetDriver();
 					QueueManager.restartTimer();
 				}
