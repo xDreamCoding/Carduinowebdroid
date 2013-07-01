@@ -27,7 +27,7 @@ public class Camera_Picture {
 	public void receive_picture(BufferedImage bufferedImage) {
 		BufferedImage image = bufferedImage;
 		image = rotate(image, Math.toRadians(90));
-		controller.parent.setImg(image);
+		controller.parent.sendImg(image);
 	}
 	
 	public BufferedImage rotate(BufferedImage image, double angle) {

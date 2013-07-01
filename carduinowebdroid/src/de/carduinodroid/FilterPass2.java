@@ -220,7 +220,6 @@ public class FilterPass2  extends HttpServlet {
 					try {
 						CarControllerWrapper ccw = CarControllerWrapper.getCarController();
 						ccw.connect(ip);
-						MyWebSocketServlet.startStream();
 					} catch (Exception e) {
 						log.writelogfile(e.getMessage());
 					}

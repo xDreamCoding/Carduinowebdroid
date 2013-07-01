@@ -188,7 +188,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 	 * 
 	 * @param message
 	 */
-	private static void broadcastImage(ByteBuffer buffer) {
+	public static void broadcastImage(ByteBuffer buffer) {
 		System.out.println("Send ByteBuffer");
 		StreamInbound someClient;
 		ListIterator<StreamInbound> iter = clients.listIterator();
@@ -221,42 +221,12 @@ public class MyWebSocketServlet extends WebSocketServlet {
 	private static TimerTask streamTick = new TimerTask() {	
 		@Override
 		public void run() {
-			int H;
-			int B;
-						
-			/* Test */
-//			File file = new File("C:\\Users\\Michael\\Pictures\\im_super_serial__2.png");
-//			System.out.println("Datei gefunden, Laenge = " + file.length());
-//			ByteBuffer bbu = ByteBuffer.allocate((int) file.length());
-//			System.out.println("ByteBuffer erzeugt");
-//			final int BYTES_PER_READ = (int) file.length();
-//			System.out.println("Bytes ermittelt");
-//		    FileInputStream fis = new FileInputStream("C:\\Users\\Michael\\Pictures\\im_super_serial__2.png");
-//		    System.out.println("Inputstream erstellt");
-//		    int bytesRead = 0;
-//		    byte[] buf = new byte[BYTES_PER_READ];
-//		    System.out.println("Buf erzeugt");
-//		    while (bytesRead != -1)
-//		    {
-//		        bbu.put(buf, 0, bytesRead);
-//		        bytesRead = fis.read(buf);
-//		        System.out.println(" " + bytesRead);
-//		    }
-//		    System.out.println("Bytes kopiert");
-//		    fis.close();
-//		    
-//			BufferedImage image = ImageIO.read( file);
-//			B = image.getWidth();
-//			H = image.getHeight();
-			/* Test */
-			/* Work */
-			
 			BufferedImage image = CarControllerWrapper.getImg();
 			
 			if(oldImage == null || !image.equals(oldImage)) {
 				oldImage = image;
-				B = image.getWidth();
-				H = image.getHeight();
+				int B = image.getWidth();
+				int H = image.getHeight();
 				/*work */
 				
 				System.out.println("Bild gelesen, Breite = " + B + " Höhe = " + H);
