@@ -34,6 +34,11 @@ textarea{
 	font-weight:bold;
 }
 
+.center{
+	margin-left:auto;
+	margin-rigth:auto;
+}
+
 #index_logo {
 	margin-top:50px;
 	text-align:center;	
@@ -451,7 +456,10 @@ width:100%;
 }
 
 #about_frame{
-	margin-top:5px;
+	margin-left:auto;
+	margin-right: auto;
+	margin-top:10px;
+	margin-bottom:15px;
 	border:1px solid #ECD6BF;
 	padding: 3px;
 	width:50%;
