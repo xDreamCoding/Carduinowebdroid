@@ -139,7 +139,7 @@ public class FilterPass2  extends HttpServlet {
 						break;
 					
 					session.setAttribute("isAdmin", u.isAdmin());
-					session.setAttribute("isUser", u.isUser());
+					session.setAttribute("isUser", u.isUser() || u.isAdmin());
 					session.setAttribute("nickName", u.getNickname());
 					session.setAttribute("userId", u.getUserID());
 					session.setAttribute("dbSessionID", ID);
