@@ -12,6 +12,11 @@
 <link rel="icon" href="static/favicon.ico" type="image/x-icon">
 <link rel="stylesheet" href="static/style.css">
 
+<style>
+html{ overflow: auto !important; }
+body{ overflow: auto !important; }
+</style>
+
 <script type="text/javascript">
 $(function() {
 	$("input[type=button], button,#about_home").button();
