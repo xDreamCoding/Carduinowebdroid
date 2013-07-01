@@ -242,12 +242,12 @@ public class FilterPass2  extends HttpServlet {
 					userID = (String) postParameterMap.get("userid")[0]; 
 					
 					if (postParameterMap.containsKey("chkdel1") && postParameterMap.containsKey("chkdel2") && postParameterMap.containsKey("chkdel3") && !(userID.equals(db.getUserIdBySession((int)session.getAttribute("DBID"))))){
-						db.deleteUser(userID);
 						int DBID = db.getSessionIDByUserID(userID);
 						if (!(DBID == -1)){							
 							HttpSession deleted = activeSession.getSession(DBID);
 							deleted.removeAttribute("nickName");
 						}
+						db.deleteUser(userID);
 						break;
 					}
 					String Password = (String) postParameterMap.get("password")[0];

@@ -94,6 +94,7 @@ public class activeSession {
 		Session.removeAttribute("DBID");
 		Session.removeAttribute("Socket");
 		activeTomcat.remove(index);
+		Session.invalidate();
 		
 		if (index < Driver){
 			Driver = Driver -1;
@@ -126,6 +127,7 @@ public class activeSession {
 				Session.removeAttribute("nickName");
 				Session.removeAttribute("Socket");
 				Session.removeAttribute("DBID");
+				Session.invalidate();
 			}
 			catch(IllegalStateException ie){
 				System.out.println("Session bereits teilweise oder ganz entfernt");
