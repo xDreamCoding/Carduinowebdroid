@@ -101,6 +101,10 @@ public class waitingqueue {
 	 */
 	
 	public static void InsertFirst(HttpSession Session){
+		if (Warteschlange.contains(Session)){
+			int index = Warteschlange.indexOf(Session);
+			Warteschlange.remove(index);
+		}
 		Warteschlange.addFirst(Session);
 	}
 	
