@@ -44,6 +44,8 @@ public class MyWebSocketServlet extends WebSocketServlet {
 	 * Connected clients
 	 */
 	private static List<StreamInbound> clients = new ArrayList<StreamInbound>();
+	private static BufferedImage oldImage;
+	private static int sameImage = 0;
 
 	@Override
 	protected StreamInbound createWebSocketInbound(String string,
@@ -250,57 +252,62 @@ public class MyWebSocketServlet extends WebSocketServlet {
 			/* Work */
 			
 			BufferedImage image = CarControllerWrapper.getImg();
-			B = image.getWidth();
-			H = image.getHeight();
-			/*work */
-			
-			System.out.println("Bild gelesen, Breite = " + B + " Höhe = " + H);
-			// Grösse von pixels = Breite * Höhe * 4 bytes 
-			int[] pixels = new int[B * H];
-			int BufLeange = B * H * 4 + 8;  // 8 bytes fuer Breite und Hoehe
-			System.out.println("pixels angelegt");
-			// kopiert alle Pixel von image ( oder nur Bildausschnitt) in ein Feld ( pixels)
-	        image.getRGB(0, 0, B, H, pixels, 0, B);
-	        System.out.println("Bildgröße bestimmt und RGB- Image erzeugt");
-	        
-	        System.out.println("Daten für ByteBuffer: " + B * H);
-	        ByteBuffer buffer = ByteBuffer.allocate( BufLeange);	
-	        buffer.clear();
-	        System.out.println("ByteBuffer erstellt = " + BufLeange + " byte");
-	        
-	        // Bildgroesse im Puffer hinterlegen
-	        // Bild- Breite int -> byte[]
-	        buffer.put((byte)(B >>> 24));
-	        buffer.put((byte)(B >>> 16));
-	        buffer.put((byte)(B >>> 8));
-	        buffer.put((byte)(B ));
-	        System.out.println("Bildbreite in ByteBuffer");
-	        
-	        // Bild- Hoehe int -> byte[]
-	        buffer.put((byte)(H >>> 24));
-	        buffer.put((byte)(H >>> 16));
-	        buffer.put((byte)(H >>> 8));
-	        buffer.put((byte)(H ));
-	        System.out.println("Bildhöhe in ByteBuffer");
-	        
-	        
-	        // Bild Pixelinformationen in Puffer hinterlegen
-	        for(int y = 0; y < image.getHeight(); y++){
-	            for(int x = 0; x < image.getWidth(); x++){
-	                int pixel = pixels[y * image.getWidth() + x];
-	                buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
-	                buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
-	                buffer.put((byte) (pixel & 0xFF));             // Blue component
-	                buffer.put((byte) ((pixel >> 24) & 0xFF));     // Alpha component. 
-	                												// nicht bei BufferdImage
-	            }
-	        }
-	        
-	        			        
-	        buffer.flip(); //ByteBuffer speichern
-	        System.out.println("ByteBuffer geschrieben");
-	        	        
-			broadcastImage(buffer);
+			if(!image.equals(oldImage)) {
+				oldImage = image;
+				B = image.getWidth();
+				H = image.getHeight();
+				/*work */
+				
+				System.out.println("Bild gelesen, Breite = " + B + " Höhe = " + H);
+				// Grösse von pixels = Breite * Höhe * 4 bytes 
+				int[] pixels = new int[B * H];
+				int BufLeange = B * H * 4 + 8;  // 8 bytes fuer Breite und Hoehe
+				System.out.println("pixels angelegt");
+				// kopiert alle Pixel von image ( oder nur Bildausschnitt) in ein Feld ( pixels)
+		        image.getRGB(0, 0, B, H, pixels, 0, B);
+		        System.out.println("Bildgröße bestimmt und RGB- Image erzeugt");
+		        
+		        System.out.println("Daten für ByteBuffer: " + B * H);
+		        ByteBuffer buffer = ByteBuffer.allocate( BufLeange);	
+		        buffer.clear();
+		        System.out.println("ByteBuffer erstellt = " + BufLeange + " byte");
+		        
+		        // Bildgroesse im Puffer hinterlegen
+		        // Bild- Breite int -> byte[]
+		        buffer.put((byte)(B >>> 24));
+		        buffer.put((byte)(B >>> 16));
+		        buffer.put((byte)(B >>> 8));
+		        buffer.put((byte)(B ));
+		        System.out.println("Bildbreite in ByteBuffer");
+		        
+		        // Bild- Hoehe int -> byte[]
+		        buffer.put((byte)(H >>> 24));
+		        buffer.put((byte)(H >>> 16));
+		        buffer.put((byte)(H >>> 8));
+		        buffer.put((byte)(H ));
+		        System.out.println("Bildhöhe in ByteBuffer");
+		        
+		        
+		        // Bild Pixelinformationen in Puffer hinterlegen
+		        for(int y = 0; y < image.getHeight(); y++){
+		            for(int x = 0; x < image.getWidth(); x++){
+		                int pixel = pixels[y * image.getWidth() + x];
+		                buffer.put((byte) ((pixel >> 16) & 0xFF));     // Red component
+		                buffer.put((byte) ((pixel >> 8) & 0xFF));      // Green component
+		                buffer.put((byte) (pixel & 0xFF));             // Blue component
+		                buffer.put((byte) ((pixel >> 24) & 0xFF));     // Alpha component. 
+		                												// nicht bei BufferdImage
+		            }
+		        }
+		        
+		        			        
+		        buffer.flip(); //ByteBuffer speichern
+		        System.out.println("ByteBuffer geschrieben");
+		        	        
+				broadcastImage(buffer);
+			} else {
+				System.out.println("Same image [" + ++sameImage + "] -> not sending");
+			}
 		}
 	};
 }

@@ -7,22 +7,26 @@ function streamHandleMessage(message) {
 	var canvas = document.getElementById('CarStream');
     var ctx = canvas.getContext('2d');
     ctx.fillStyle = "rgb(255, 255, 200)";
-      ctx.fillRect(0, 0, 1080, 720);
-     console.log( "Daten = " + message.data);
-      
-      var IntBuffer = new Uint8Array( message.data);  
-     // Bildbreite und Höhe ermitteln byte[] -> int
-      var B = 0;     
-      for (var i = 0; i < 4; i++) {
-          B |= ((IntBuffer[3-i] & 0xff) << (i << 3));
-      }
-      console.log( "Bildbreite = " + B);
-      var H = 0;     
+	ctx.fillRect(0, 0, 1080, 720);
+	console.log( "Daten = " + message.data);
+	  
+	var IntBuffer = new Uint8Array( message.data);  
+	
+	// Bildbreite und Höhe ermitteln byte[] -> int
+	var B = 0;     
+	for (var i = 0; i < 4; i++) {
+	      B |= ((IntBuffer[3-i] & 0xff) << (i << 3));
+	}
+	console.log( "Bildbreite = " + B);
+	
+	var H = 0;     
     for (var i = 0; i < 4; i++) {
         H |= ((IntBuffer[7-i] & 0xff) << (i << 3));
     }
     console.log( "Bildhöhe = " + H);
     
+    canvas.width = B;
+    canvas.height = H;
     var img = ctx.getImageData(0, 0, B, H);
     
     console.log("Dummy Image erzeugt");

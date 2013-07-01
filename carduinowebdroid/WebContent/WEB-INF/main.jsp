@@ -25,6 +25,7 @@
 <script type="text/javascript" src="static/chat.js"></script>
 <script type="text/javascript" src="static/controls.js"></script>
 <script type="text/javascript" src="static/ajax.js"></script>
+<script type="text/javascript" src="static/stream.js"></script>
 
 <!-- initializing Websockets -->
 

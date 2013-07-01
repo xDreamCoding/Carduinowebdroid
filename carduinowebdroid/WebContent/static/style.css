@@ -489,3 +489,9 @@ width:100%;
 .ui-icon-carat-1-e{
 	margin-top:4px !important;
 }
+
+#CarStream
+{
+    display: block;
+    margin: 0 auto;
+}
