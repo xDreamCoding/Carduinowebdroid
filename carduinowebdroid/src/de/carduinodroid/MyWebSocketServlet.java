@@ -21,6 +21,7 @@ import org.apache.catalina.websocket.WebSocketServlet;
 import org.apache.catalina.websocket.WsOutbound;
 
 import de.carduinodroid.shared.activeSession;
+import de.carduinodroid.shared.waitingqueue;
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.Log;
 
@@ -74,6 +75,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 			@Override
 			protected void onClose(int status) {
 				activeSession.deleteSocket(session);
+				waitingqueue.deleteTicket(session);
 				System.out.println("onClose - status code: " + status);
 				if (activeSession.isDriver(session)){
 					activeSession.resetDriver();

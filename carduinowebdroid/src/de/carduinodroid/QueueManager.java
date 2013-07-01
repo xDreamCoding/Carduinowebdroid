@@ -40,8 +40,6 @@ public class QueueManager {
 	
 	public static void refresh(Options opt) {
 
-		Fahrzeit = opt.driveTime;
-
 		if (!(activeSession.getDriver() == null) && !(Fahrzeit == opt.driveTime)){
 			long driveTime = System.currentTimeMillis() - start;
 			long remainingTime = (opt.driveTime*60000) - driveTime;
