@@ -4,6 +4,10 @@
  * @author Sven-Leonhard Weiler
  */
 function streamHandleMessage(message) {
+	data = message.data;
+	msg = data.substring(identifierImageFrame.length, data.length);
+	$("#image").attr('src', 'data:image/jpg;base64,'+msg);
+	/**
 	var canvas = document.getElementById('CarStream');
     var ctx = canvas.getContext('2d');
     ctx.fillStyle = "rgb(255, 255, 200)";
@@ -62,4 +66,5 @@ function streamHandleMessage(message) {
     frame = frame + 1;
     ctx.strokeText(frame, 20, 20, 40);
     ctx.restore();
+    */
 }
