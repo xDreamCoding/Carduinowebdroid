@@ -620,6 +620,23 @@ public class DBConnector {
 	}
 	
 	
+	public boolean closeAllOpenSessions() {
+		PreparedStatement stmt = null;
+
+		Timestamp datetime = new Timestamp(System.currentTimeMillis());
+		
+		try {
+			stmt = dbConnection.prepareStatement("UPDATE session SET `logoutTime`=? WHERE `logoutTime` IS NULL");
+			stmt.setTimestamp(1, datetime);
+			
+			executeUpdate(stmt);
+		} catch (SQLException e) {
+			log.writelogfile(e.getMessage());
+			return false;
+		}
+		return true;
+	}
+	
 	// --- User ---
 	/** 
 	 * \brief Tries to login with a given userID and password.

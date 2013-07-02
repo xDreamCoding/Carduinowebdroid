@@ -69,6 +69,9 @@ public class MyServletContextListener implements ServletContextListener {
 		log.writelogfile("DBConnector instanciated.");
 		context.setAttribute("database", db);
 		
+		// closing all opened sessions
+		db.closeAllOpenSessions();
+		
 		// send options and db to logNG 
 		log.setOptions(options);
 		log.setDB(db);
@@ -78,6 +81,6 @@ public class MyServletContextListener implements ServletContextListener {
 		waitingqueue.initqueue(db);
 		QueueManager.main(options, db, log);
 
-		//db.dbTest();		
+		//db.dbTest();
 	}
 }
