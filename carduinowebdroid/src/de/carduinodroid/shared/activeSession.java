@@ -93,9 +93,8 @@ public class activeSession {
 		try{
 			StreamInbound in = (StreamInbound)Session.getAttribute("Socket");
 			WsOutbound out = in.getWsOutbound();
-			CharBuffer buff = CharBuffer.allocate(10);
-			try {
-				out.writeTextMessage(buff.put("invalid"));
+			try {		
+				out.writeTextMessage(CharBuffer.wrap("invalid"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -145,9 +144,8 @@ public class activeSession {
 			try{
 				StreamInbound in = (StreamInbound)Session.getAttribute("Socket");
 				WsOutbound out = in.getWsOutbound();
-				CharBuffer buff = CharBuffer.allocate(10);
 				try {
-					out.writeTextMessage(buff.put("invalid"));
+					out.writeTextMessage(CharBuffer.wrap("invalid"));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -158,7 +156,7 @@ public class activeSession {
 				Session.removeAttribute("DBID");
 				Session.invalidate();
 			}
-			catch(NullPointerException ie){
+			catch(IllegalStateException ie){
 				System.out.println("Session bereits teilweise oder ganz entfernt");
 		}
 		}

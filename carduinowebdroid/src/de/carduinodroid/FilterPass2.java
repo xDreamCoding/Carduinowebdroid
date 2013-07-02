@@ -142,7 +142,6 @@ public class FilterPass2  extends HttpServlet {
 							session.setAttribute("nickName", u.getNickname());
 							session.setAttribute("userId", u.getUserID());
 							session.setAttribute("dbSessionID", ID);
-							
 							if(DEBUG) System.out.println("user " + u.getNickname() + " has logged in");
 							return;
 						}
@@ -155,7 +154,6 @@ public class FilterPass2  extends HttpServlet {
 					int ID = activeSession.insertSession(ipAdress, userID, session);
 					if (ID == -1)
 						break;
-					
 					session.setAttribute("isAdmin", u.isAdmin());
 					session.setAttribute("isUser", u.isUser() || u.isAdmin());
 					session.setAttribute("nickName", u.getNickname());
@@ -210,7 +208,6 @@ public class FilterPass2  extends HttpServlet {
 				case "logout":
 					activeSession.deleteSession(session);
 					waitingqueue.deleteTicket(session);
-					System.out.println("logout");
 					break;
 				
 					/** 
