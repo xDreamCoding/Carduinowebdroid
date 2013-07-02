@@ -114,6 +114,7 @@ public class QueueManager {
 	public static void main(Options opt, DBConnector db, Log logng) {
     	
     	log = logng;
+    	aliveSessions = new ArrayList<HttpSession>();
     	
     	Session = new TimerTask(){
 			public void run(){

@@ -1,6 +1,7 @@
 package de.carduinodroid;
 
 import java.io.IOException;
+import java.nio.CharBuffer;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -11,6 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.catalina.websocket.StreamInbound;
+import org.apache.catalina.websocket.WsOutbound;
+
 import de.carduinodroid.shared.User;
 import de.carduinodroid.shared.activeSession;
 import de.carduinodroid.shared.waitingqueue;
@@ -230,8 +235,10 @@ public class FilterPass2  extends HttpServlet {
 					
 					if (postParameterMap.containsKey("chkdel1") && postParameterMap.containsKey("chkdel2") && postParameterMap.containsKey("chkdel3") && !(userID.equals(db.getUserIdBySession((int)session.getAttribute("DBID"))))){
 						int DBID = db.getSessionIDByUserID(userID);
+							
 						if (!(DBID == -1)){							
 							HttpSession deleted = activeSession.getSession(DBID);
+							activeSession.deleteSession(deleted);
 							deleted.removeAttribute("nickName");
 						}
 						db.deleteUser(userID);

@@ -90,22 +90,31 @@ public class activeSession {
 			return;
 		}
 		
-		StreamInbound in = (StreamInbound)Session.getAttribute("Socket");
-		WsOutbound out = in.getWsOutbound();
-		CharBuffer buff = CharBuffer.allocate(10);
-		try {
-			out.writeTextMessage(buff.put("invalid"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		try{
+			StreamInbound in = (StreamInbound)Session.getAttribute("Socket");
+			WsOutbound out = in.getWsOutbound();
+			CharBuffer buff = CharBuffer.allocate(10);
+			try {
+				out.writeTextMessage(buff.put("invalid"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
-		db.closeSession((int)Session.getAttribute("DBID"));
-		Session.removeAttribute("nickName");
-		Session.removeAttribute("DBID");
-		Session.removeAttribute("Socket");
-		activeTomcat.remove(index);
-		Session.invalidate();
+			db.closeSession((int)Session.getAttribute("DBID"));
+			Session.removeAttribute("nickName");
+			Session.removeAttribute("DBID");
+			Session.removeAttribute("Socket");
+			activeTomcat.remove(index);
+			Session.invalidate();
+		
+		}
+		catch(IllegalStateException ie){
+			if (Session.getAttribute("DBID") != null){
+				db.closeSession((int)Session.getAttribute("DBID"));
+			}
+			activeTomcat.remove(index);
+		}
 		
 		if (index < Driver){
 			Driver = Driver -1;
@@ -144,7 +153,6 @@ public class activeSession {
 					e.printStackTrace();
 				}
 				
-				db.closeSession((int)Session.getAttribute("DBID"));
 				Session.removeAttribute("nickName");
 				Session.removeAttribute("Socket");
 				Session.removeAttribute("DBID");
