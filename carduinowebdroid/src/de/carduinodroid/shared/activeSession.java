@@ -109,7 +109,7 @@ public class activeSession {
 			Session.invalidate();
 		
 		}
-		catch(IllegalStateException ie){
+		catch(NullPointerException ie){
 			if (Session.getAttribute("DBID") != null){
 				db.closeSession((int)Session.getAttribute("DBID"));
 			}
@@ -158,7 +158,7 @@ public class activeSession {
 				Session.removeAttribute("DBID");
 				Session.invalidate();
 			}
-			catch(IllegalStateException ie){
+			catch(NullPointerException ie){
 				System.out.println("Session bereits teilweise oder ganz entfernt");
 		}
 		}
