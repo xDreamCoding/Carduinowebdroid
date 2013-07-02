@@ -619,16 +619,22 @@ public class DBConnector {
 		return found;
 	}
 	
-	
+	/**
+	 * \brief Closes all open sessions.
+	 * @return  Returns "true" if the SessionID was found or "false" if not.
+	 */
 	public boolean closeAllOpenSessions() {
 		PreparedStatement stmt = null;
 
 		Timestamp datetime = new Timestamp(System.currentTimeMillis());
 		
 		try {
+			stmt = dbConnection.prepareStatement("SET SQL_SAFE_UPDATES=0;");
+			executeUpdate(stmt);
 			stmt = dbConnection.prepareStatement("UPDATE session SET `logoutTime`=? WHERE `logoutTime` IS NULL");
-			stmt.setTimestamp(1, datetime);
-			
+			stmt.setTimestamp(1, datetime);	
+			executeUpdate(stmt);
+			stmt = dbConnection.prepareStatement("SET SQL_SAFE_UPDATES=1;");
 			executeUpdate(stmt);
 		} catch (SQLException e) {
 			log.writelogfile(e.getMessage());
