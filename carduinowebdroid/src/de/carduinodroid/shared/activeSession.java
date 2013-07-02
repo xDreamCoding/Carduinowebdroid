@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.websocket.StreamInbound;
-import org.apache.catalina.websocket.WsOutbound;
 
 import de.carduinodroid.QueueManager;
 import de.carduinodroid.utilities.CarControllerWrapper;

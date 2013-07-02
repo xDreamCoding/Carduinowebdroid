@@ -24,6 +24,7 @@ import de.carduinodroid.utilities.Config;
 /**
  * \brief This Class is used to handle the different Servlet-Requests
  * @author Alexander Rose
+ * @author Michael Röding
  *
  */
 
@@ -61,20 +62,16 @@ public class FilterPass2  extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// nothing to do here
-		
-//		if(DEBUG) System.out.println("doGet");
-//		
-//			String[] args1 = null;							// new
-//		
-//  	  		if ( !BildSender.Runner) {						// new
-//  	  		System.out.println("Starte CarStream ");
-//  	  		try {
-//  	  			BildSender.main(args1);
-//  	  			System.out.println("CarStream gestartet");
-//  	  		} catch  (final Exception ex) {
-//  	  		System.out.println("Fehler beim Starten des CarStreams");
-//  	  		}
-//  	  	}													// new
+		if(DEBUG) {
+			Map<String, String[]> getParameterMap = request.getParameterMap();		
+			Iterator<Entry<String, String[]>> entries = getParameterMap.entrySet().iterator();
+			while (entries.hasNext()) {
+			    Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) entries.next();
+			    String key = (String)entry.getKey();
+			    String[] value = (String[])entry.getValue();
+			    System.out.println("Key = " + key + ", Value = " + value[0]);
+			}
+		}
 	}
 
 	/**
@@ -102,7 +99,6 @@ public class FilterPass2  extends HttpServlet {
 			}
 			
 			if(postParameterMap.size() > 0 && postParameterMap.containsKey("action")) {
-				String SessionID = session.getId();
 				String ipAdress = req.getRemoteAddr();
 				DBConnector db = (DBConnector)request.getServletContext().getAttribute("database");
 				
@@ -125,7 +121,7 @@ public class FilterPass2  extends HttpServlet {
 					for (int i = 0; i < active.length; i++){
 						User online = db.getUserBySession((int)active[i].getAttribute("DBID"));
 						if (online.getUserID().equals(userID)){
-							System.out.println("User bereits eingeloggt");
+							log.writelogfile("User '" + userID + "' is already loged in");
 							return;
 						}
 					}
@@ -144,7 +140,7 @@ public class FilterPass2  extends HttpServlet {
 					session.setAttribute("userId", u.getUserID());
 					session.setAttribute("dbSessionID", ID);
 					
-					//System.out.println("user " + u.getNickname() + " has logged in");
+					if(DEBUG) System.out.println("user " + u.getNickname() + " has logged in");
 					break;
 				
 					/** 
@@ -158,7 +154,7 @@ public class FilterPass2  extends HttpServlet {
 					}
 					User user = db.getUserBySession((int)session.getAttribute("DBID"));
 					if (user == null){
-						System.out.println("User nicht gefunden");
+						if(DEBUG) System.out.println("User nicht gefunden");
 						break;
 					}
 					if (user.isGuest() == true) return;
@@ -193,14 +189,6 @@ public class FilterPass2  extends HttpServlet {
 					activeSession.deleteSession(session);
 					waitingqueue.deleteTicket(session);
 					session.removeAttribute("nickName");
-					///TODO \todo logout = ich lösche ein paar sachen und das wars? session? rechte? zurück zum index?				
-
-					//if ( BildSender.Runner) {							// new
-			  	  	//	System.out.println("Stoppe CarStream ");		// new
-			  	  		//BildSender.Stop();								// new
-			  	  		//System.out.println("CarStream beendet");		// new
-			  	  	//}													// new
-					
 					break;
 				
 					/** 
@@ -213,7 +201,7 @@ public class FilterPass2  extends HttpServlet {
 						break;
 					}
 					String ip = ((Options)request.getServletContext().getAttribute("options")).carduinodroidIP;
-					if(ip == "") {
+					if(ip == null || ip == "") {
 						log.writelogfile("unable to connect to carduinodroid because ip is not set");
 						break;
 					}
@@ -231,11 +219,11 @@ public class FilterPass2  extends HttpServlet {
 				
 				case "edituser":
 					if (session.getAttribute("isAdmin").equals(false)){
-						System.out.println("Admin-Rechte werden für diese Operation benötigt");
+						if(DEBUG) System.out.println("Admin-Rechte werden für diese Operation benötigt");
 						break;
 					}
 					if (!(postParameterMap.containsKey("userid")) || !(postParameterMap.containsKey("password"))){
-						System.out.println("Feld unvollständig");
+						if(DEBUG) System.out.println("Feld unvollständig");
 						break;
 					}
 					boolean isAdmin;
@@ -256,7 +244,7 @@ public class FilterPass2  extends HttpServlet {
 						db.changePassword(userID, Password);
 					}
 					if (!postParameterMap.containsKey("nickname")){
-						System.out.println("Feld zum editieren von Usern unvollständig");
+						if(DEBUG) System.out.println("Feld zum editieren von Usern unvollständig");
 						break;
 					}
 					String Nickname = (String) postParameterMap.get("nickname")[0];
@@ -267,7 +255,7 @@ public class FilterPass2  extends HttpServlet {
 						isAdmin = true;
 					}
 					if (userID.equals(db.getUserIdBySession((int)session.getAttribute("DBID"))) && (!isAdmin)){
-						System.out.println("Man kann sich nicht selbst das Admin recht entziehen");
+						if(DEBUG) System.out.println("Man kann sich nicht selbst das Admin recht entziehen");
 						break;
 					}
 					if (isAdmin){
@@ -284,12 +272,12 @@ public class FilterPass2  extends HttpServlet {
 					
 				case "adduser":
 					if (session.getAttribute("isAdmin").equals(false)){
-						System.out.println("Admin-Rechte werden für diese Operation benötigt");
+						if(DEBUG) System.out.println("Admin-Rechte werden für diese Operation benötigt");
 						break;
 					}
 					
 					if (!(postParameterMap.containsKey("userid")) || !(postParameterMap.containsKey("nickname")) || !(postParameterMap.containsKey("password"))){
-						System.out.println("Feld unvollständig");
+						if(DEBUG) System.out.println("Feld unvollständig");
 						break;
 					}
 					
@@ -317,14 +305,19 @@ public class FilterPass2  extends HttpServlet {
 					
 				case "saveconfig":
 					if (session.getAttribute("isAdmin").equals(false)){
-						System.out.println("Admin-Rechte werden für diese Operation benötigt");
+						if(DEBUG) System.out.println("Admin-Rechte werden für diese Operation benötigt");
 						break;
 					}
 					
-					if (!postParameterMap.containsKey("IP") || !postParameterMap.containsKey("DBAdress") || !postParameterMap.containsKey("DBUser")
-						|| !postParameterMap.containsKey("DBPw") || !postParameterMap.containsKey("drivetime") || !postParameterMap.containsKey("filepath")
+					if (false // better readable
+						|| !postParameterMap.containsKey("IP") 
+						|| !postParameterMap.containsKey("DBAdress") 
+						|| !postParameterMap.containsKey("DBUser")
+						|| !postParameterMap.containsKey("DBPw") 
+						|| !postParameterMap.containsKey("drivetime") 
+						|| !postParameterMap.containsKey("filepath")
 						|| !postParameterMap.containsKey("loggpsint")){
-						System.out.println("Feld unvollständig");
+						if(DEBUG) System.out.println("Feld unvollständig");
 						break;
 					}
 					
@@ -376,7 +369,7 @@ public class FilterPass2  extends HttpServlet {
 				
 				case "admincontrol":
 					if (session.getAttribute("isAdmin").equals(false)){
-						System.out.println("Admin-Rechte werden für diese Operation benötigt");
+						if(DEBUG) System.out.println("Admin-Rechte werden für diese Operation benötigt");
 						break;
 					}
 					
@@ -399,7 +392,15 @@ public class FilterPass2  extends HttpServlet {
 					}
 					break;
 				default:
-					//HOW COULD DIS HAPPEN?
+					log.writelogfile("FilterPass2: unknown action " + (String)postParameterMap.get("action")[0]);
+					log.writelogfile("FilterPass2: key-values pairs are:");
+					Iterator<Entry<String, String[]>> entries = postParameterMap.entrySet().iterator();
+					while (entries.hasNext()) {
+					    Map.Entry<String, String[]> entry = (Map.Entry<String, String[]>) entries.next();
+					    String key = (String)entry.getKey();
+					    String[] value = (String[])entry.getValue();
+					    log.writelogfile("Key = " + key + ", Value = " + value[0]);
+					}
 					break;
 				}
 			}
