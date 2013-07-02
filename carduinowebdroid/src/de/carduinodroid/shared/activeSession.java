@@ -94,6 +94,7 @@ public class activeSession {
 			StreamInbound in = (StreamInbound)Session.getAttribute("Socket");
 			WsOutbound out = in.getWsOutbound();
 			try {		
+				Session.removeAttribute("nickName");
 				out.writeTextMessage(CharBuffer.wrap("invalid"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -101,7 +102,6 @@ public class activeSession {
 			}
 		
 			db.closeSession((int)Session.getAttribute("DBID"));
-			Session.removeAttribute("nickName");
 			Session.removeAttribute("DBID");
 			Session.removeAttribute("Socket");
 			activeTomcat.remove(index);
