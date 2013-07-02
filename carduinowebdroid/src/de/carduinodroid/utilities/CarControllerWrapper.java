@@ -3,6 +3,7 @@ package de.carduinodroid.utilities;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImagingOpException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 
@@ -195,14 +196,19 @@ public class CarControllerWrapper {
 	}
 
 	public void sendImg(BufferedImage before) {
-		int w = before.getWidth() / 2;
-		int h = before.getHeight() / 2;
-		BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-		AffineTransform at = new AffineTransform();
-		at.scale(0.5, 0.5);
-		AffineTransformOp scaleOp = 
-		   new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
-		image = scaleOp.filter(before, image);
+		BufferedImage image;
+		try {
+			int w = before.getWidth() / 2;
+			int h = before.getHeight() / 2;
+			image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+			AffineTransform at = new AffineTransform();
+			at.scale(0.5, 0.5);
+			AffineTransformOp scaleOp = 
+			new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+			image = scaleOp.filter(before, image);
+		} catch (ImagingOpException e) {
+			image = before;
+		}
 		int H;
 		int B;
 
