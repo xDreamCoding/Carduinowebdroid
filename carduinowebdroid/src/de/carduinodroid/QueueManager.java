@@ -2,7 +2,7 @@ package de.carduinodroid;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
-
+import java.util.ArrayList;
 import de.carduinodroid.shared.*;
 import de.carduinodroid.utilities.*;
 import de.carduinodroid.utilities.Config.Options;
@@ -22,7 +22,7 @@ public class QueueManager {
 	private static TimerTask GPSLogger;
 	private static TimerTask Session;
 	private static TimerTask action;
-	private static boolean aliveSessions;
+	private static ArrayList<HttpSession> aliveSessions;
 	private static long start = 0;
 	static Log log;
 	static int driveID;
@@ -88,9 +88,7 @@ public class QueueManager {
 	 */
 	
 	public static void receivedPing(HttpSession Session){
-		if(activeSession.isDriver(Session)){
-			aliveSessions = false;
-		}
+		aliveSessions.remove(Session);
 	}
     
 	/** 
@@ -116,15 +114,22 @@ public class QueueManager {
 	public static void main(Options opt, DBConnector db, Log logng) {
     	
     	log = logng;
-    	aliveSessions = false;
     	
     	Session = new TimerTask(){
 			public void run(){
-							
-				if (aliveSessions){
-					activeSession.deleteSession(activeSession.getDriver());
-				}									
-				aliveSessions = true;			   			
+				
+				for (int i = 0; i < aliveSessions.size(); i++){
+					if (aliveSessions.get(i).getAttribute("Socket") != null){
+						activeSession.deleteSession(aliveSessions.get(i));
+					}	
+				}
+				aliveSessions.clear();
+				
+				HttpSession[] actives = new HttpSession[activeSession.getLength()];
+				actives = activeSession.getAllSessions();
+				for (int i = 0; i < actives.length; i++){
+					aliveSessions.add(actives[i]);
+				}
 			}
 		};
     	

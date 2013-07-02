@@ -188,7 +188,6 @@ public class FilterPass2  extends HttpServlet {
 				case "logout":
 					activeSession.deleteSession(session);
 					waitingqueue.deleteTicket(session);
-					session.removeAttribute("nickName");
 					break;
 				
 					/** 

@@ -1,11 +1,11 @@
 package de.carduinodroid.shared;
 
 import java.util.ArrayList;
-
 import javax.servlet.http.HttpSession;
-
 import org.apache.catalina.websocket.StreamInbound;
-
+import org.apache.catalina.websocket.WsOutbound;
+import java.io.IOException;
+import java.nio.CharBuffer;
 import de.carduinodroid.QueueManager;
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.DBConnector;
@@ -21,6 +21,7 @@ public class activeSession {
 	private static ArrayList<HttpSession> activeTomcat;
 	private static int Driver;
 	private static int DriverID;
+	private static CharBuffer msg;
 	static DBConnector db;
 	
 	/** 
@@ -88,6 +89,17 @@ public class activeSession {
 			//System.out.println("Session bereits gelöscht");
 			return;
 		}
+		
+		StreamInbound in = (StreamInbound)Session.getAttribute("Socket");
+		WsOutbound out = in.getWsOutbound();
+		CharBuffer buff = CharBuffer.allocate(10);
+		try {
+			out.writeTextMessage(buff.put("invalid"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		db.closeSession((int)Session.getAttribute("DBID"));
 		Session.removeAttribute("nickName");
 		Session.removeAttribute("DBID");
@@ -122,6 +134,16 @@ public class activeSession {
 		for (int i = 0; i < activeTomcat.size(); i++){
 			HttpSession Session = activeTomcat.get(i);
 			try{
+				StreamInbound in = (StreamInbound)Session.getAttribute("Socket");
+				WsOutbound out = in.getWsOutbound();
+				CharBuffer buff = CharBuffer.allocate(10);
+				try {
+					out.writeTextMessage(buff.put("invalid"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				db.closeSession((int)Session.getAttribute("DBID"));
 				Session.removeAttribute("nickName");
 				Session.removeAttribute("Socket");
@@ -130,9 +152,9 @@ public class activeSession {
 			}
 			catch(IllegalStateException ie){
 				System.out.println("Session bereits teilweise oder ganz entfernt");
-			}
 		}
-		
+		}
+		db.closeAllOpenSessions();
 		activeTomcat.clear();
 		Driver = -1;
 	}
