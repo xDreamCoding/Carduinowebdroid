@@ -79,7 +79,8 @@ public class QueueManager {
 	public static void restartTimer() {
     	caretaker.cancel();
     	caretaker = new Timer();
-    	caretaker.schedule(new de.carduinodroid.Dummy(action), 2000, 60000*Fahrzeit);		
+    	caretaker.schedule(new de.carduinodroid.Dummy(action), 2000, 60000*Fahrzeit);	
+    	aliveSessions = false;
     }
 	
 	/** 
@@ -121,9 +122,12 @@ public class QueueManager {
 			public void run(){
 				
 				if (aliveSessions){
+					System.out.println("TIMEOUT");
 					activeSession.deleteSession(activeSession.getDriver());
 				}
-				aliveSessions = true;			
+				if (activeSession.getDriver() != null){
+					aliveSessions = true;		
+				}
 			}
 		};
     	
@@ -163,6 +167,7 @@ public class QueueManager {
 						}
 						try {
 							aktSession = waitingqueue.getNextUser();
+							aliveSessions = false;
 							start = System.currentTimeMillis();
 							driveID = db.startDrive(db.getUserIdBySession((int)aktSession.getAttribute("DBID")));
 							activeSession.setDriver(aktSession, driveID);
