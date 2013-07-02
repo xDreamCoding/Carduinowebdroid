@@ -254,7 +254,6 @@ public class FilterPass2  extends HttpServlet {
 						if (!(DBID == -1)){							
 							HttpSession deleted = activeSession.getSession(DBID);
 							activeSession.deleteSession(deleted);
-							deleted.removeAttribute("nickName");
 						}
 						db.deleteUser(userID);
 						break;
