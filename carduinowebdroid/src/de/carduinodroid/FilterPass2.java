@@ -127,6 +127,23 @@ public class FilterPass2  extends HttpServlet {
 						User online = db.getUserBySession((int)active[i].getAttribute("DBID"));
 						if (online.getUserID().equals(userID)){
 							log.writelogfile("User '" + userID + "' is already loged in");
+							User u = db.loginUser(userID, pw);
+							
+							if(u == null)
+								break;
+							activeSession.deleteSession(active[i]);
+							
+							int ID = activeSession.insertSession(ipAdress, userID, session);
+							if (ID == -1)
+								break;
+							
+							session.setAttribute("isAdmin", u.isAdmin());
+							session.setAttribute("isUser", u.isUser() || u.isAdmin());
+							session.setAttribute("nickName", u.getNickname());
+							session.setAttribute("userId", u.getUserID());
+							session.setAttribute("dbSessionID", ID);
+							
+							if(DEBUG) System.out.println("user " + u.getNickname() + " has logged in");
 							return;
 						}
 					}
@@ -193,6 +210,7 @@ public class FilterPass2  extends HttpServlet {
 				case "logout":
 					activeSession.deleteSession(session);
 					waitingqueue.deleteTicket(session);
+					System.out.println("logout");
 					break;
 				
 					/** 
@@ -374,6 +392,11 @@ public class FilterPass2  extends HttpServlet {
 					 */
 				
 				case "admincontrol":
+					if (activeSession.isActive(session) == false){
+						session.removeAttribute("nickName");
+						break;
+					}
+					
 					if (session.getAttribute("isAdmin").equals(false)){
 						if(DEBUG) System.out.println("Admin-Rechte werden für diese Operation benötigt");
 						break;
