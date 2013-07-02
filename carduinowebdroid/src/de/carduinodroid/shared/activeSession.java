@@ -129,9 +129,6 @@ public class activeSession {
 				CarControllerWrapper.setUp(false);
 			}
 		}			
-		if (activeTomcat.size() == 0){
-			deleteAll();
-		}
 	}
 	
 	/** 
