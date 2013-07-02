@@ -24,6 +24,7 @@ function initializeWebsocket() {
     	if (message.data instanceof ArrayBuffer) streamHandleMessage(message);
 		else if (message.data.match(identifierChat + "*")) chatHandleMessage(message);
 		else if (message.data.match(identifierControl + "*")) controlHandleMessage(message);
+		else if (message.data.match("invalid")) history.go(0);
     };
     ws.onerror = function () {
         $("#main_chat").append("Websocket Error!" + "\n");
