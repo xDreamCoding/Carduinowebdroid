@@ -126,7 +126,7 @@ public class FilterPass2  extends HttpServlet {
 					for (int i = 0; i < active.length; i++){
 						User online = db.getUserBySession((int)active[i].getAttribute("DBID"));
 						if (online.getUserID().equals(userID)){
-							log.writelogfile("User '" + userID + "' is already loged in");
+							log.writelogfile("User '" + userID + "' got kicked, cause the same user logged in again");
 							User u = db.loginUser(userID, pw);
 							
 							if(u == null)

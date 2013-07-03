@@ -14,6 +14,7 @@ public class waitingqueue {
 
 	private static LinkedList<HttpSession> Warteschlange = null;
 	static DBConnector db;
+	static final boolean DEBUG = false;
 	
 	/** 
 	 * \brief creates the internal waitingqueue and receives Connection to DB
@@ -55,14 +56,14 @@ public class waitingqueue {
 	
 	public static void insertUser(HttpSession Session){
 		if (Warteschlange.contains(Session) || activeSession.isDriver(Session)){
-			System.out.println("Wurde bereits eingereiht");
+			if (DEBUG) System.out.println("Wurde bereits eingereiht");
 			if (Warteschlange.contains(Session)){
 				Warteschlange.remove(Session);
 			}
 			return;
 		}
 		Warteschlange.add(Session);
-		System.out.println("User in Warteschlange eingereiht");
+		if (DEBUG) System.out.println("User in Warteschlange eingereiht");
 	}
 	
 	/** 
@@ -89,7 +90,7 @@ public class waitingqueue {
 	public static void deleteTicket(HttpSession Session){
 		int index = Warteschlange.indexOf(Session);
 		if (index == -1){
-			System.out.println("Wurde bereits gelöscht");
+			if (DEBUG) System.out.println("Wurde bereits gelöscht");
 			return;
 		}
 		Warteschlange.remove(index);

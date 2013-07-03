@@ -49,7 +49,7 @@ public class Filter implements javax.servlet.Filter {
 			//System.out.println(ipAdress);
 			
 			if (!activeSession.isActive(session) && session.getAttribute("nickName") != null){
-				if(DEBUG) System.out.println("HAAAAAX " + session.getAttribute("nickName"));
+				if(DEBUG) System.out.println("Should not happen " + session.getAttribute("nickName"));
 				session.removeAttribute("nickName");
 			}
 			

@@ -23,6 +23,7 @@ public class activeSession {
 	private static int DriverID;
 	private static CharBuffer msg;
 	static DBConnector db;
+	final static boolean DEBUG =false;
 	
 	/** 
 	 * \brief initializes the activeSession queue
@@ -50,13 +51,13 @@ public class activeSession {
 	public static int insertSession(String ipadress,String userid, HttpSession Tomcat){
 		
 		if (activeTomcat.contains(Tomcat)){
-			System.out.println("bereits verbunden");
+			if (DEBUG) System.out.println("bereits verbunden");
 			return -1;
 		}
 		int ID = -1;		
 		ID = db.createSession(userid, ipadress);
 		if (ID == -1){
-			System.out.println("konnte Session nicht erstellen");
+			if (DEBUG) System.out.println("konnte Session nicht erstellen");
 			return -1;
 		}
 		Tomcat.setAttribute("DBID", ID);
@@ -86,7 +87,7 @@ public class activeSession {
 	public static void deleteSession(HttpSession Session){
 		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
-			//System.out.println("Session bereits gelöscht");
+			if (DEBUG) System.out.println("Session bereits gelöscht");
 			return;
 		}
 		
@@ -225,7 +226,7 @@ public class activeSession {
 	public static void deleteSocket(HttpSession Session){
 		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
-			System.out.println("Zugehörige Session bereits gelöscht");
+			if (DEBUG) System.out.println("Zugehörige Session bereits gelöscht");
 			return;
 		}
 		Session.removeAttribute("Socket");

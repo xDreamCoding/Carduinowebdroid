@@ -122,7 +122,7 @@ public class QueueManager {
 			public void run(){
 				
 				if (aliveSessions){
-					System.out.println("TIMEOUT");
+					if (DEBUG) System.out.println("TIMEOUT");
 					activeSession.deleteSession(activeSession.getDriver());
 				}
 				if (activeSession.getDriver() != null){
