@@ -10,10 +10,10 @@ Carduinowebdroid uses the following softwares:
 * Java - http://www.java.com/de/
 * Tomcat - http://tomcat.apache.org/
 * jQuerry UI - http://jqueryui.com/
-* jQueery DataTable - https://datatables.net/
+* jQuery DataTable - https://datatables.net/
 * MariaDB - https://mariadb.org/en/
 * JSTL - https://jstl.java.net/
-* carduinodroid - https://code.google.com/p/carduinodroid/
+* Carduinodroid - https://code.google.com/p/carduinodroid/
 
 _______________________
 
@@ -37,9 +37,7 @@ _______________________
 1. download the latest .war or xport .war from Eclipse Project
 2. put the .war in your tomcat /webapps folder.
 3. Start the Tomcat service.
-4. your CarDuinoWebDroid website ist now in localhost:8080/webcarduinodroid/ (You can rename this folder to ROOT if you want the URL to be localhost:8080)
-
-
+4. your CarDuinoWebDroid website ist now in localhost:8080/webcarduinodroid/ 
 **How to set up Eclipse for Tomcat development:**  
 http://www.coreservlets.com/Apache-Tomcat-Tutorial/tomcat-7-with-eclipse.html  
   

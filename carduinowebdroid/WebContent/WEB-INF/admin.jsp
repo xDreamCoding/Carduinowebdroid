@@ -58,11 +58,6 @@ body{ overflow: auto !important; }
 <li><a href="main.jsp"><span class="ui-icon ui-icon-wrench" id="admin_menuicons"></span>Back to Main</a></li>
 </ul>
 
-<c:set var="result">
-	<ct:user par="0" />
-</c:set>
-<c:set var="result" value="${result-1}" />
-
 <c:if test="${param.menu == 1}">
 <table>
 	<tr>
@@ -71,7 +66,9 @@ body{ overflow: auto !important; }
 			<table id="admin_usertbl" class="display">
 				<thead><tr><th>UserID</th><th>Nickname</th><th>isAdmin</th><th>Edit User</th></tr></thead>
 				<tbody>
-				<c:forEach var="i" begin="0" end="${result}">
+				<c:set var="userCount"><ct:user par="0" /></c:set>
+				<c:set var="userCount" value="${userCount-1}" />
+				<c:forEach var="i" begin="0" end="${userCount}">
 				<c:set var="string1"><a href="admin.jsp?menu=1&user=${i}">Edit</a></c:set>
 					<tr>
 						<td><ct:user par="3" num="${i}" /></td>
@@ -92,7 +89,7 @@ body{ overflow: auto !important; }
 					<c:if test="${isAdmin}"><c:set var="isAdmincb">checked="checked"</c:set></c:if>
 				</c:if>
 			<div class="admin_box">
-					<form method="POST">
+					<form method="POST" action="admin.jsp?menu=1">
 						<div>
 						<input type="hidden" name="action" value="edituser">
 							<div class="bold">Edit User</div>

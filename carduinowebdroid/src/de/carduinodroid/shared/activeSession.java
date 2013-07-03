@@ -1,12 +1,11 @@
 package de.carduinodroid.shared;
 
 import java.util.ArrayList;
-
 import javax.servlet.http.HttpSession;
-
 import org.apache.catalina.websocket.StreamInbound;
 import org.apache.catalina.websocket.WsOutbound;
-
+import java.io.IOException;
+import java.nio.CharBuffer;
 import de.carduinodroid.QueueManager;
 import de.carduinodroid.utilities.CarControllerWrapper;
 import de.carduinodroid.utilities.DBConnector;
@@ -22,7 +21,9 @@ public class activeSession {
 	private static ArrayList<HttpSession> activeTomcat;
 	private static int Driver;
 	private static int DriverID;
+	private static CharBuffer msg;
 	static DBConnector db;
+	final static boolean DEBUG =false;
 	
 	/** 
 	 * \brief initializes the activeSession queue
@@ -50,13 +51,13 @@ public class activeSession {
 	public static int insertSession(String ipadress,String userid, HttpSession Tomcat){
 		
 		if (activeTomcat.contains(Tomcat)){
-			System.out.println("bereits verbunden");
+			if (DEBUG) System.out.println("bereits verbunden");
 			return -1;
 		}
 		int ID = -1;		
 		ID = db.createSession(userid, ipadress);
 		if (ID == -1){
-			System.out.println("konnte Session nicht erstellen");
+			if (DEBUG) System.out.println("konnte Session nicht erstellen");
 			return -1;
 		}
 		Tomcat.setAttribute("DBID", ID);
@@ -86,14 +87,34 @@ public class activeSession {
 	public static void deleteSession(HttpSession Session){
 		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
-			//System.out.println("Session bereits gelöscht");
+			if (DEBUG) System.out.println("Session bereits gelöscht");
 			return;
 		}
-		db.closeSession((int)Session.getAttribute("DBID"));
-		Session.removeAttribute("nickName");
-		Session.removeAttribute("DBID");
-		Session.removeAttribute("Socket");
-		activeTomcat.remove(index);
+		
+		try{
+			Session.removeAttribute("nickName");
+			StreamInbound in = (StreamInbound)Session.getAttribute("Socket");
+			WsOutbound out = in.getWsOutbound();
+			try {		
+				out.writeTextMessage(CharBuffer.wrap("invalid"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+			db.closeSession((int)Session.getAttribute("DBID"));
+			Session.removeAttribute("DBID");
+			Session.removeAttribute("Socket");
+			activeTomcat.remove(index);
+			Session.invalidate();
+		
+		}
+		catch(Exception ie){
+			if (Session.getAttribute("DBID") != null){
+				db.closeSession((int)Session.getAttribute("DBID"));
+			}
+			activeTomcat.remove(index);
+		}
 		
 		if (index < Driver){
 			Driver = Driver -1;
@@ -109,9 +130,6 @@ public class activeSession {
 				CarControllerWrapper.setUp(false);
 			}
 		}			
-		if (activeTomcat.size() == 0){
-			deleteAll();
-		}
 	}
 	
 	/** 
@@ -122,16 +140,25 @@ public class activeSession {
 		for (int i = 0; i < activeTomcat.size(); i++){
 			HttpSession Session = activeTomcat.get(i);
 			try{
-				db.closeSession((int)Session.getAttribute("DBID"));
 				Session.removeAttribute("nickName");
+				StreamInbound in = (StreamInbound)Session.getAttribute("Socket");
+				WsOutbound out = in.getWsOutbound();
+				try {
+					out.writeTextMessage(CharBuffer.wrap("invalid"));
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				Session.removeAttribute("Socket");
 				Session.removeAttribute("DBID");
+				Session.invalidate();
 			}
-			catch(IllegalStateException ie){
+			catch(Exception ie){
 				System.out.println("Session bereits teilweise oder ganz entfernt");
 			}
 		}
-		
+		db.closeAllOpenSessions();
 		activeTomcat.clear();
 		Driver = -1;
 	}
@@ -199,7 +226,7 @@ public class activeSession {
 	public static void deleteSocket(HttpSession Session){
 		int index = activeTomcat.indexOf(Session);
 		if (index == -1){
-			System.out.println("Zugehörige Session bereits gelöscht");
+			if (DEBUG) System.out.println("Zugehörige Session bereits gelöscht");
 			return;
 		}
 		Session.removeAttribute("Socket");

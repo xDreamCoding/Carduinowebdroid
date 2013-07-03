@@ -3,6 +3,7 @@ package de.carduinodroid.utilities;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
 import java.net.UnknownHostException;
 import javax.imageio.ImageIO;
 
@@ -203,7 +204,6 @@ public class CarControllerWrapper {
 		} catch( IOException ioe ) { }
 		String b64image = Base64.encode( baos.toByteArray() );
 		MyWebSocketServlet.broadcastImage(b64image);
-		
 	}
 
 	/**

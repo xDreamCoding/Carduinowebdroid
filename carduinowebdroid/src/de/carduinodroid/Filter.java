@@ -49,7 +49,7 @@ public class Filter implements javax.servlet.Filter {
 			//System.out.println(ipAdress);
 			
 			if (!activeSession.isActive(session) && session.getAttribute("nickName") != null){
-				if(DEBUG) System.out.println("HAAAAAX " + session.getAttribute("nickName"));
+				if(DEBUG) System.out.println("Should not happen " + session.getAttribute("nickName"));
 				session.removeAttribute("nickName");
 			}
 			
@@ -60,10 +60,15 @@ public class Filter implements javax.servlet.Filter {
 			staticRequest = req.getRequestURI().startsWith(req.getContextPath() + "/static");
 			websocketRequest = req.getRequestURI().startsWith(req.getContextPath() + "/websocket") || req.getRequestURI().startsWith(req.getContextPath() + "/websocketStream") ;
 
-			if(session.getAttribute("nickName") != null && ((String)session.getAttribute("nickName")) != "") {
-				target = "main";
-				if(req.getRequestURI().endsWith("admin.jsp") && (boolean)session.getAttribute("isAdmin")) 
-					target = "admin";
+			try{
+				if(session.getAttribute("nickName") != null && ((String)session.getAttribute("nickName")) != "") {
+					target = "main";
+					if(req.getRequestURI().endsWith("admin.jsp") && (boolean)session.getAttribute("isAdmin")) 
+						target = "admin";
+				}
+			}
+			catch(IllegalStateException ie){
+				target = "index";
 			}
 			if(req.getRequestURI().endsWith("about.jsp"))
 				target = "about";

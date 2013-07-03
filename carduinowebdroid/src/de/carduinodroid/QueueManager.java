@@ -2,7 +2,6 @@ package de.carduinodroid;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
-
 import de.carduinodroid.shared.*;
 import de.carduinodroid.utilities.*;
 import de.carduinodroid.utilities.Config.Options;
@@ -39,8 +38,6 @@ public class QueueManager {
 	 */
 	
 	public static void refresh(Options opt) {
-
-		Fahrzeit = opt.driveTime;
 
 		if (!(activeSession.getDriver() == null) && !(Fahrzeit == opt.driveTime)){
 			long driveTime = System.currentTimeMillis() - start;
@@ -82,7 +79,8 @@ public class QueueManager {
 	public static void restartTimer() {
     	caretaker.cancel();
     	caretaker = new Timer();
-    	caretaker.schedule(new de.carduinodroid.Dummy(action), 2000, 60000*Fahrzeit);		
+    	caretaker.schedule(new de.carduinodroid.Dummy(action), 2000, 60000*Fahrzeit);	
+    	aliveSessions = false;
     }
 	
 	/** 
@@ -90,7 +88,7 @@ public class QueueManager {
 	 */
 	
 	public static void receivedPing(HttpSession Session){
-		if(activeSession.isDriver(Session)){
+		if (activeSession.isDriver(Session)){
 			aliveSessions = false;
 		}
 	}
@@ -122,11 +120,14 @@ public class QueueManager {
     	
     	Session = new TimerTask(){
 			public void run(){
-							
+				
 				if (aliveSessions){
+					if (DEBUG) System.out.println("TIMEOUT");
 					activeSession.deleteSession(activeSession.getDriver());
-				}									
-				aliveSessions = true;			   			
+				}
+				if (activeSession.getDriver() != null){
+					aliveSessions = true;		
+				}
 			}
 		};
     	
@@ -166,6 +167,7 @@ public class QueueManager {
 						}
 						try {
 							aktSession = waitingqueue.getNextUser();
+							aliveSessions = false;
 							start = System.currentTimeMillis();
 							driveID = db.startDrive(db.getUserIdBySession((int)aktSession.getAttribute("DBID")));
 							activeSession.setDriver(aktSession, driveID);
