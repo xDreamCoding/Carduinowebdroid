@@ -92,10 +92,10 @@ public class activeSession {
 		}
 		
 		try{
+			Session.removeAttribute("nickName");
 			StreamInbound in = (StreamInbound)Session.getAttribute("Socket");
 			WsOutbound out = in.getWsOutbound();
 			try {		
-				Session.removeAttribute("nickName");
 				out.writeTextMessage(CharBuffer.wrap("invalid"));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -109,7 +109,7 @@ public class activeSession {
 			Session.invalidate();
 		
 		}
-		catch(NullPointerException ie){
+		catch(Exception ie){
 			if (Session.getAttribute("DBID") != null){
 				db.closeSession((int)Session.getAttribute("DBID"));
 			}
@@ -140,6 +140,7 @@ public class activeSession {
 		for (int i = 0; i < activeTomcat.size(); i++){
 			HttpSession Session = activeTomcat.get(i);
 			try{
+				Session.removeAttribute("nickName");
 				StreamInbound in = (StreamInbound)Session.getAttribute("Socket");
 				WsOutbound out = in.getWsOutbound();
 				try {
@@ -149,14 +150,13 @@ public class activeSession {
 					e.printStackTrace();
 				}
 				
-				Session.removeAttribute("nickName");
 				Session.removeAttribute("Socket");
 				Session.removeAttribute("DBID");
 				Session.invalidate();
 			}
-			catch(IllegalStateException ie){
+			catch(Exception ie){
 				System.out.println("Session bereits teilweise oder ganz entfernt");
-		}
+			}
 		}
 		db.closeAllOpenSessions();
 		activeTomcat.clear();
