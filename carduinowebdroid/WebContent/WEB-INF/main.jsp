@@ -59,7 +59,7 @@ $(document).ready(function(){
         <td><button id="main_close_left" class="ui-icon ui-icon-triangle-1-w"></button> <button id="main_open_left" class="ui-icon ui-icon-triangle-1-e"></button></td>
         <td id="main_table_stream">   
         	<div id="main_stream">
-        	 <img id="image" class="bg"/>
+        	 <img id="image" />
     		</div>
         	<div id="main_controls">
             	<table id="main_control_table">
