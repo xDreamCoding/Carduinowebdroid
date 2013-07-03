@@ -39,6 +39,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 	public static final String identifierChat = "Ch%:";
 	public static final String identifierControl = "Co%:";
 	public static final String identifierHeartbeat = "Hb%:";
+	public static final String identifierImageFrame = "If%:";
 	
 	private static Timer streamTimer = new Timer("streamTimer");
 
@@ -207,7 +208,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 	 * 
 	 * @param message
 	 */
-	public static void broadcastImage(ByteBuffer buffer) {
+	public static void broadcastImage(String buffer) {
 		System.out.println("Send ByteBuffer");
 		StreamInbound someClient;
 		synchronized(clients) {
@@ -216,7 +217,8 @@ public class MyWebSocketServlet extends WebSocketServlet {
 			while (iter.hasNext()) {
 				someClient = (MessageInbound) iter.next();
 				try {
-					someClient.getWsOutbound().writeBinaryMessage( buffer);
+					someClient.getWsOutbound().writeTextMessage(
+							CharBuffer.wrap(identifierImageFrame + buffer));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -296,7 +298,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 		        buffer.flip(); //ByteBuffer speichern
 		        System.out.println("ByteBuffer geschrieben");
 		        	        
-				broadcastImage(buffer);
+				//broadcastImage(buffer);
 			} else {
 				System.out.println("Same image [" + ++sameImage + "] -> not sending");
 			}
