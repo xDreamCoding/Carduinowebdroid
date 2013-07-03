@@ -23,6 +23,7 @@ import org.apache.catalina.websocket.WsOutbound;
 import de.carduinodroid.shared.activeSession;
 import de.carduinodroid.shared.waitingqueue;
 import de.carduinodroid.utilities.CarControllerWrapper;
+import de.carduinodroid.utilities.Config.Options;
 import de.carduinodroid.utilities.Log;
 
 /**
@@ -53,6 +54,7 @@ public class MyWebSocketServlet extends WebSocketServlet {
 		final ServletContext context = hsr.getServletContext();
 
 		final Log log = (Log)context.getAttribute("log");
+		final Options options = (Options)context.getAttribute("options");
 
 
 		/**
@@ -103,7 +105,9 @@ public class MyWebSocketServlet extends WebSocketServlet {
 					msg = msg.substring(identifierControl.length());
 					if(msg.startsWith("speed")) {
 						System.out.println("speed: " + msg.substring("speed".length()));
-						CarControllerWrapper.setSpeed(Integer.valueOf(msg.substring("speed".length())));
+						int speed = Integer.valueOf(msg.substring("speed".length()));
+						speed = Math.min(speed, options.maxDriveSpeed);
+						CarControllerWrapper.setSpeed(speed);
 					} else if(msg.startsWith("angle")) {
 						System.out.println("angle: " + msg.substring("angle".length()));
 						CarControllerWrapper.setAngle(Integer.valueOf(msg.substring("angle".length())));
