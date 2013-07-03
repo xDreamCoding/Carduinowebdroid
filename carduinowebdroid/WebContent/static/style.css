@@ -39,18 +39,6 @@ textarea{
 	margin-right:auto;
 }
 
-img.bg {
-	min-height: 100%;
-	min-width: 100%px;
-	width: 100%;
-	height: auto;
-	position: fixed;
-	top: 0;
-	left: 0;
-}
-
-
-
 #index_logo {
 	margin-top:50px;
 	text-align:center;	
@@ -272,7 +260,6 @@ img.bg {
 }
 
 #main_stream{
-	position:relative;
 	border:1px solid #ECD6BF;
 	padding: 3px;
 	height: auto !important;
