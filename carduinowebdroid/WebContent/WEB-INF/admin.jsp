@@ -160,7 +160,7 @@ body{ overflow: auto !important; }
 </c:set>
 <c:set var="result" value="${result-1}" />
 <table>
-	<tr><th>Inhalt vom Log</th></tr>
+	<tr><th>Log Content</th></tr>
 	<c:forEach items="${logList}" var="s"> 
 		<tr>
 			<td><c:out value="${s}" /></td>
