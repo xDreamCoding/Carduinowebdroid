@@ -37,7 +37,8 @@ _______________________
 1. download the latest .war or xport .war from Eclipse Project
 2. put the .war in your tomcat /webapps folder.
 3. Start the Tomcat service.
-4. your CarDuinoWebDroid website ist now in localhost:8080/carduinowebdroid/ 
+4. your CarDuinoWebDroid website ist now in localhost:8080/carduinowebdroid/
+
 **How to set up Eclipse for Tomcat development:**  
 http://www.coreservlets.com/Apache-Tomcat-Tutorial/tomcat-7-with-eclipse.html  
   
