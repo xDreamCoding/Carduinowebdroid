@@ -30,7 +30,7 @@ public class CarControllerWrapper {
 	String[] resolutions;
 	String latitude, longitude;
 	static boolean up = false, down = false, right = false, left = false,
-			lightOn = false, connected = false;
+			lightOn = false, connected = false, send = true;
 	static int sameImage = 0;
 
 	private CarControllerWrapper(Log log) {
@@ -198,12 +198,16 @@ public class CarControllerWrapper {
 	}
 
 	public void sendImg(BufferedImage image) {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try {
-			ImageIO.write( image, "png", baos );
-		} catch( IOException ioe ) { }
-		String b64image = Base64.encode( baos.toByteArray() );
-		MyWebSocketServlet.broadcastImage(b64image);
+		if (send) {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			try {
+				ImageIO.write(image, "png", baos);
+			} catch (IOException ioe) {
+			}
+			String b64image = Base64.encode(baos.toByteArray());
+			MyWebSocketServlet.broadcastImage(b64image);
+		}
+		send = !send;
 	}
 
 	/**
